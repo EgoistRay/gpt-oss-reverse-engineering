@@ -1,0 +1,157 @@
+In Ruby, we need to define the Node.
+
+Thus, perhaps in the code, we process.
+
+Alternatively, perhaps we can process in an initial step, process data points to build a K-d tree, and implement the 'nearest neighbor' search.
+
+Alternatively, perhaps we can process as per the approach in literature.
+
+Given that, perhaps we can implement a 1D variant of K-d tree of the data points.
+
+In 1D, perhaps a Balanced BST suffices.
+
+Perhaps we can process accordingly.
+
+Thus, to proceed, perhaps in processing, for each data point, perform an AVL insertion, with the standard balancing operations.
+
+Implementing AVL tree in code is as follows.
+
+Now, let's proceed with code.
+
+Implementation plan:
+
+- Define the Node class, with val, left, right, height, size.
+
+- Implement the update function, which updates the height and size based on its children.
+
+- Functions for balancing: rotations (right, left), checking balance factor, performing rebalancing.
+
+- Search function: for a given query point x', find the nearest neighbor among the data points in the tree.
+
+- Since search is by comparing x' - current node's val, recursively proceed.
+
+Implementation steps:
+
+* Insert function:
+
+    1. If root is nil, create a new node.
+
+    2. Else, recursively select left or right based on comparison.
+
+    3. After insertion, update height and size.
+
+    4. Check balance factor.
+
+    5. Perform any necessary rotations.
+
+* Find function (distance):
+
+    1. For a given query point x', recursively traverse to find the closest point.
+
+    2. At each node, compare distances, update best so far.
+
+Given that, we can proceed to implement.
+
+Now, the concern is the performance of this approach.
+
+Alternatively, perhaps the overhead of balancing per insertion is large for N up to 10^5.
+
+Alternatively, perhaps not.
+
+Assuming we can process per data point insertion and query per data point in log N steps, we can proceed.
+
+Now, to process the data points.
+
+Given we have to process cumulative counts per label.
+
+Assuming we process the data points sequentially, for each data point, we can insert into the AVL tree, then perform the query.
+
+Implementation plan:
+
+- For each data point i:
+
+    1. Update cumulative label count: cnt[label_i] +=1.
+
+    2. Determine the target label L_target with maximum cnt[L].
+
+    3. In the AVL tree, query for the nearest data point to x_i among the existing data points (excluding x_i itself), i.e., in the tree prior to processing x_i.
+
+    4. If the nearest neighbor exists, get its label, else if no other data point exists, perhaps set target node x_t as x_i itself (self), with label L_target.
+
+    5. The cumulative count for target label is cnt[L_target] + 1.
+
+    6. Compute distance between x_i and x_t accordingly.
+
+Thus, each time, we process insertion into the AVL tree, and query before the insertion.
+
+Processing accordingly.
+
+Now, proceed to code.
+
+Regarding the size of data points: up to 10^5, each with index up to 10^5 as per problem statement.
+
+But in the problem description, the data points are given as:
+
+- For each data point i, we have position x_i, label L_i, index index_i.
+
+Now, the index is an integer between 1 and 10^5.
+
+Now, in code, perhaps we can process accordingly.
+
+Alternatively, perhaps we can process accordingly.
+
+Now, perhaps we can process the data set of N points.
+
+We can process the data as an array of structures.
+
+For each point, we have:
+
+- x_i: position
+
+- L_i: label
+
+- index_i: index.
+
+Now, for processing the cumulative counts per label.
+
+We process an array or hash: cnt[L] counts per label, stored as an array up to 10^5.
+
+Now, for the AVL tree, we need to store only the positions x_i.
+
+But perhaps in addition, we can store more data per node: perhaps the data point's label, index, to have a deterministic tie breaker, but perhaps not necessary here.
+
+Alternatively, perhaps we can process accordingly.
+
+Now, proceed to implement the AVL tree.
+
+First, define the Node class.
+
+Implementation in Ruby.
+
+Now, proceed.
+
+Implement Node with attributes:
+
+- val: position
+
+- left, right: child nodes
+
+- height: height of the node
+
+- size: number of nodes in subtree (can be helpful when needed).
+
+Now, define the update function: updates height and size.
+
+Define rotations:
+
+- left rotation
+
+- right rotation
+
+Define balance factor.
+
+Define a function to perform balancing.
+
+Now, in insertion, after inserting, perform balancing.
+
+Now, in query function:

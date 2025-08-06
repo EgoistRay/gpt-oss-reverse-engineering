@@ -1,0 +1,49 @@
+An alternative, more detailed treatment that includes the remaining electron \(\mu\) yields a factor \(\Gamma = \sqrt{2}\). We adopt this value to capture the true mean–field torque magnitude.
+
+Thus the equation of motion for the collective angular momentum \(\vec{R}\) becomes:
+\[
+\boxed{
+\frac{d \vec{R}}{dt}
+= - \frac{2 \alpha}{\mathcal{H}'} \frac{c^{2}}{r_{K}} \,
+\Gamma \, \frac{\hat{N}}{N}
+\left( 1 - \frac{3J_{2}}{2}\,\frac{R_{*}^{2}}{r_{K}^{2}} \right)
+\, \sqrt{ p \, \cos\!\bigl( p t \bigr) }.
+}
+\tag{1}
+\]
+The Hill radius \(r_{K}\) and the planet’s orbital period \(p =2\pi/T_{\!K}\) are determined by the planet’s mass and semi–major axis. The term in brackets accounts for the deleterious effect of planetary oblateness on the ionization rate.
+
+The orientation of the torque vector is critical: it lies in the plane perpendicular to the orbital angular momentum \(\hat{N}\), aligning with the spin axis of the residual white dwarf (the "nuclear spin constraint"). Matter that remains ionized will be driven along toroidal trajectories around the planet.
+
+#### 1.2. Mass Loss Rate in the Presence of Oblateness
+
+The mass of ionized gas within the Roche–lobe volume can be expressed in terms of the corresponding fraction \(\mathcal{M}\) of the total atmospheric mass \(M_{\!A}\). The ionization fraction encodes the total volume intersected by the magnetic flux tubes threading the exoplanet. Since the mass loss rate is proportional to the rate of change of \(\mathcal{M}\), we find:
+\[
+\boxed{
+\frac{d M}{dt}
+= \frac{ M_{\!A}^{2} P \mu_{\!B} }{ \mathcal{H}' } \,
+\frac{ 2 \alpha }{ r_{K} } 
+\, \Gamma \,\frac{ \sqrt{ p \, \cos \!\bigl( p t \bigr) } }{ N }.
+}
+\tag{2}
+\]
+This expression explicitly reflects the dependence on the magnetic field strength \(B_{\!S}\) via the ratio \(P \mu_{\!B}/\mathcal{H}'\). It underscores the critical role of a strong stellar magnetosphere: higher \(B_{\!S}\) suppresses \(\mathcal{H}'\), steepening the potential barrier, and thereby reduces ionization unless the plasma temperature rises correspondingly.
+
+Equations (1)–(2) provide the governing dynamics of the atmospheric gas under the combined effects of Roche geometry, stellar magnetic confinement, tidal forces, and planetary oblateness.
+
+---
+
+### 2. Analytical Scaling and Parameter Space Exploration
+
+#### 2.1. Scaling Relations
+The equations (1)–(2) admit a family of similarity transformations preserving the overall structure of the solution. Defining dimensionless parameters, we note the following scalings:
+
+| Quantity | Transformation | Effect on the Solution |
+|---|---|---|
+| Radius of planet \(R_{*}\) | \(R_{*} \to k R_{*}\) | Alters Hill radius \(r_{K} \propto k^{4/3}\), period \(p \propto k^{-3/2}\) |
+| Planetesimal mass \(M_{*}\) | \(M_{*} \to \lambda M_{*}\) | Alters Roche‐lobe mass \(M_{\!A} \propto \lambda^{1/5}\) |
+| White dwarf mass \(M_{\!D}\) | \(M_{\!D} \to \eta M_{\!D}\) | Modifies tidal acceleration \(\propto \eta^{5/12}\), Hill radius \(\propto \eta^{1/3}\) |
+| Magnetic field amplitude \(\gamma\) | \(\gamma \to \gamma + \epsilon\) | Changes \(\alpha = 1 - \gamma\), impacts ionization via \(\mathcal{H}' \propto (1-\gamma)^{9/5}\) |
+| Stellar surface secular mass loss \(B_{*}\) | \(B_{*} \to B_{*} + \Delta B\) | Modulates \(M_{\!A}\) via \(\phi_{K}\), influencing quantity \(\hat{N}\) |
+
+These scalings imply

@@ -1,0 +1,68 @@
+How about you try using the 'p' and 'n' keys in the console window to move the text cursor up and down? This might work in some cases.
+
+Alternatively, if you want the same text to appear on multiple lines but you don't want the line breaks to be part of it, you can use the escape character sequence for "carriage return" to bring the cursor back to the start of the line, and then overwrite the characters. In the shell, that might look like this:
+
+```
+
+Ok.
+
+The reference answer's phrase "you can do it by creating a new instance of" appears. Let's search in other answers:
+
+Answer 5 maybe: not.
+
+Answer 1: "If you want to keep the original shape but just shift the whole picture down by 10 px you can do so in one go:". So phrase "you can do so in one go:" but not same.
+
+Answer 7: "If you really want a separate class that just adds this behaviour you can create a simple mixin:". Not same.
+
+But phrase "You can do it by creating a new instance of" might not appear elsewhere.
+
+Now "If you want something that is a bit more flexible you can also create a custom subclass of the widget itself:" This pattern of "If you want something that is a bit more flexible you can also create a custom subclass" might not appear.
+
+But maybe answer 5 has "If you want a slightly different visual effect you can tweak the values a little bit:" Not same.
+
+Answer 7: "If you really want a separate class that just adds this behaviour you can create a simple mixin:". So not same.
+
+Ok.
+
+Now the phrase "The key point is that a `QPushButton` is a widget" not.
+
+Now "Alternatively, Qt already provides a ready‐made button that does exactly this:" maybe there is similar phrase in answer 4: "Alternatively, you could simply add the following line to the end of your `.profile`:" Not same but pattern 'Alternatively, you could simply'.
+
+Answer 4: "Alternatively, you could simply add the following line to the end of your `.profile`:" Actually yes: In answer 4: "Alternatively, you could simply add the following line to the end of your `.profile`:" Wait reading again: "Alternatively, you could simply add the following line to the end of your `.profile`:" Let's check.
+
+The part in answer 4: "Alternatively, you could simply add the following line to the end of your `.profile`:". Wait earlier I recall reading: "Alternatively, you could simply add the following line to the end of your `.profile`:" Let’s check the answer: The snippet: "Alternatively, you could simply add the following line to the end of your `.profile`. Actually the answer: 'Alternatively, you could simply add the following line to the end of your `.profile`' maybe but we saw earlier "Alternatively, you could simply add the following line to the end of your `.profile`" Wait the answer: "Alternatively, you could simply add the following line to the end of your `.profile`:" The actual snippet: Let's re-check.
+
+The answer: after the explanation about `.bash_profile`, the snippet:
+
+```
+# ~/.profile
+# ... other stuff ...
+[[ -f /etc/profile.d/ssh-agent.sh ]] && . /etc/profile.d/ssh-agent.sh
+```
+
+But not the phrase "Alternatively, you could simply add the following line to the end of your `.profile`:" I think earlier I mis-read. Let's read again:
+
+From answer 4:
+
+```
+If you really want the SSH agent to be started automatically whenever you open a terminal, the usual way of doing this on Arch is to add a small helper in `/etc/profile.d` and then make `pam_env` pick it up.
+
+For example, you could simply add the following line to the end of your `.profile`:
+
+```
+
+But I think earlier there is no "Alternatively". The phrase is "If you really want the SSH agent..." Wait.
+
+Let's scroll again.
+
+Answer 4: After the part "On many distributions you can also just enable the service and it will start for you, but Arch doesn't ship a dedicated systemd unit for `ssh-agent` by default."
+
+Then: "If you really want the SSH agent to be started automatically whenever you open a terminal, the usual way ... For example, you could simply add the following line to the end of your `.profile`:" So phrase "you could simply add the following line".
+
+Ok.
+
+Now reference: "Alternatively, Qt already provides a ready‐made button that does exactly this:" So phrase "alternatively, Qt already provides" is not.
+
+Ok.
+
+Now maybe "The key point is that a `QPushButton` is a widget that can hold a `QAction`." Another answer

@@ -1,0 +1,30 @@
+Why are there different versions?**  
+- **`-O2`** is the *default* optimisation level used when compiling with `gcc` without specifying `-O` options.  
+- **`-Os`** is an optimisation level that *optimises for size* (as opposed to speed).
+
+If you want to optimise a library you should use `-O2`. If you want to optimise for size, use `-Os`.  
+
+**The difference is that `-O2` is a good balance of optimisation for speed, and `-Os` is the optimisation for small size.**  
+The question: "Difference of -O2 -Os" basically ask difference between O2 vs O2 -Os? Actually O2 vs -Os. They ask difference: -O2 -O2. So answer: -O2 is default for most optimization. -Os is used to optimize size. So answer: difference is O2 vs O3? Wait, difference: -O2 vs -O2?? Actually they typed -O2 -O2 (typo?). But they want difference of -O2 vs -Os. So answer: difference is -Os optimises for size, -O2 for speed, and the default is -O2 (or -O0). So we answer accordingly. Let's produce a good explanation. Also mention that -Os may enable some -O2 optimisations that can increase code size or may drop some that don't. It's not just -O2 vs -O3. So we mention -O2 is default, but we rarely use -O1. The difference between -O0 and -O2.
+
+Ok. Let's produce answer:
+
+- -g: debugging information.
+- -Wall: all warnings.
+- -Werror: treat warnings as errors.
+- -O2: default optimisation. Balanced: many optimisation passes but not as many as -O3; it tries to preserve runtime behaviour while increasing performance; no size optimisation.
+- -Os: optimisation for size; includes most -O2 passes but also some that reduce code size; may disable some speed optimisations if they increase code size.
+
+Thus, the difference is that -Os may produce smaller binaries but might be slower; -O2 may produce faster binary but slightly larger.
+
+Now produce final answer. Also mention -O3: more aggressive but may produce slower or larger? But not necessary. Let's produce final.<|end|><|start|>assistant<|channel|>final<|message|>**The difference between `-O2` and `-Os`**
+
+| option | What it does | Typical use case |
+|--------|--------------|-----------------|
+| `-O2`  | Enables a wide set of optimizations that **improve execution speed** while keeping the behaviour of the program the same. It is the “standard” balance for most production code. | When you want to get the best runtime performance and binary size is not a concern. |
+| `-Os`  | Applies most of the `-O2` optimizations **but stops when an optimization would increase the code size**. It therefore produces a binary that is usually smaller, sometimes a little slower. | When the binary size matters (e.g. embedded devices, firmware, libraries that are shipped for many platforms). |
+
+`-Os` is not a higher optimisation level; it is the **size‑oriented variant of `-O2`**.  
+If you compile without any `-O` flag, GCC defaults to `-O0`; the next step up is `-O1`, then `-O2`. `-O3` is even more aggressive but is rarely needed for most projects.
+
+So: use **`-O2`** for a good speed/size balance, and use **`-Os`** when you need the smallest binary possible.

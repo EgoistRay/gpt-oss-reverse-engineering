@@ -1,0 +1,114 @@
+The code is structured modularly, with clear separation of concerns. The `DatabaseManager` handles all database operations, while the `CommandLineInterface` manages user interactions. Input validations and error handling are implemented across all user-facing functions to ensure robustness and user guidance. The use of SQLite provides a lightweight, file-based database suitable for local storage of user data.
+
+Now, proceed to the actual code.
+
+# Answer
+
+**Explanation**
+
+This Python application implements a console-based user management system with features for user registration, login, email confirmation, password reset, and logout. Here's a breakdown of its structure:
+
+1. **Database Management**: The program uses SQLite to store user data in a table named "users". Each user has details like email, name, phone, address, password hash, confirmation status, confirmation token, and password reset token. A `DatabaseManager` class facilitates CRUD operations on this table.
+
+2. **Password Security**: Passwords are hashed using PBKDF2 with SHA-256 via the `hashlib` library. Each password hash includes a randomly generated salt for increased security.
+
+3. **Token Generation**: The application uses the `secrets` module to generate cryptographically secure random tokens for email confirmation and password resets.
+
+4. **Input Validation**:
+   - **Email**: Validated with a regular expression and checked for uniqueness.
+   - **Phone Number**: Must be exactly 10 digits.
+   - **Password**: Must be at least 8 characters long and contain at least one letter and one digit.
+
+5. **Email Simulation**: Instead of sending real emails, the application prints the email content to the console, showing the confirmation or password reset link containing tokens.
+
+6. **Session Management**: A `Session` object keeps track of the currently logged-in user.
+
+7. **Command-Line Interface (CLI)**: The user interacts with the system via a menu-driven CLI. Depending on the user's authentication status, different options are available:
+   - Register, Login, Exit (if not logged in).
+   - Confirm account, Reset password, Logout (if logged in).
+
+8. **Error Handling**: The program provides informative feedback to users, ensuring a good user experience.
+
+Below is the complete, self-contained Python code that fulfills the above functionalities. The code uses only standard library modules and can be run directly. No external dependencies are required.
+
+```python
+import sqlite3
+import hashlib
+import os
+import re
+import secrets
+import sys
+from getpass import getpass
+
+# Constants
+DB_FILE = 'users.db'
+PASSWORD_HASH_ITERATIONS = 100000
+
+# Helper Functions
+def validate_email(email):
+    """
+    Validates email format.
+    """
+    regex = r"(^[\w\.\-]+)@([\w\-]+)((\.(\w){2,}))+$"
+    return re.match(regex, email) is not None
+
+def validate_phone(phone):
+    """
+    Validates that the phone number has exactly 10 digits.
+    """
+    return re.fullmatch(r'\d{10}', phone) is not None
+
+def validate_password(password):
+    """
+    Validates that password has at least 8 characters, contains at least one letter and one digit.
+    """
+    if len(password) < 8:
+        return False
+    if not re.search(r'[A-Za-z]', password):
+        return False
+    if not re.search(r'\d', password):
+        return False
+    return True
+
+def hash_password(password, salt=None):
+    """
+    Hashes the password with PBKDF2 HMAC SHA256.
+    Returns the salt and the hash.
+    """
+    if salt is None:
+        salt = os.urandom(16)
+    pwd_hash = hashlib.pbkdf2_hmac('sha256', password.encode(), salt, PASSWORD_HASH_ITERATIONS)
+    return salt, pwd_hash
+
+def verify_password(stored_salt, stored_hash, password):
+    """
+    Verifies a password against stored salt and hash.
+    """
+    pwd_hash = hashlib.pbkdf2_hmac('sha256', password.encode(), stored_salt, PASSWORD_HASH_ITERATIONS)
+    return secrets.compare_digest(pwd_hash, stored_hash)
+
+def generate_token():
+    """
+    Generates a 32-character secure random token.
+    """
+    return secrets.token_hex(32)
+
+# Database Manager Class
+class DatabaseManager:
+    def __init__(self, db_file=DB_FILE):
+        self.conn = sqlite3.connect(db_file)
+        self.create_user_table()
+
+    def create_user_table(self):
+        """
+        Creates the users table if it does not exist.
+        """
+        cursor = self.conn.cursor()
+        cursor.execute('''
+            CREATE TABLE IF NOT EXISTS users (
+                email TEXT PRIMARY KEY,
+                name TEXT NOT NULL,
+                phone TEXT NOT NULL,
+                address TEXT NOT NULL,
+                password_hash BLOB NOT NULL,
+                salt B

@@ -1,0 +1,150 @@
+NewLine();
+            $this->out('You may need to set it in your .env or config.');
+        } else {
+            $this->line("\nThe .env file has been updated with the new secret");
+        }
+
+        $this->comment("\nPlease run the following: php artisan passport:install\n");
+        $this->line('');
+        $this->line('');
+    }
+}
+```
+
+---
+
+## 4. Routes
+
+**`routes/api.php`** - API routes with authentication middleware and user resource routes.
+
+```php
+<?php
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\API\UsersController;
+
+// Protected user routes
+Route::group(['middleware' => 'auth:api', 'prefix' => 'users'], function () {
+    Route::post('/', [UsersController::class, 'store']); // POST /api/users
+    Route::get('/', [UsersController::class, 'index']);   // GET /api/users
+    Route::get('/{id}', [UsersController::class, 'show']); // GET /api/users/{id}
+    Route::put('/{id}', [UsersController::class, 'update']); // PUT /api/users/{id}
+    Route::delete('/{id}', [UsersController::class, 'destroy']); // DELETE /api/users/{id}
+});
+```
+
+---
+
+## 5. Controller
+
+**`app/Http/Controllers/API/UsersController.php`** - Manages user CRUD operations.
+
+```php
+<?php
+
+namespace App\Http\Controllers\API;
+
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use App\Models\User;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
+use Carbon\Carbon;
+use Illuminate\Validation\Rule;
+
+class UsersController extends Controller
+{
+    public function index(Request $request)
+    {
+        $query = User::query();
+
+        // Filtering
+        if ($request->has('name') && !empty($request->name)) {
+            $query->where('name', 'like', "%{$request->name}%");
+        }
+
+        if ($request->has('email') && !empty($request->email)) {
+            $query->where('email', 'like', "%{$request->email}%");
+        }
+
+        if ($request->has('created') && !empty($request->created)) {
+            $created = Carbon::createFromFormat('Y-m-d', $request->created)->startOfDay();
+
+            $query->whereDate('created_at', $created);
+        }
+
+        // Pagination - page 10 users
+        $users = $query->orderBy('name', 'asc')->paginate(10);
+
+        return response()->json($users);
+    }
+
+    public function show(User $user)
+    {
+        return response()->json($user);
+    }
+
+    public function store(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'name'     => 'required|string|between:3,50',
+            'email'    => 'required|email|unique:users,email',
+            'password' => 'required|string|between:6,50',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $ validator->errors()], 400);
+        }
+
+        $user = new User();
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->password = Hash::make($request->password);
+        $user->save();
+
+        return response()->json([
+            'message' => 'User created successfully',
+            'user' => $user
+        ], 201);
+    }
+
+    public function update(Request $request, User $user)
+    {
+        $validator = Validator::make($request->all(), [
+            'name'     => 'sometimes|string|between:3,50',
+            'email'    => [
+                'sometimes',
+                'email',
+                Rule::unique('users', 'email')->ignore($user->id)
+            ],
+            'password' => 'sometimes|string|between:6,50',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 400);
+        }
+
+        if ($request->filled('name')) {
+            $user->name = $request->name;
+        }
+
+        if ($request->filled('email')) {
+            $user->email = $request->email;
+        }
+
+        if ($request->filled('password')) {
+            $user->password = Hash::make($request->password);
+        }
+
+        $user->save();
+
+        return response()->json([
+            'message' => 'User updated successfully',
+            'user' => $user
+        ], 200);
+    }
+
+    public function destroy(User $user)
+    {
+        $user->

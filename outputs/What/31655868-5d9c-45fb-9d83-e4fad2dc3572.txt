@@ -1,0 +1,31 @@
+What they need: "I am having issues when I return a list of dictionaries from a class using an SQLalchemy ORM. The list and the data it contains is correct. The problem is the return of the response fails and the server throws an exception. ... The response is a list of dictionaries that contains no sensitive data. The server is a Rest API in Python and the stack trace shows a 'Failed to decode request body' error. The error occurs in 'webob.dec.jsonquote' on the line 'obj = json.dumps(obj, **kw)'."
+
+Essentially: They have a REST API; using JSONEncoder; returning a list of dict; but when returning from a class instance, the dictionary contains some datatypes that JSON can't encode (maybe datetime objects). In JSONEncoder they convert datetime objects to isoformat string via default().
+
+But they still have error. Maybe the request body is not actually JSON? The error thrown is 'Failed to decode request body' which usually occurs when there is a request expecting JSON but the body can't be parsed: e.g., in request 'webob.dec.jsonquote', maybe the JSON module tries to parse the request body to convert to Python representation. Wait: in Flask or webob? But I think this error arises when you call json.loads on non-JSON data? Wait.
+
+Maybe they send the request to API expecting JSON; but they send wrong data? Wait, they send GET /POST? They say "return a list of dictionaries" from a class used for REST API. Response fails. If they build a custom JSONEncoder, they handle datetime. They still get 'Failed to decode request body'.
+
+Thus the issue might be that the response body is not JSON serializable: e.g., contains datetime objects or custom objects not convertible. Even though they use default() to convert datetimes, but maybe there are other types like 'decimal.Decimal', 'set', etc.
+
+Also check that the `default` method is inside a subclass of json.JSONEncoder; but they call `json.loads()` after? Wait, they call `json.dumps(response_list, cls=JSONEncoder)`? or maybe `json.dumps([x])`? But they got exception inside jsonquote after serialization. Wait, `jsonquote` is used for request bodies to convert to JSON? Wait.
+
+Let's research: In webob.dec.jsonquote, used to convert Python objects to JSON strings for request bodies. But they may be using this to encode dictionary into JSON? Actually webob's JSONResponse might use jsonquote.
+
+Simplify: The error occurs when they use "request.json" property to read JSON body of request; but the request content is not JSON-encoded; maybe they are sending application/json but not correct? But they say error occurs when returning a list from class.
+
+Better to replicate: In Python with webob and JSONResponse, we can use Request.get_json() etc. But the exception "Failed to decode request body" originates when trying to parse the request body as JSON if request body is not a valid JSON. But this occurs during request, not response. Wait but the stack trace shows error occurs while JSON encoding? Wait.
+
+Actually 'webob.dec.jsonquote' is used when converting request.body to JSON? I'm not sure.
+
+Let's analyze: error occurs at `obj = json.dumps(obj, **kw)` inside jsonquote. This may be about converting request input into JSON? Or about converting response? Wait: The doc of webob.dec.jsonquote: "Return the JSON representation of an object" used for request/response? If used for query or form? I will look up.
+
+But from the question: "Failed to decode request body" error. That's error by request. But they are retrieving the body of a request? Maybe they are performing POST with JSON; not encoding the body? Wait.
+
+Better to replicate: Suppose we have a Flask endpoint using json.dumps? Use `jsonify`? On error the message "Failed to decode request body" appears when the server expects a JSON request but receives something else. But we want to decode response. Hmm.
+
+But think: The error might be thrown when you write the request handler with `request.get_json()` expecting JSON, but you didn't send JSON? Wait but they are "return a list of dictionaries from a class using an SQLalchemy ORM. The list and the data it contains is correct." So they query the database, get dictionary list, and try to return it as response. But error occurs before sending? Actually the stack shows json.dumps inside jsonquote; that serialization attempted to encode request body? Wait.
+
+If they use a Flask-RESTful's Response object may rely on `json.dumps` to convert data. But the error might be due to not specifying 'skipkeys' or 'allow_nan' etc. Maybe there is a None? No.
+
+Let's step back: JSON dumps fails if object contains non-default types. They added default

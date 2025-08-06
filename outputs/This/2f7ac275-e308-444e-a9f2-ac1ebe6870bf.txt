@@ -1,0 +1,69 @@
+This method calculates the number of days from the start of the month or from the last anniversary date to today, depending on whether we want to calculate based on an anniversary or the start. It uses `date_diff_today($d, $type)`, which would be a method that calculates the difference in days between date `$d` and today, of the given type ('day' or 'month').
+
+```php
+$_days = $this->date_diff_today ($d, $type);
+```
+
+Finally, it returns the number of days. If the start is equal to the anniversary, it uses `date_diff_today` in 'month' mode. Otherwise, it uses 'day' mode.
+
+```php
+return $isStartEqualToAnniversary ? $_days : -$_days;
+```
+
+Lastly, we have the `addDaysToTime` method. This method takes a number of days to add to the anniversary date, or the start date if anniversary is before start. It's used to find the date of each event.
+
+```php
+public function addDaysToTime ($days) {
+}
+```
+
+If `$days` is null, it means we don't know the number of days to add. In this case, we calculate the days required between anniversary and start, and then we add the number of days needed to reach that number of days between anniversary and start.
+
+```php
+if (is_null ($days)) {
+    $diffBetweenStartAndAnniversary = $this->getDateDifferenceBetweenStartAndAnniversary('day');
+    $requiredDaysBetweenAnniversaryAndStart = $diffBetweenStartAndAnniversary * -1;
+    $days = $this->dateDiffToAdd($requiredDaysBetweenAnniversaryAndStart);
+} else {
+    $days = $this->dateDiffToAdd($days);
+}
+```
+
+Then we add these days to the anniversary date:
+
+```php
+return $this->dateAdd($this->anniversary, $days);
+```
+
+This concludes the code. 
+
+Note that several methods like `dateDiffToAdd`, `dateAdd`, `date_diff_today`, and `dateDiffToCompare` are used but not defined in the code provided. These would need to be defined for this code to work. They are likely utility methods for dealing with dates.
+
+Summary of the code:
+
+- It calculates the schedule of periodic events, such as the release of a video series.
+- The schedule is determined by:
+  - The start date of the series.
+  - An optional anniversary date and interval (e.g., "every 4 months").
+  - An optional final date.
+  - A custom number of events (periods) to generate.
+  - A boolean indicating if the dates are "real" (i.e., to be calculated on the fly) or read from the cache.
+- The `periodicEvents` method is the main function, which generates a table of events.
+- The `setScheduleTable` method generates the table of dates for each event.
+
+This code is likely part of a larger system for managing a schedule of releases, possibly on a website that hosts video content.
+
+In a real-world scenario, to write this code from scratch, one would need to:
+- Define the requirements for how the event dates should be calculated.
+- Design the methods that need to be part of the class to support this functionality.
+- Implement the logic for calculating dates based on start, anniversary, and end conditions.
+- Add caching considerations if needed.
+- Handle any special cases, such as leap years.
+
+I won't reproduce the code here since it seems to be a complete snippet already. Instead, I explained what each part does and how it fits into the overall functionality.
+
+Class Schedule: calculates and generates a table of periodic event dates based on start date, optional anniversary interval, and final date; returns an array of event dates and associated metadata.Let's first review the code in order to understand what it does. It appears that this is a part of a C++ program that deals with 3D data visualization, probably using the OpenGL library. From the function names and the code structure, it seems this is a class called `GLObject` that has methods for initializing data, drawing charts, and handling user input (hovering, clicking, etc.).
+
+The code snippet includes a lot of functions that seem to deal with drawing charts, such as `drawC3`, `drawC3Chart`, `drawC3S`, etc. These seem to be for drawing 3D charts like C-3, C-3-S, etc. There are also methods like `hover`, `hoverLeave`, `click`, `move` that handle what happens when the user hovers over, clicks, or moves the mouse. There’s also a `setDataFile` method that loads data from CSV files.
+
+The code also has a lot of variables and data structures such as `points`, `

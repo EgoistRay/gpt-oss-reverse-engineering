@@ -1,0 +1,37 @@
+This is the same.
+
+Hence final expression: -41971 - 1/(A*h**3). We may combine into factor 1/h**3? Wait cannot due to constant term -41971. But we may express as -(41971*h**3 + 1/(A))/h**3? Wait then numerator not integer; Wait we might write:
+
+-41971 - 1/(A*h**3) = -(41971 + 1/(A*h**3)). But that's sum.
+
+Hence expression is fine.
+
+But maybe there is simplification using `atan(-675))))**(-3)`: We can rewrite as 1/(atan(-675)**3). Because (atan(-675))**(-3) -> 1/(atan(-675)**3). Good.
+
+Now we check if `atan(-675)` can be simplified to `-atan(675)`? yes.
+
+Now final expression: -41971 - 1/(atan(-675)**3*(((81 - 860)/900)**(66469117953/(-9*x**4))))
+
+Simplify: (-6*acosh(2))**(...). Wait we must compute exponent denominator `-9*x**4`; Did we inadvertently mis-simplify sign? Wait we had from original: ((-6*acosh(2))**(-66469117953/(9*(-x**4)))). Let's compute: The denominator: 9*(-x**4) = -9*x**4. So -66469117953 / (-9*x**4) = 66469117953/(9*x**4). So exponent positive. Good.
+
+Thus A = ((-6*acosh(2))**(66469117953/(9*x**4))). Wait there is not any additional negative sign from `-66469117953/(9*(-x**4))`. Yes we used that.
+
+So final expression:
+
+-41971 - 1/(atan(-675)**3 * ((-6*acosh(2))**(66469117953/(9*x**4)) * (55/900)**3))
+
+Simplify 55/900 -> 11/180. So A = (-6*acosh(2))**(66469117953/(9*x**4)) * (11/180)**3.
+
+But we may combine 55/900**3; check: (55/900)**3 = (55**3)/(900**3) = 166375/729000000. But we may express as rational because sympy will automatically reduce. But keep as (55/900)**3 or (11/180)**3.
+
+Maybe we should keep as Rational(166375, 729000000) to avoid exponent; but it's okay.
+
+But we might prefer to keep as (55/900)**3 because base rational will be simplified automatically to rational; but then maybe exponent 3 negative sign? Wait we have 1/(...(55/900)**3). So final denominator includes factor (55/900)**3; We could compute its numeric value: 166375/729000000 = 166375/729e6 = 206... But there may be gcd? Let's check gcd of 166375 and 729000000.
+
+Compute gcd quickly:
+
+Compute 729000000 mod 166375.
+
+- 166375 * 4 = 665500. Subtract: 729000000 - 665500 = 728334500? Wait mis-s. Wait that's wrong due to mis-digit.
+
+Hold: We want gcd(166375, 729000000). But 166375 < 729000000; compute 729000000 / 166375 -> approximate 4387 * 166375 = 729318... Wait compute: 166375*4387 =? 166375*4000=665,500,000; 166375*300=49,912,500 -> 715,412,500; plus *80=13,310,000 -> 728,722,500; plus *7=1,164,625 -> 729,887,125 > 729,000,000. So *4383? 166375*4383 = 166375*(4000+300+80+3) = 665,500,000+49,912,500+13,310,000+499,125=729,221,625 > 729,000,000. *4382 -> 665,500,000 +49,912,500+13,310,000+166,375=729,? Wait compute: 665,500,000+49,912,500=715,412,500; +13,310,000=728,722,500; +166,375=728,888,875 <729,000,000. So remainder

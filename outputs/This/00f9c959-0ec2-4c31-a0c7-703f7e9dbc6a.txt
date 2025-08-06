@@ -1,0 +1,44 @@
+This constructor is 'protected', not 'private'. So sub-classes (which may be inner classes) may use it; external system cannot instantiate TimerTextLabel directly; On Android, you could extend TimerTextLabel anyway. So 'private' may not be needed.
+
+But anyway.
+
+Now the bigger issue: Even though we call Main.nTime.stop() and dispose of timer, the thread may still be alive until it exits the while loop. Because we call stop after disposing but the thread has not yet terminated; however, our timer thread loop stays until nSeconds > nLastSeconds; but nSeconds keep increasing by nTimeStep even after disposed because we are calling getSeconds() which might still update counters: Wait: we have 'nSeconds += nTimeStep; this works even after disposed? getSeconds() will create or remove LnTimerDisplay from ArrayList each time; disposed LnTimerTextLabel: disposed = true; So LnTimerDisplay disposal occurs when disposing a timer; This is earlier.
+
+Hence the timer thread continues counting but is paused; but the variable nSeconds increments at each iteration: Actually getSeconds() is called after check if disposed; if disposed=true, we return nSeconds unchanged. But disposed becomes true after we call dispose(); Wait we didn't set disposed until dispose(); In final state, disposed is set when dispose() is called before we stop the timer: In start() we call 'if disposed=true' and dispose() only in final statement after disposing labels, but before we call TimerTextLabel constructor, we looked at global 'disposed' may be true if a previous timer was disposed; Wait design: In start(), after disposing labels, we set disposed and remove LnTimerDisplay team from ArrayList, etc. In that event we assign 'disposed = true;' before calling new TimerTextLabel. But at that moment, we are not disposing the timer thread we just started (since we just finished disposing previous timer); we are disposing timerDisplay maybe; But the new TimerTextLabel has disposed=false. So after start() completes, new TimerTextLabel disposed=false. Then we start thread in constructor; So the thread runs while nSeconds <= nLastSeconds; at start it's nSeconds=0; after first step, nSeconds=0.2 etc. It will run sem forever until externally requested to stop (via Main.nTime.stop()). When we call dispose() on timer, that triggers:
+
+- timerStop() to set running=false; But we call stop() on main timer not LnTimerTextLabel.
+
+- Then we iterate over all LnTimerDisplay labels and dispose them: each label is disposed (so disposed=true). We also call Timer.stop(this) and dispose labels. But note LnTimerTextLabel itself is also disposed at this point? In LTimerPanel.disposeAfterTimerCall() we did not dispose timer itself? Wait we call timer.stop() (the LnTimerTextLabel). timer.stop() calls LTimerPanel.disposeTimer(), which includes disposing timer disp. But it does not set disposed flag for timer? Wait LnTimerTextLabel has property disposed. But was disposed set in dispose()? In LnTimerTextLabel class we didn't set disposed to false on dispose? Wait lines: 
+
+```
+public void dispose()
+{
+    for (int i = 0; i < Main.pnl_movementTextTimer.nLnTimerDisplay.size(); i++)
+    {
+        try {
+            Timer.dispose(((LnTimerDisplay)Main.pnl_movementTextTimer.nLnTimerDisplay.get(i)).getTimer());
+        } catch (Exception e){};
+    }
+
+    for (int z = 0; z < Main.pnl_movementTextTimer.nLnTimerLabel.size(); z++)
+    {
+        try {
+            Timer.dispose(((LnTimerLabel)Main.pnl_movementTextTimer.nLnTimerLabel.get(z)).getTimer());
+        } catch (Exception e){};
+    }
+}
+
+```
+
+So dispose() of Timer does not set disposed=true; it just disposes marks. Wait, but LnTimerLabel.dispose() sets disposed=true inside its own class: In LnTimerLabel.dispose() method they set disposed=true and remove from arraylist. Did we call LnTimerLabel.dispose() elsewhere? In disposeAfterTimerCall(), after stopping timer, we call:
+
+```
+for (int i = 0; i < Main.pnl_movementTextTimer.nLnTimerLabel .size(); i++)
+{
+    try {
+        Timer.dispose(((LnTimerLabel)Main.pnl_movementTextTimer.nLnTimerLabel.get(i)).getTimer());
+    } catch (Exception e){};
+}
+```
+
+But Timer.dispose(...) of LnTimerLabel may be not defined; Wait LnTimerLabel.getTimer() returns a Timer (from TimerTextLabel?). Actually LnTimerLabel extends TimerTextLabel; which extends Timer further? Wait yes LnTimerLabel extends TimerTextLabel extends Timer. So Timer.dispose(...) called with LnTimerLabel instance: we call Timer.dispose on LnTimerLabel -

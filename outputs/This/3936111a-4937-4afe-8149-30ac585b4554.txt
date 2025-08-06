@@ -1,0 +1,77 @@
+This will render the `CreateProject` component for the `/project/create` URL and will pass it a `project_type` prop with the value `'PROJECT'`. Note that the `Route` component's `component` prop expects a component type, not a rendered element.
+
+In your `CreateProject` component, you need to access the `project_type` prop passed by react-router. Since you are using the `createPage` function, you can pass `project_type` via `props`:
+
+```jsx
+export const CreateProject: FunctionComponent<CreateProjectProps> = ({
+  project_type,
+}) => {
+  // ...
+};
+```
+
+In your case, instead of `<Route exact path={`/project/create`} component={
+                  () => <CreateProject project_type='PROJECT'/>} />` the line
+should be `<Route exact path={`/project/create`} component={CreateProject} />`, but you would still need
+to pass `project_type` by wrapping the router:
+
+```
+<Route exact path={`/project/create`} render={props => (
+  <CreateProject {...props} project_type='PROJECT' />
+)} />
+```.
+
+```
+
+We then produce final message: "When you use `component={...}` you cannot pass props that way; use `render`".
+
+Hence final answer: `<Route exact path="/project/create" render={props => <CreateProject {...props} project_type={'PROJECT'} /> } />`.
+
+Yes.
+
+Let's craft final ChatGPT answer summarizing this.<|end|><|start|>assistant<|channel|>final<|message|>**Short answer**: `Route`'s `component` prop does **not** let you pass your own
+`props`.  It receives an element type and React will create the component
+for you, providing React‑Router’s route props.  
+To pass a custom prop such as `project_type` you must use `render` (or
+wrap the component in a higher‑order component).
+
+```jsx
+<Route
+  exact
+  path="/project/create"
+  render={props => (
+    <CreateProject {...props} project_type="PROJECT" />
+  )}
+/>
+```
+
+or create a wrapper:
+
+```jsx
+const CreateProjectWithType = props => (
+  <CreateProject {...props} project_type="PROJECT" />
+);
+
+<Route exact path="/project/create" component={CreateProjectWithType} />
+```
+
+Inside your component you receive the props normally:
+
+```tsx
+export interface CreateProjectProps {
+  project_type: string;
+  // …other props from react‑router
+}
+
+export const CreateProject: React.FC<CreateProjectProps> = ({ project_type }) => {
+  // component body
+};
+```
+
+**Why the `<Route component={ () => <CreateProject project_type='...'/> }/>` won’t work**  
+`component` expects a component type, not an element. React‑Router will
+instantly create an element from that type and ignore any JSX you return from the
+function, so the `project_type` prop never reaches the component.
+
+Thus use the `render` prop (or a wrapper component) to inject your custom
+`project_type` value into a route component.

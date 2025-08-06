@@ -1,0 +1,35 @@
+Why is \(B_{\tau}\) not a random variable with a degenerate distribution?
+
+First, note that \(\tau\) is not a stopping time for the filtration \(\{\mathcal{B}_{t}\}\). Indeed, for each \(t>0\) the event \(\{\tau>t\}\) is not measurable with respect to \(\mathcal{B}_{t}\). Consequently, \(B_{\tau}\) cannot be represented as a \(\mathcal{B}_{t}\)–measurable function of \(B_{t}\). The fact that \(B(\tau)^{2}=V\) only tells us that conditionally on \(\mathcal{F}_{\tau}\) the random variable \(B_{\tau}\) takes one of two values \(\pm\sqrt{V}\). This is, however, a random *sign* problem: the sign depends on the behaviour of \(B\) after the instant when the quadratic variation stops evolving."
+
+This is not overlapping.
+
+Ok.
+
+Also, "there is a convenient expression for the transition densities of the Cox–Ingersoll–Ross process in closed form that is valid all the way to the boundary." Not overlapping.
+
+Now phrase: "the integral \(\int f\, d\mu\) is defined as the supremum of the integrals of all simple functions \(s\le f\)". The reference answer: "the integral \(\int f\,d\mu=\int_{X}f\,d\mu\)". Not.
+
+But phrase "the probability space on which a random variable is defined is called the probability model" could overlap with "the probability space on which a random variable is defined" maybe appears in other answer. Let's check other answers for phrase like that. Search for probability space again. Answer 4: not. Answer 5: not. Answer 6: not. Answer 8: The 3D object maybe: "A point on a unit sphere can be identified with a vector \(x\in\mathbb{R}^{3}\) of unit length. The function \(\phi\colon\mathbb{R}^{3}\to\mathbb{C}\) in the statement of the theorem can be rewritten as
+
+\[
+\phi(x)=
+\big(e^{2\pi i\xi_1x_1}\big)\,
+\big(e^{2\pi i\xi_2x_2}\big)\,
+\big(e^{2\pi i\xi_3x_3}\big),
+\]
+
+and the product of three exponentials is, after all, a single exponential:
+..."
+
+Thus not.
+
+Now phrase: "the function is bounded and continuous" appears. We earlier saw that. So we have overlapping phrase.
+
+Consider that the question is to decide if that phrase is "the same phrase." A phrase could be considered matching if it's identical string, maybe ignoring the ellipsis or some words replaced by ellipsis. The phrase "bounded and continuous" is simple but maybe qualifies but the phrase might be too short to be considered unique.
+
+Let's define "match" as "phrase that appears in both answers, maybe with intervening words replaced by an ellipsis." Because they say "Replace non-matching parts within a matching phrase with ...". So a phrase like "the function is bounded and continuous" is exactly same. So maybe treat as a match. But we might worry that they expect only longer phrases (like "the function is bounded and continuous" - 4 words) counts? They might consider shorter phrases as trivial. But they didn't give threshold. We'll examine the guidelines: "In your answer, you should list phrases from the reference answer that appear verbatim in another answer." They want phrases; nothing about length. They say "Ignore very short common phrases, such as 'In fact ...'." So this phrase is not "In fact...". 4 words may still be considered short but not trivial. But we might treat as match with probability maybe 0.6. But the phrase "the function is bounded and continuous" may appear again? Let's check if that phrase appears exactly in other answer 7. Yes: "in the case where you are given the integral of a function over a surface \(\Sigma\) the integrand is usually \(f \, d\sigma\) where \(d\sigma\) denotes the surface element. ... the integral over the sphere is \(\int_{S^2} f \, d\sigma\)." In answer 6, earlier we saw: "the function is bounded and continuous, the hypothesis of the theorem is satisfied, and thus \(L(f)=0\)." So that match is in answer 6. So yes, phrase "the function is bounded and continuous" appears.
+
+Thus a matching phrase exists.
+
+But we need to gauge

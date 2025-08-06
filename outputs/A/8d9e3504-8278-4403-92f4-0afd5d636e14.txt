@@ -1,0 +1,37 @@
+A\) and \(B\) are independent, so we can
+use the standard binomial distribution.  
+The probability that at most one \(Y_i\) equals \(1\) (i.e. at most one
+\(X_i\) is odd) is
+
+\[
+\boxed{P\Bigl(\sum_{i=1}^nY_i\le 1\Bigr)=
+\Pr(Y_1=1)\Pr(Y_2=0)\cdots\Pr(Y_n=0)+\sum_{i=1}^{n}
+\Pr(Y_i=0)\prod_{j\ne i}\Pr(Y_j=1)} .
+\]
+
+--------------------------------------------------------------------
+
+**If the \(A\)–events are not independent** (for example they are
+independent but not identically distributed), we still have independence
+between \(X_i\) and \(X_j\); hence the same reasoning applies and the
+formula above holds.  
+In general, if the \(A_i\) are not independent, the above probability
+cannot be expressed without extra information about their joint
+distribution.
+The problem is much easier than it appears.  Note that $B$ being true implies $A\_1$ is false, which in turn implies $X\_1$ is odd.  So all but the first terms must be zero.  Thus the probability is $1-P(X\_1=1 \mid A\_1)$.
+Now, we want the probability that $X\_1=1$ given $A\_1$ is true.  Since $X\_1$ is odd if $A\_1$ is true, we want the probability that $X\_1=1$ given $X\_1$ is odd.  This probability is 1/2.
+Thus the answer is $1-1/2=0.5$.
+Note that this holds if $n=1$.  This answer is *independent* of $n$ as long as $n \ge 1$.  If $n=0$, there is no answer.
+It seems that the key is that the probability of $B$ is 0, so it is the zero event.
+If we consider a similar problem, where $X\_n$ is even or odd with probabilities 0.4 and 0.6, then the answer is still 0.5.  This problem seems more general.
+
+---
+
+The key point that the problem is easy to solve was that the probability that $X\_i$ is odd when $A\_i$ is true is 1.  In that sense the probability that $A$ is true is independent.
+We need to analyze the user query: They gave a problem: $X_1, X_2, \ldots, X_n$ random integers. Probability that $X_i$ is even is 1/2 independent of each other and independent of $B$. $B$ is a Boolean variable, probability of $B$ being true is 0. If $B$ is true, all $X_i$ are odd. If $B$ is false, $X_i$ have no restrictions. We want probability that $X_i$ are even and at most one is odd. They want probability that $X_1$ is odd, at most 1 $X_i$ is odd? Wait: They want "X_i are even and at most one X_i is odd"? This is inconsistent: If all are even, then none odd, which satisfies at most 1 odd. But "and at most one X_i is odd" means we want probability that at most one $X_i$ is odd, and all other $X_i$ are even? Actually they say "X_i are even and at most one X_i is odd" maybe meaning "X_i are even except possibly one" or "all X_i are even except at most one odd." But if B is False (the only case where X_i can be even or odd), each X_i has independent 1/2 probability of being even and 1/2 odd. We want prob that at most 1 odd among them. So that is P(0 odds) + P(1 odd). If each X_i independent, with p=1/2 odd, then probability of exactly j odds among n is C(n,j)*(1/2)^n. So probability at most 1 odd = C(n,0)+C(n,1)*(1/2)^n = (1 + n)*(1/2)^n? Wait compute:
+
+P(0 odds) = (1/2)^n
+P(1 odd) = n*(1/2)^n
+Total = (n+1)*(1/2)^n
+
+But we

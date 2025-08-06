@@ -1,0 +1,92 @@
+NewItem` is defined as a function that returns an object. This function takes a parameter `data`, which is an observable. The function returns an object with the following properties:
+- `label`: set to the value of `data()`.
+- `value`: set to the value of `data()`.
+
+This `makeNewItem` function seems to be a factory function that creates a new item with a given label and value. The `data()` indicates that `data` is expected to be an observable, and `data()` would give the current value of that observable.
+
+Let's note that `makeNewItem` is being defined inside the module, and it doesn't seem to be returned by the module. This means it might be used only internally within this module, or the code has not included the return statement that contains this function.
+
+## Function: getSelectedItem
+
+Next:
+```javascript
+var getSelectedItem = function () {
+    var selectedItem = this.getItemById(this.selectedId());
+    //console.debug(selectedItem);
+    this.selectedItem(selectedItem);
+    if (selectedItem) {
+        var newItem = selectedItem;
+        this.selectedItemLabel(newItem.label);
+        this.selectedItemValue(newItem.value);
+    }
+};
+```
+
+`getSelectedItem` is a function that presumably operates in the context of an object that has certain properties (`selectedId`, `selectedItem`, etc.). Let's walk through it:
+
+- It calls `this.getItemById(this.selectedId())`. `this.selectedId()` suggests that `selectedId` is an observable containing the ID of the selected item. `getItemById` presumably looks up an item by this ID.
+- The result is stored in `selectedItem`.
+
+The next part of the function does the following:
+- `this.selectedItem(selectedItem);` sets the observable `selectedItem` to the found item.
+- If `selectedItem` is truthy (i.e., it was found and is not null or undefined), then it:
+  - Assigns `selectedItem` to `newItem`. (The variable `newItem` seems unnecessary here; maybe it was used for something else earlier).
+  - Sets `this.selectedItemLabel(newItem.label);` and `this.selectedItemValue(newItem.value);`. This suggests that there are observables for the label and value of the selected item, and we're updating them with the selected item's label and value.
+
+In summary, `getSelectedItem` looks up the item with the currently selected ID, updates the selected item observable, and also updates label and value observables with the selected item's label and value.
+
+## Function: setSelectedId
+
+Next:
+```javascript
+var setSelectedId = function (newValue) {
+    this.selectedId(newValue);
+    //console.debug(this.selectedId());
+    //console.debug("setSelectedId");
+};
+```
+This function sets the `selectedId` observable to the `newValue`. It looks like a simple setter. The commented-out lines indicate it used to log to the console.
+
+## Function: getId
+
+Next:
+```javascript
+var getId = function () {
+    //console.debug(this.selectedId());
+    //this.setSelectedItem(this.getItemById(this.selectedId()));
+    this.setSelectedItem(this.getItemById(this.selectedId()));
+    //console.debug(this.selectedItem());
+};
+```
+This function seems to call `setSelectedItem` with the item that has the ID from `selectedId`. It's a bit odd because the function name `getId` suggests it should return something, but instead it performs an action. This might be a misnamed function, or it's intended to refresh or update the selected item based on the ID. The commented lines suggest it was used to debug the `selectedId`.
+
+## Function: getSelectedValue
+
+Next:
+```javascript
+var getSelectedValue = function () {
+    var selectedItem = this.getItemById(this.selectedId());
+    this.selectedItem(selectedItem);
+    if (selectedItem)
+        return "selected value: " + selectedItem.value;
+    return undefined;
+};
+```
+This is similar to `getSelectedItem` but instead of updating the `selectedItem` observable, it returns a string "selected value: <value>" if the item is found, or `undefined` if not. It still also updates `this.selectedItem(selectedItem)`, which seems redundant because it's doing this action but not using the returned string except for maybe for debugging.
+
+## Function: getSelectedLabel
+
+Similar to getSelectedValue:
+```javascript
+var getSelectedLabel = function () {
+    var selectedItem = this.getItemById(this.selectedId());
+    this.selectedItem(selectedItem);
+    if (selectedItem)
+        return "label: " + selectedItem.label;
+    return undefined;
+};
+```
+This returns a string "label: <label>" if found.
+
+## Function: getSelectedItemLabel
+

@@ -1,0 +1,115 @@
+This method `addNew` returns a `String`. This is typical of JSF action methods that return a navigation outcome.
+
+- It calls `create()` on the `dao`. This likely creates a new entity record in the database.
+- It then adds a new message to the `FacesContext` saying "Successfully added". The message is a `FacesMessage` with a severity of `INFO`. The first argument "Successfully added" might be the summary, and the second argument "" is the detail. 
+  - The `FacesUtils.addMessage(...)` method seems to take a `FacesMessage` and add it to the context. It also uses the string "Message" which might be a client ID of a component that should display the message.
+- Then it sets `this.edit` to a new instance of `T`. This likely resets the form to be ready for another new entry.
+- It sets `this.action` to "addNew", which might be used for logging or display purposes.
+- Then it returns an empty string. In JSF, returning an empty string means to stay on the same page.
+
+So this method handles creating a new entity and then resets the form.
+
+```java
+   public String delete() {
+      dao.delete(this.edit);
+      FacesUtils.addMessage(new FacesMessage(FacesMessage.SEVERITY_INFO, "Successfully deleted", ""));
+      
+      this.setAction("delete");
+      return "";
+   }
+```
+The `delete` method also returns a `String`. 
+
+- It calls `delete(this.edit)` on the DAO. This would delete the current entity from the database.
+- It adds a message saying "Successfully deleted".
+- It sets the action to "delete".
+- It returns an empty string.
+
+This method handles deleting the current entity.
+
+```java
+   public void edit(T entity) {
+      try {
+         this.setAction("edit");
+         this.edit = dao.findById(entity.getId());
+      } catch (RuntimeException e) {
+         e.printStackTrace();
+      }
+   }
+```
+The `edit` method returns void and takes a `T entity`. This might be called when a user selects an entity to edit.
+
+- It sets the action to "edit".
+- It calls `dao.findById(entity.getId())` and sets this to `this.edit`. This means it retrieves the entity from the database by its ID and sets it as the entity to be edited.
+- It's wrapped in a try-catch that catches `RuntimeException` and prints the stack trace.
+
+This method prepares the form for editing an existing entity.
+
+```java
+   public void editById() {
+      try {         
+         this.setAction("edit");
+         this.edit = dao.findById(id);
+      } catch (RuntimeException e) {
+         e.printStackTrace();
+      }
+   }
+```
+This `editById` method is similar to `edit`, but it uses the `id` field rather than an entity passed in.
+
+- It sets the action to "edit".
+- It calls `dao.findById(id)` and sets this to `this.edit`. This means it retrieves the entity with the given ID and sets it as the entity to be edited.
+- It's also wrapped in a try-catch for `RuntimeException`.
+
+```java
+   public String init() {
+      if (action == null || action.equals("") ) action = "addNew";
+      
+      //TODO : load data
+      return "";
+   }
+```
+The `init` method returns a `String`. This might be called when the page or component initializes.
+
+- It checks if `action` is null or empty. If it is, it sets `action` to "addNew". This ensures that there is a default action.
+- There's a comment `//TODO : load data`. This might mean that in a more complete implementation, this method would load data into the `list`.
+- It returns an empty string, which means stay on the same page.
+
+Now the remaining methods are getters and setters for `edit`, `list`, `action`, and `id`.
+
+```java
+   public T getEdit() {
+      return edit;
+   }
+
+   public void setEdit(T edit) {
+      this.edit = edit;
+   }
+
+   public List<T> getList() {
+      return list;
+   }
+
+   public void setList(List<T> list) {
+      this.list = list;
+   }
+
+   public String getAction() {
+      return action;
+   }
+
+   public void setAction(String action) {
+      this.action = action;
+   }
+
+   public Integer getId() {
+      return id;
+   }
+
+   public void setId(Integer id) {
+      this.id = id;
+   }
+}
+```
+
+Putting it all together, this `CRUDPage` class seems to be a JSF backing bean that manages CRUD operations for an entity of type `T`. It interacts with a `GenericDAO<T>` to

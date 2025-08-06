@@ -1,0 +1,29 @@
+What about 7 2 1 0: 2+1=3; 7-3=4; 4-3=1; 1-3? can't. 7 5 0 0? Not.
+
+Thus 2+2+2+1 seems minimal. So 6 operations.
+
+Therefore answer: 6.
+
+But we might produce final reasoning elegantly: Use triangle inequality: Suppose final difference between two numbers is D. After performing operations with k numbers, minimal possible D equals |sum of selected numbers| - |sum of unselected numbers|? Let's analyze: Suppose we have numbers a,b,c,d. After some operations, we end up with two numbers equal. Equivalent to selecting two pairs of numbers such that we bring them together. Suppose we pair (a,b) and (c,d). Then we can reduce each pair to a same value using 4 operations? Wait.
+
+Better: We can think of representing as we want to bring all numbers to same value, difference zero. For each operation, we modify two numbers by same amount. Suppose final all numbers equal to X. Then difference of any two numbers initially equals difference after operations? Actually if we subtract same amount from two numbers, their relative difference unchanged. But we also add to other number. The relative difference between numbers not in pair may change.
+
+But there is more straightforward reasoning: Because each step reduces number of distinct numbers by at most one? Actually each step can at most merge two numbers? Eg subtracting from 5 and 5 and adding to 4 gives 5->4 and 5->4; So two numbers become equal to third; difference zero among them.
+
+Essentially each operation can reduce count of distinct numbers by 1 (maybe 2). But minimal number of operations maybe equal to (# of numbers with odd difference from final). Not.
+
+However, for the answer we just provide minimal operations: 6.
+
+Now craft final explanation:
+
+Let’s propose solution: Use a greedy approach: Each operation reduces the total "distance" between numbers: Let T = sum_{i=1}^4 |a_i - m| where m is the median? Not.
+
+Better: We can use parity/graph reasoning. Represent each number as vertex; each operation subtracts from two vertices and adds to one; we can view as transferring 1 from two vertices to third. Equivalent to: choose two vertices to lose one unit and one vertex to gain one unit. Over multiple operations, we want to equalize all vertices.
+
+Goal: All 5's. We need to transfer 5 units from numbers 6 and 7 to others. Each operation can transfer 1 unit from at most two vertices. So minimal operations at least 5/2 ceil=3? Wait but we also have to adjust 4's. This reasoning not good.
+
+But we can produce more formal reasoning: Let total sum remain constant. So we must transfer 5 units from 6 and 7 to 4's.
+
+We cannot transfer 3 units from both 6 and 7 simultaneously in one operation, but we can transfer at most 2 units from two numbers to third per operation. To transfer 5 units, we need at least ⌈5/2⌉=3 operations. That's lower bound. But we also need to bring 6 and 7 each to 5; each requires at least 1 operation (since they need to be subtracted). So at least 2 additional operations, giving 5 as lower bound. But we can show 5 not possible due to parity of numbers? Wait we found 5 impossible. Need to show that 5 cannot be achieved.
+
+We could argue: In 5 moves, the total sum remains 25. Suppose we finish with all numbers 5. Let us examine how many times each number was decreased. Since numbers 6 and 7 are larger than final 5, each must be decreased at least once; each operation decreases each subtracted number by 1. So 6 decreased at least 1, 7 decreased at least 1. The sum of decreases equals 5 (since we need to reduce total by 5). So exactly 5 decreases in total across the four numbers. Because each operation subtracts from two numbers, each operation accounts for exactly 2 decreases. So the number of operations equals number_of_decreases/2 = 5/2 = 2.5, but must be integer, so at least 3? Actually 5 decreases would come from at least 2 operations (since each subtracting two numbers). Wait we need to account for decreases across all numbers. Let's compute: 6 must be decreased 1 time; 7 decreased 1 time; 4 decreased? maybe 0; 4 decreased to 5? Actually 4's need to be increased, not decreased, but we might also

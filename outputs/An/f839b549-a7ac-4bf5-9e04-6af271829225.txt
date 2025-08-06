@@ -1,0 +1,149 @@
+An error occurred while saving the data.');
+    }
+
+    /**
+     * Helper method to display messages to the user.
+     * @param {String} message - Message to display.
+     */
+    _displayMessage(message) {
+        this.messageBox.textContent = message;
+    }
+
+    /**
+     * Helper method to clear messages from the display.
+     */
+    _clearMessage() {
+        this.messageBox.textContent = '';
+    }
+}
+
+// Usage example:
+
+// Assuming the HTML structure exists as per the IDs used
+// Instantiate the controller
+const controller = new BookEditController();
+
+```
+
+```javascript
+// BookEditController.js
+
+/**
+ * BookEditController
+ *
+ * Manages the editing of book records, handling form validation, 
+ * duplicate checks, data synchronization, and server communication.
+ */
+class BookEditController {
+    /**
+     * Constructor
+     * @param {Object} options - Options for initializing the controller
+     * @param {string} options.formId - ID of the edit form
+     * @param {string} options.titleId - ID of the title input field
+     * @param {string} options.authorId - ID of the author select field
+     * @param {string} options.genreId - ID of the genre select field
+     * @param {string} options.isbnId - ID of the ISBN input field
+     * @param {string} options.idId - ID of the hidden input field for Book ID
+     * @param {string} options.messageBoxId - ID of the message display element
+     */
+    constructor(options) {
+        // Initialize form elements
+        this.form = document.getElementById(options.formId);
+        this.titleInput = document.getElementById(options.titleId);
+        this.authorSelect = document.getElementById(options.authorId);
+        this.genreSelect = document.getElementById(options.genreId);
+        this.isbnInput = document.getElementById(options.isbnId);
+        this.idInput = document.getElementById(options.idId);
+        this.messageBox = document.getElementById(options.messageBoxId);
+
+        // Bind event listeners
+        this.form.addEventListener('submit', (e) => this.save(e));
+
+        // Store old values for comparison
+        this.oldValues = {
+            title: this.titleInput.value.trim(),
+            isbn: this.isbnInput.value.trim()
+        };
+    }
+
+    /**
+     * Handles the form save operation.
+     * @param {Event} e - The event object
+     */
+    async save(e) {
+        e.preventDefault(); // Prevent default form submission
+
+        // Clear previous error indications and messages
+        this.clearErrors();
+        this._clearMessage();
+
+        // Validate form
+        if (!this.checkForm()) {
+            // Validation failed, abort save
+            return;
+        }
+
+        // Extract book properties
+        const properties = this.getProperties();
+
+        // Check for duplicate book
+        if (await this.checkDuplicateBook(properties.id, properties.title, properties.isbn)) {
+            // Duplicate found, abort save
+            return;
+        }
+
+        // Synchronize author and genre fields
+        const authorId = this.author_select();
+        const genreId = this.genre_select();
+
+        // Prepare data for server
+        const bookData = {
+            id: properties.id,
+            title: properties.title,
+            author: authorId,
+            genre: genreId,
+            isbn: properties.isbn
+        };
+
+        try {
+            // Send data to server
+            await this.doSave(bookData);
+            // On success, display success message
+            this._displayMessage('Book saved successfully.');
+            // Update old values
+            this.oldValues.title = properties.title;
+            this.oldValues.isbn = properties.isbn;
+        } catch (error) {
+            // Handle errors
+            this._displayMessage('Error saving book. Please try again.');
+        }
+    }
+
+    /**
+     * Validates the form fields.
+     * @returns {boolean} - True if validation passes, false otherwise.
+     */
+    checkForm() {
+        // Validate title
+        const title = this.titleInput.value.trim();
+        if (title === '') {
+            this._setError(this.titleInput, 'Title is required.');
+            return false;
+        }
+        if (title.length < 2 || title.length > 200) {
+            this._setError(this.titleInput, 'Title must be between 2 and 200 characters.');
+            return false;
+        }
+
+        // Validate ISBN
+        const isbn = this.isbnInput.value.trim();
+        if (isbn === '') {
+            this._setError(this.isbnInput, 'ISBN is required.');
+            return false;
+        }
+        if (!/^\d{13}$/.test(isbn)) {
+            this._setError(this.isbnInput, 'ISBN must be a 13-digit number.');
+            return false;
+        }
+
+        //

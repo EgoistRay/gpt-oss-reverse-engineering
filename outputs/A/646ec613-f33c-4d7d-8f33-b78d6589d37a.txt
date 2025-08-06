@@ -1,0 +1,129 @@
+A' and 'C' in 'ABAC' is 2
+
+- For "ABCD", the longest substring with unique characters is "ABCD" with length 4.
+
+Now, write a function in JavaScript that, given a string, returns the length of its longest substring of unique characters, using the sliding window method.
+
+We are told to implement a function in JavaScript that, given a string s, returns the length of the longest substring of s containing only unique characters, i.e., no repeated characters.
+
+The constraints are:
+
+- s can be any string with length between 0 and 5,000.
+
+An efficient solution would be to use the sliding window method.
+
+Approach:
+
+We need to find the length of the longest substring without repeating characters. This is a classic problem, and the sliding window technique is efficient.
+
+Implementation details:
+
+- We will use two pointers: left and right.
+
+- We will also use a set to store characters in the current window.
+
+- Initialize left = 0, maxLen = 0
+
+- Iterate right from 0 to s.length-1
+
+At each step:
+
+- While s[right] is in the set:
+
+  - Remove s[left] from the set
+
+  - Increment left
+
+- Add s[right] to the set
+
+- Update maxLen to be the max of (maxLen, right - left + 1)
+
+At the end, return maxLen
+
+Edge cases:
+
+- Empty string: should return 0.
+
+Testing:
+
+Test 1: "abcabcbb" => 3
+
+Test 2: "bbbbb" => 1
+
+Test 3: "pwwkew" => 3
+
+Test 4: "" => 0
+
+Test 5: "a" => 1
+
+Test 6: "abcdefg" => 7
+
+Test 7: "abccddeffgh" => 4
+
+Test 8: "ababcabcabcabc" => 3 (since "abc" repeats)
+
+Test 9: "abba" => 2
+
+Test 10: "ABABAB" => 2
+
+Now, write a function with explanation and code.
+
+# Answer
+
+To solve this problem, we employ the sliding window technique, which efficiently tracks substrings in a string to find the maximum length of a substring with all unique characters.
+
+**Approach**:
+
+1. **Initialize two pointers**: `left` and `right`, representing the current window's start and end indices, respectively.
+2. **Use a set** to store unique characters within the current window.
+3. **Iterate** over the string with the `right` pointer:
+   - While the character at the `right` pointer is already in the set:
+     - Remove the character at the `left` pointer from the set.
+     - Increment the `left` pointer to shrink the window from the left.
+   - Add the character at the `right` pointer to the set.
+   - Update the maximum length (`maxLen`) found so far, using the current window size (`right - left + 1`).
+4. **Return** the maximum length after the iteration completes.
+
+This approach ensures we only process each character once, leading to an efficient O(n) time complexity, where n is the length of the string.
+
+**JavaScript Implementation**:
+
+```javascript
+/**
+ * Function to find the length of the longest substring without repeating characters.
+ * @param {string} s - The input string.
+ * @returns {number} - Length of the longest substring without repeating characters.
+ */
+function lengthOfLongestSubstring(s) {
+  // Edge case: if the string is empty, return 0
+  if (!s || s.length === 0) return 0;
+
+  // Set to store unique characters in the current window
+  const charSet = new Set();
+  let maxLen = 0; // Maximum length found
+  let left = 0;   // Left pointer of the sliding window
+
+  // Iterate over the string with the right pointer
+  for (let right = 0; right < s.length; right++) {
+    // If the character at right is already in the set, move left pointer to remove duplicates
+    while (charSet.has(s[right])) {
+      charSet.delete(s[left]); // Remove the character at the left pointer
+      left++; // Move the left pointer forward
+    }
+
+    // Add the current character to the set
+    charSet.add(s[right]);
+
+    // Update maxLen if the current window size is larger
+    const currentLen = right - left + 1;
+    if (currentLen > maxLen) {
+      maxLen = currentLen;
+    }
+  }
+
+  // Return the maximum length found
+  return maxLen;
+}
+
+// Test cases
+console.log(lengthOfLongestSubstring("abcabcbb")); // Expected output: 

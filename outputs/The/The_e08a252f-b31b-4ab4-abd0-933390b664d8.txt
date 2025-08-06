@@ -1,0 +1,109 @@
+The `addProduct` method adds a product to the cart, ensuring that the quantity does not exceed the product's available stock. If the cart already contains the product, its quantity is increased by the specified amount, but it cannot exceed the product's stock. If adding the product would exceed stock, a `RuntimeException` is thrown.
+
+The `removeProduct` method removes a product from the cart by its `id`. If the product is not in the cart, it does nothing.
+
+The `updateQuantity` method updates the quantity of a specific product in the cart. It ensures the desired quantity is positive and does not exceed the product's available stock. If these conditions are not met, it throws a `RuntimeException`. If the quantity is set to zero, the product is removed from the cart.
+
+The `listCartItems` method returns an array of all products in the cart, each with their `id`, `name`, `price`, `quantity`, and `total` price (`price * quantity`).
+
+The `calculateCartTotal` method computes and returns the total price of all items in the cart.
+
+The following PHP code implements the `Cart` class with these methods and includes test cases to demonstrate its functionality.
+
+Now, provide the code. Since this is an independent, self-contained code, we should include the class definition and some test cases to show how it can be used.
+
+Note: Since the question says "You may use any built-in PHP functions and data structures, but you may not use any external libraries or frameworks.", so we can use standard PHP functions.
+
+Also, we must remember to handle the error conditions appropriately.
+
+Implement the code.
+
+Here we go.
+
+# Answer
+
+**Answer:**
+
+The following PHP code defines a `Cart` class that manages products in a shopping cart. It includes methods to add, remove, and update products, as well as to list cart items and calculate the total cart price. Each method ensures that operations respect the stock limits of the products and handles error cases by throwing `RuntimeException`.
+
+```php
+<?php
+
+/**
+ * Represents a shopping cart.
+ */
+class Cart
+{
+    /**
+     * @var array Holds the cart items with product ID as key.
+     */
+    private $items = [];
+
+    /**
+     * Adds the specified quantity of a product to the cart.
+     *
+     * @param array $product An associative array with keys 'id', 'name', 'price', 'stock'.
+     * @param int $quantity The quantity to add.
+     *
+     * @throws RuntimeException if adding the product would exceed the available stock.
+     */
+    public function addProduct(array $product, int $quantity): void
+    {
+        $this->validateProductArray($product);
+        $this->validateQuantity($quantity);
+
+        $productId = $product['id'];
+        $availableStock = $product['stock'];
+        $currentQuantityInCart = $this->items[$productId]['quantity'] ?? 0;
+
+        $newTotalQuantity = $currentQuantityInCart + $quantity;
+
+        if ($newTotalQuantity > $availableStock) {
+            throw new RuntimeException("Cannot add product '{$product['name']}' to cart: quantity ($newTotalQuantity) exceeds available stock ($availableStock).");
+        }
+
+        if (isset($this->items[$productId])) {
+            // Update existing product quantity
+            $this->items[$productId]['quantity'] = $newTotalQuantity;
+        } else {
+            // Add new product to cart
+            $this->items[$productId] = [
+                'id'       => $product['id'],
+                'name'     => $product['name'],
+                'price'    => $product['price'],
+                'quantity' => $newTotalQuantity,
+            ];
+        }
+    }
+
+    /**
+     * Removes a product from the cart by its ID.
+     *
+     * @param mixed $productId The ID of the product to remove.
+     */
+    public function removeProduct($productId): void
+    {
+        if (isset($this->items[$productId])) {
+            unset($this->items[$productId]);
+        }
+    }
+
+    /**
+     * Updates the quantity of the specified product in the cart.
+     *
+     * @param mixed $productId The ID of the product.
+     * @param int $newQuantity The new quantity to set.
+     *
+     * @throws RuntimeException if new quantity is zero or exceeds available stock.
+     */
+    public function updateQuantity($productId, int $newQuantity): void
+    {
+        if (!isset($this->items[$productId])) {
+            throw new RuntimeException("Product with ID {$productId} not found in cart.");
+        }
+
+        if ($newQuantity <= 0) {
+            throw new RuntimeException("New quantity must be positive.");
+        }
+
+        // For updating quantity, we need the product's available

@@ -1,0 +1,120 @@
+New.setUsername(textUsername.trim());
+        studentNew.setPassword(textPassword.trim());
+        studentNew.setPasswordmod(false);
+
+        studentDao.regist(studentNew);
+        init_UI_register();
+        currentScreen.setContentUi("home");
+        handlerMessage.sendMessage(handlerMessage.obtainMessage(UIScreen.message_add_student));
+      }
+      else
+      {
+        ToastUtils.alert(this,"输入用户名或密码格式错误！",false);
+      }
+
+    }
+    else if(what==1)
+    {
+      Intent item= data.getData();
+      if(item!=null)
+      {
+        String temppath= item.getPath();
+        if(temppath!=null)
+        {
+          //ToastUtils.alert(this,temppath,true);
+          try
+          {
+            byte[] buf= new byte[1024];
+            InputStream in= this.getContentResolver().openInputStream(item);
+            ByteArrayOutputStream out = new ByteArrayOutputStream();
+            int read;
+            while((read=in.read(buf))!=-1)
+              out.write(buf,0,read);
+            studentDao.putPhoto(stuid, out.toByteArray());
+            // dialogPassword();
+          }
+          catch(IOException e)
+          {
+            e.printStackTrace();
+          }
+          student.setPhoto(photo);
+        }
+      }
+    }
+  }
+```
+- This method handles results from startActivityForResult calls. 
+- If `what==0`, this means it's handling the result from the photo capture intent. 
+  - It extracts the bitmap from the data extras, which should be the thumbnail of the captured photo. 
+  - Then it gets the URI from the `photoUri`. 
+  - It then creates a FileOutputStream using the URI's path and writes the bitmap to it. 
+  - It then frees the bitmap. 
+  - Then it displays the bitmap in an ImageView with ID `R.id.register_pic`. 
+  - If `stuid` is not empty, it sets the photo in the student. 
+
+This part seems a bit odd, especially the part where it writes the bitmap to a file with a `.jpg` extension but has an image format of `PNG`. Also, the handling of the URI and file path might not be correct. 
+
+- If `what == 1`, this means it’s handling the result from picking a photo. It gets the data URI. If it's not null, it gets the path. It then reads the content from that path and passes it to `studentDao.putPhoto` with the student ID. This part also might not be correct, as it might not handle the thumbnail correctly. This code seems to try to read a thumbnail directly from an `ImageView`, which might not be what it intends. Let's also note that processing can be done on a background thread.
+
+Let's continue.
+
+## UI Methods: getImageHostPath
+```java
+  private String getImageHostPath()
+  {
+    return "file://" + Environment.getExternalStorageDirectory().getAbsolutePath()
+        + File.separatorChar + "shots";
+  }
+```
+- This generates a path string for the shots directory on the SD card. This might be used for the image capture intent.
+
+## UI Methods: getBitmap
+```java
+  public void getBitmap()
+  {
+    // rocks,it won't support the SD card
+  }
+```
+- This method is empty. The comment suggests that it won't work with SD cards. This might be a placeholder.
+
+## UI Methods: dialogPassword
+```java
+  public void dialogPassword()
+  {
+    LayoutInflater fi = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
+    final View layout = fi.inflate(R.layout.loginpwd, null);
+    final EditText textPassword = (EditText) layout.findViewById(R.id.centerPassword);
+    new AlertDialog.Builder(this)
+        .setTitle("请设置密码")
+        .setView(layout)
+        .setPositiveButton("确定",
+            new DialogInterface.OnClickListener() {
+              @Override
+              public void onClick(DialogInterface dialog, int which)
+              {
+                //get Layout
+                /*
+                 *
+                 *
+                 */
+
+                String strPassword = textPassword.getText().toString();
+
+                //判断输入正确性
+                Pattern pattern = Pattern.compile("[a-zA-Z0-9_]{5,20}");
+                Matcher matcher = pattern.matcher(strPassword);
+                if(matcher.matches())
+                {
+                  ToastUtils.alert(context,"恭喜！密码设置成功！",false);
+                }
+                else
+                {
+                  String errMsg = "密码格式应为5-20位数字、字符、下划线组合";
+                  ToastUtils.alert(context, errMsg, true);
+                  return;
+                }
+
+                //更新缓存
+                SharedPreferences.Editor editor = App.getCache("teacher").edit();
+                editor.putString(GlobalConst.PREFS_KEY_PASSWORD, textPassword.getText().toString());
+                editor

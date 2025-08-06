@@ -1,0 +1,99 @@
+This function `addImageEventHandler` seems to set up image processing for a given component. It takes an array `allSrc`, a `prefix`, `imagePath`, a callback `cb`, a `type`, and a `size`. It sets up some parameters, defines a callback function `cbP` that checks for success, and then gets the `src` attributes of elements within the component. It then iterates over the `srcs` and calls `processImg` on each. This looks like a function for preloading or processing images for a component, but I think this might be from a different part of the code and not directly relevant to the "Moo" component. I'll keep it in mind.
+
+Let's skip ahead. I see a block that starts with:
+
+```javascript
+            /* ------------- 组件类 ------------- */
+            var ComMoo = GcClass("ComMoo", M.Moo, function () {
+                // var _self = this;
+                var _default = {
+                    // 1 => 默认 2 => 跭
+                };
+                var _defaultTemplate = null;
+                // var _setParams = new GcData();
+                // ... (more code)
+```
+This looks like the start of the class definition for `ComMoo`. Let's analyze this piece. 
+
+This code defines a class `ComMoo` using `GcClass`. The class name is "ComMoo", it extends `M.Moo`, and its constructor function is defined by the function that follows. Inside the constructor, there are local variables named `_default`, `_defaultTemplate`, `_setParams`, etc.
+
+Let's keep reading the constructor:
+
+```javascript
+                // var _setParams = new GcData();
+                /*
+                var _setParams = GcData.getFromMap(function (_val, _key, _obj) {
+                    var _val2 = _obj[_key].value;
+                    _obj[_key] = _val?GcStr.format(_val, _key)+"\r":{_val:null};
+                });
+                var _default = GC_DATA({
+                    isShow : 1,
+                    isClear : 0,
+                    isShowCover : 0,
+                    isShowIcon : 0,
+                    isShowTitle : 1,
+                    // titleColor : '#fff',
+                    // titleSize : 16,
+                    // titleFontSize : 16,
+                    // titleFontWeight : 'bold',
+                    _on : true,
+                    backgroundColor : '', //背景色
+                    colorHover : '#ddd',
+                });
+                Object.assign(this.data, _default);
+                */
+                
+                var _data = GcData.getFromMap(_default);
+                var _cacheData = GcData.getFromMap(_default);
+                var _default = GcData();
+                _data.isShowCover = 1;
+                _data.isShowIcon = 1;
+                
+                /*
+                $.extend(this.data, {
+                    icon : null,
+                    title : null,
+                    img : null,
+                    titleDesc : null,
+                });
+                */
+                var _t = this;
+                var _dom = getDom('thisDom');
+                // var _thisDom = this.dom();
+```
+This seems to be setting up the initial data for the component. `_data` appears to be the initial data for the component, with defaults. `GcData.getFromMap(_default)` suggests that this component is using a data structure that maps defaults onto something. The defaults include `isShowCover`, `isShowIcon`, and some others.
+
+Let's continue:
+
+```javascript
+                var _isCover = $get('isShowCover', _this.dom());
+
+                // var _default = GC_DATA({
+                // 	"isShowCover": 1,
+                // 	"backgroundColor": "",
+                // 	"colorHover": "#ddd"
+                // });
+
+                // // this.setData(_default);
+                // // Object.keys(_data).forEach(function (_key) {
+                // // 	_data[_key] = GcFunc.getVal(this, _key, _data[_key]);
+                // // });
+                /*
+                this.setData({
+                    "isShow": 1,
+                    "isClear": 0,
+                    "isShowCover": 0,
+                    "isShowIcon": 0,
+                    "isShowTitle": 1,
+                    // titleColor : '#fff',
+                    // titleSize : 16,
+                    // titleFontSize : 16,
+                    // titleFontWeight : 'bold',
+                    "_on": true,
+                    "backgroundColor": "", //背景色
+                    "colorHover": "#ddd"
+                });
+                */
+                
+                // var _params = GcData.getFromMap(function (_val, _key, _obj) {
+                // 	_obj[_key] = _obj[_key

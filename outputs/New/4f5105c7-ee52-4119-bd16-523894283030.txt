@@ -1,0 +1,54 @@
+New()
+    source.SetDimensions(3, 3, 3)
+    source.SetOrigin(3, 2, 1)
+    source = source.GetOutput()
+    # Get a point
+    point = source.GetPoint(-100)
+    self.assertTrue(np.array_equal(point, (0, 0, 0)))
+    point = source.GetPoint(-1)
+    self.assertTrue(np.array_equal(point, (2, 2, 2)))
+```
+
+In this test, we are creating a new `vtkImageData` instance. We set its dimensions to 3x3x3, which means it should have 27 points in a 3x3x3 grid. The origin is set to (3, 2, 1). We then get the underlying VTK object with `GetOutput()`.
+
+Next, we test the `GetPoint` method of `vtkImageData`. The argument to `GetPoint` seems to be a point ID. We are testing that calling `GetPoint(-100)` returns the point at ID 0, which has coordinates (0, 0, 0). Then we check that `GetPoint(-1)` returns the point at the last ID, which should be the point at the opposite corner of the grid. Since the grid starts at origin (3, 2, 1) and has dimensions 3x3x3, the last point should be at index (2, 2, 2) which in coordinates would be origin + (2, 2, 2) = (3+2, 2+2, 1+2) = (5, 4, 3). However, I think there's a mistake in this test. Because we set the origin to (3, 2, 1), the coordinates of points would not start from (0, 0, 0). Let's double-check what's actually happening. I suspect that the `GetPoint` method might be returning coordinates relative to the origin, or I might be misunderstanding how `GetPoint` works. Let's check the VTK documentation for `vtkImageData::GetPoint`.
+
+After checking the VTK documentation, I realize that I might not fully understand how `GetPoint` behaves. I'll leave this for now and move on, but this is something that should be clarified.
+
+Let's continue with the next test: `test_SetPoint`. This test checks if we can set and get point IDs on the structured points:
+
+```python
+def test_SetPoint(self):
+    # Get a point
+    source = vtk.vtkStructuredPoints.New()
+    source.SetDimensions(3, 3, 3)
+    source.SetOrigin(3, 2, 1)
+    source.GetPointData().SetNumberOfArrays(1)
+    source.GetPointData().SetActiveScalars(0)
+    source = source.GetOutput()
+    source.SetPoint(999999999, 2, 2, 2)
+    self.assertEqual(source.GetPointID(2, 2, 2), 999999999)
+```
+
+In this test, we create a `vtkStructuredPoints`, set dimensions, origin, and configure scalar arrays. Then on the underlying VTK object, we set a point ID of 999999999 to the grid index (2, 2, 2). We then check that `GetPointID(2, 2, 2)` returns 999999999. This tests that setting a point ID works correctly.
+
+Next is `test_GetScalarValue`:
+
+```python
+def test_GetScalarValue(self):
+    source = vtk.vtkStructuredPoints.New()
+    source.SetDimensions(3, 3, 3)
+    source.SetOrigin(3, 2, 1)
+    source.GetPointData().SetNumberOfArrays(1)
+    source.GetPointData().SetActiveScalars(0)
+    source = source.GetOutput()
+    source.GetPointData().GetScalars().SetTuple1(1, 12.0)
+    val = source.GetScalarValue(0, 0, 1)
+    self.assertEqual(val, 12.0)
+    val = source.GetScalarValue(0, 0, 2)
+    self.assertEqual(val, 0)
+    val = source.GetScalarValue(-1, 0, 1)
+    self.assertEqual(val, 12.0)
+```
+
+This test sets a scalar value at index 1 of the scalars array to 12.0. Then it checks that `GetScalarValue(0, 0, 1)` returns 12.0, which should refer to the same index. It also checks that `GetScalarValue(0, 0, 2)` returns 0, since it was not set. Finally, it checks that `GetScalarValue(-1

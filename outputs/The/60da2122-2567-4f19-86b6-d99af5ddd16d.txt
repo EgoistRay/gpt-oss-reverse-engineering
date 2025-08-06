@@ -1,0 +1,81 @@
+The number of sub-arrays of length \(\ge 2\) is
+
+\[
+S_n = \binom{n+1}{2}-n=\frac{n(n-3)}{2}\;.
+\]
+
+---
+
+### Expected number of pairs of neighboring vertices in one step
+
+In a random permutation the relative order of any fixed pair of vertices is
+uniform among all  
+
+\[
+2!\; n! 
+\]
+
+permutations, hence
+
+\[
+\Pr\bigl(\text{vertices }u,v\text{ are adjacent}\bigr)=\frac{2}{\,n+1\,}.
+\]
+
+There are \(S_n\) possible unordered vertex pairs that have
+\(\min\ge 2\), so
+
+\[
+\mathbb E[\text{pairs adjacent in one step}]
+= S_n\;\frac{2}{n+1}
+= N^{2}+O(N) .
+\tag{1}
+\]
+
+---
+
+### Expected number of edges deleted
+
+Each adjacency deletes the **unique** edge that connects the two vertices,
+and no edge can be deleted twice.  
+Hence the number of edges removed in a step equals the number of adjacent
+pairs.  The expectation follows immediately:
+\[
+\mathbb E[\text{edges deleted in a step}]=
+N^{2}+O(N).
+\tag{2}
+\]
+
+Thus the mean number of edges removed during the whole algorithm is
+exactly \(N^2\) plus a lower‑order term (the \(O(N)\) in 2.3).  The
+explanation is that the algorithm deletes an edge precisely when the two
+vertices that the edge originally connected become adjacent in the
+random ordering and there are, on average, about \(N^{2}\) such adjacent
+pairs.  
+No “error” in the computation of \(\operatorname{Pr}(\text{being adjacent})\) is involved. The “extra” \(O(N)\) results from the fact that not all pairs \((u,v)\) with \(\min(u,v)=1\) are counted, and from the small‑order contributions of the lower‑\(n\) terms.  This is why the algorithm appears to delete almost exactly one edge for each of the \(\Theta(N^2)\) potential edges. This explains the \(O(N)\) term in the theorem. The key insight is that the algorithm removes precisely the edges whose two endpoints become adjacent in the random ordering.
+
+**Hence** the mean number of edges deleted in one step (and therefore
+the total number of deletions needed to reach the identity) is indeed
+\(N^{2}+O(N)\). The $O(N)$ term is just a lower‑order correction.
+
+**Hence** the claim of Theorem 2.3 is correct and consistent with the
+derivation that you provided. – This is to be put in the proof.
+
+So the answer to the question is: The theorem is based on the observation that an edge is removed if and only if the 2 vertices of the edge are adjacent in the random walk. The probability of that is
+\(\frac{2}{n+1}\). The number of pairs at distance at least 2 is
+\(\binom{n+1}{2}-n = \frac{n(n-3)}{2}\), giving exactly $N^2+O(N)$
+expected deletions per step.
+
+-----
+
+I think that covers it well; the explanation of the \(O(N)\) term
+remains at the second line, clarifying that it's not a mistake but a
+natural lower‑order term, not an unaccounted for error. 
+
+(Alternatively, include the derivation from the sum formula:
+\(\sum_{i=3}^{n} \frac{2}{i+1} = n-1-\sum_{i=3}^{n}\frac{2}{i+1}\),
+which tends to \(n+O(1)\) .) 
+```
+
+They claim the algorithm deletes exactly N^2 + O(N). The expectation number of edges removed is N^2 + lower order terms. The method for computing that probability is probability that two vertices become adjacent in a random permutation. They find that there are total N^2 + O(N) pairs.
+
+The user asks for a proof: Is there a better way to derive this expectation? The question about is it necessary? We need to show that there's no error. We have to justify that the random permutation with edges inserted and removed is essentially a random walk. Each step deletes edges that connect to new neighbor. So each pair with min between 2 is counted. There are (n^2-3n)/2 pairs. Each pair has probability 2/(k+1), summing over k leads to N^

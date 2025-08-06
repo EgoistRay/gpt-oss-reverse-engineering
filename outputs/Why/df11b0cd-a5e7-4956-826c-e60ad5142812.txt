@@ -1,0 +1,91 @@
+Why? Because we need to check each pair; If there is some pair where x is not in set or y is not in set, we return false. Because we want all pairs to have both endpoints in set.
+
+Edge: Suppose we have pair (0,1) and (2,3); set {0,1,2,3} -> both endpoints of each pair are in the set. Good.
+
+Suppose set {0,1,1,2} -> pair (0,1) ok; pair (2,3) fails because 3 not in set.
+
+Suppose set {0,1,2,3} -> all pair endpoints exist.
+
+Hence algorithm works.
+
+Complexities:
+
+- n <= 2 * 10^5, each set of size k <= 5, pairs <= 4. So each check O(k + m) constant, times number of permutations 120, times number of positions up to 2e5: 1.2e7, fine.
+
+Now we need to implement in PHP 8.0.
+
+Implementation details:
+
+- We'll parse input using fgets and explode; but need to handle up to 2e5 numbers; so reading entire line and splitting might be memory heavy but still fine (2e5 ints). Use reading loops.
+
+- Since k <= 5, we can store a_i in array of ints.
+
+- We'll generate permutations using next_permutation algorithm or by using recursion. In PHP we can use function to produce permutations of indices 0..k-1 using recursion or built-in `array_multisort`? We'll manually generate.
+
+But we need to generate permutations for each test case; k <=5, so at most 120; we can produce all permutations using built-in `array_multisort` or `combinations`.
+
+Implement:
+
+$indices = range(0, $k-1);
+// generate perms using function `permutations($array)` that returns array of arrays.
+
+Implement recursion:
+
+function permute($arr, $l, $r, &$result, $k)
+{
+  if ($l == $r) {
+     $result[] = $arr;
+  } else {
+     for ($i = $l; $i <= $r; $i++) {
+        $tmp = $arr[$l];
+        $arr[$l] = $arr[$i];
+        $arr[$i] = $tmp;
+        permute($arr, $l+1, $r, $result);
+        // backtrack
+        $tmp = $arr[$l];
+        $arr[$l] = $arr[$i];
+        $arr[$i] = $tmp;
+     }
+  }
+}
+
+Call permute(range(0,k-1), 0, k-1, $perms, $k);
+
+But we may generate duplicates (none). Works.
+
+Now algorithm details:
+
+Input reading:
+
+$firstLine = trim(fgets(STDIN));
+list($n, $k, $m) = array_map('intval', explode(' ', $firstLine));
+
+Second line: list of a_i. Since k small, we can parse:
+
+$aiLine = trim(fgets(STDIN));
+$a = array_map('intval', explode(' ', $aiLine));
+// if less than k numbers due to newlines? We'll read until we have k numbers; but given input lines may contain trailing spaces; but we can rely on reading exactly one line.
+
+Third line: pairs: m numbers -> 2m ints
+
+We may need to read multiple lines if 2*m may exceed typical line length; but we can just loop to read until we have 2*m numbers. Implementation: $pairTokens = []; while (count($pairTokens) < 2*$m){ $line = trim(fgets(STDIN)); if ($line==='') continue; $tokens = array_map('intval', preg_split('/\s+/', $line)); $pairTokens = array_merge($pairTokens, $tokens); }
+
+After reading, build array of pairs: $pairs = []; for i 0..m-1: $u = $pairTokens[2*i] - 1; $v = $pairTokens[2*i+1] - 1; $pairs[] = [$u, $v];
+
+Now algorithm loops:
+
+$indices = range(0, $k-1);
+$perms = [];
+permute($indices, 0, $k-1, $perms);
+
+But generating all perms as arrays will produce many memory but fine.
+
+For each permutation $ord in $perms:
+
+We need to iterate positions.
+
+$last = array_fill(0, $k, -1);
+$posInSeq = array_fill(0, $k, $n); // sentinel n for none
+
+For ($start = 0; $start < $n; $start++) {
+    $posInSeq[$

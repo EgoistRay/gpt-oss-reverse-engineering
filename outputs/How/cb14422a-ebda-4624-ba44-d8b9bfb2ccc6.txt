@@ -1,0 +1,39 @@
+How does the 'create' action handle the case where an 'id' attribute is present in the form submission, and how does this differ from when 'id' is not present?
+
+Answer:
+
+In this code, the `create` action does not actually handle the case where 'id' is present. It only handles the case where a new object is being created from a form submission.
+
+However, the `create` action does call `create_from_attributes_and_ownership`, which checks if `@attributes.key?(id_attribute)` and then uses `find_or_initialize_by(id_attribute => @attributes[id_attribute])`. This means if the form submission includes an `id` attribute, it will either find the existing record with that `id` or initialize a new one. Then it checks if the record is persisted. If it is not persisted (i.e., it's a new record and not found in the database), it attempts to save it. If it is persisted, it calls `update_from_attributes_and_ownership` instead, which will update the existing record.
+
+So effectively, the `create` action can both create a new record or update an existing one if the `id` is provided and matches an existing record. This might not be the most conventional way of handling `create` and could be confusing to someone reading the code, as they might expect `create` to only create new records.
+
+This is a more complex behavior and may not be a good teaching example. Let's move on.
+
+I think we've covered the main learning points and created exercises for them. Let's review what we've got:
+
+1. How the `new` action handles different `:id` param values (new, edit, copy).
+2. How `create_from_attributes_and_ownership` decides to find an existing instance or create a new one based on `id`.
+3. The difference between `new_from_attributes` and `create_from_attributes_and_ownership`.
+4. The `destroy` action's handling of a custom 'delete' field in the parameters.
+5. The role of `ownership_class`.
+6. The difference between `new`/`create` and `edit`/`update` in relation to the `ownership_class` and `ownership_attributes`.
+
+These seem like solid learning points and exercises. If we wanted to add more, we could delve into how the `update_from_attributes_and_ownership` works, or the role of `ownership_attributes`. For the sake of brevity, let's finalize the answer here.
+
+- Understanding the 'new' action logic for different ':id' values (new, edit, copy); e.g., if ':id' is 'copy', it fetches the object with that ID and copies its attributes except certain exclusions.
+- How 'create_from_attributes_and_ownership' finds or initializes an instance based on 'id' from attributes; it checks if 'id' is present and uses 'find_or_initialize_by' or simply initializes a new instance.
+- Difference between 'new_from_attributes' and 'create_from_attributes_and_ownership'; 'new_from_attributes' only initializes a new instance, while 'create_from_attributes_and_ownership' also checks for existing records using 'id'.
+- The 'destroy' action checks for a 'delete' parameter in the object's attributes. If set, it deletes the object; otherwise, it redirects to a new object's page. 
+- The 'ownership_class' is likely a method that should return the class that owns the resource; it's used for setting the resource as the owner of the record being created or edited. 
+- The code uses 'new_from_attributes' for new/edit actions and 'create_from_attributes_and_ownership' for create/update actions; this likely has to do with how ownership is handled. 
+- The 'ownership_attributes' are used to set the owner of the object. 
+- The code also uses 'set_params', 'set_attributes', 'set_ownership' to manage parameters. 
+- The controller expects a 'new_resource' method which should be defined elsewhere. 
+- The code checks for an 'id' key in '@attributes' to decide if the record should be fetched from the database or created anew. 
+- The 'destroy' action will delete the record if the 'delete' attribute is present; otherwise, it will redirect. 
+- In the 'update' action, it checks if '@object.owner' is nil to decide which update method to call. 
+- In the 'edit' action, there is a check that the object's 'id' matches '@attributes[id_attribute]'.
+- The code uses 'send' to call methods like 'set_params', which means those methods are defined in the controller or a parent class. 
+- The 'new' and 'edit' actions set '@object' to be a new instance or an edited instance, respectively, and then render the 'new' template. 
+- The 'create' action attempts to create a record and handle

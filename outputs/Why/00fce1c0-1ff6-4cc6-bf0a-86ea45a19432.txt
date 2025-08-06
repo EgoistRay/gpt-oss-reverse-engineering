@@ -1,0 +1,23 @@
+Why might different orders in the partial-wave expansion of operator matrix elements lead to orders in the scaled energy expansion that are lower than the achieved order? (Open-ended: explain possible causes and implications of this behavior.)
+
+Abstract: The Breit-Wigner theory is extended to a generalized Breit-Wigner formula,
+which includes higher-order power corrections for the true mass expansion. This
+generalization is applied for the two-body relativistic scattering process
+$N\Lambda\to N\Lambda$. The relativistic scattering amplitude is expressed in
+the partial-wave expansion formalism. The propagation mechanism of the
+intermediate $N\Lambda$ state is calculated using the spin-conserving,
+attractive one-pion-exchange short-range potential. The one-pion invariant
+amplitude is made of baryon-mass functions determined upon a small-number
+iterative expansion. Consistency with the relativistic Breit-Wigner theory is
+analyzed using a series of numerical benchmark results. With a comparison of
+internal angular-momentum configurations, we explicitly demonstrate the
+viability of an extended Breit-Wigner theory and its viability to represent
+higher-order terms of the meson picture. The generalization enhances the
+treatment of transport phenomena of a dynamical many-body quanten system and
+provides useful phenomenological insights into the quasi-particle dynamics. The
+constructed dynamical intermediate state opens up the connection to excited
+hyperons and higher-mass baryons in terms of the resonance picture. The
+invariant mass approach provides a possible path to describe explicitly the
+(anti-baryonic) matter as well as the antimatter resonances, particularly in
+the absence of the mirror symmetry: discordant mass degeneracy between baryons
+and their \={baryons}.

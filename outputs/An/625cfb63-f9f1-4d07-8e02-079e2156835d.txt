@@ -1,0 +1,96 @@
+An alternative to using 'useParams' directly in the component could be to pass the route parameters as props. That would mean the component would receive 'this.props.id', 'this.props.id2', etc. However, using 'useParams' directly inside the component is a more modern and direct way to access the route parameters.
+
+---
+
+## Exercise 3: Using the useEffect hook
+
+Explain how the useEffect hook is used with the dependencies array in this component. What will trigger useEffect to run, and why might that be important? Write a simplified version of this component that uses useEffect to fetch data only when a "userId" route parameter changes.
+
+Answer:
+
+In the given component, the useEffect hook is used to perform data fetching from an API when the component mounts, and also when the 'id2' route parameter changes. The dependencies array for useEffect is:
+
+[id, id2, id3, id4, id5, id6, id7, id8, id9, id10, id11, id12]
+
+This means that useEffect will run after the first render (componentDidMount) and also after any of these dependencies change. In the case of a route component, these dependencies correspond to route parameters. So if the route changes and the route parameters change, this useEffect will run again.
+
+Inside useEffect, it checks which parameter (id2 to id12) is defined and then calls one of the 'get' functions to fetch data. This likely updates the state (through useState) and causes the component to re-render with new data.
+
+This is important because it ensures that if the URL changes to a different ID, or if the component receives new props that change the ID, it will fetch the new data.
+
+Let's write a simplified component that uses useEffect to fetch data only when a "userId" route parameter changes. We'll assume there's only one parameter 'userId'.
+
+```jsx
+import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+
+function UserProfile() {
+  const { userId } = useParams();
+  const [profileData, setProfileData] = useState(null);
+
+  useEffect(() => {
+    async function fetchProfile() {
+      try {
+        const response = await fetch(`https://api.example.com/users/${userId}`);
+        const data = await response.json();
+        setProfileData(data);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+    
+    if (userId) {
+      fetchProfile();
+    }
+  }, [userId]);
+
+  return (
+    <div>
+      {profileData ? (
+        <div>
+          <h2>{profileData.name}</h2>
+          {/* ... more profile data ... */}
+        </div>
+      ) : (
+        <p>Loading...</p>
+      )}
+    </div>
+  );
+}
+```
+
+In this example, useEffect will run after the component mounts and also whenever 'userId' changes. This way, if the route changes to a different 'userId', it will fetch the new profile data.
+
+---
+
+## Exercise 4: Conditional rendering
+
+How does this component use conditional rendering to decide what to display? Identify the part of the code that is responsible for this and explain how it works. Then, write a simple React component that conditionally displays "Hello" if a certain state variable 'showHello' is true, and "Goodbye" if it is false.
+
+Answer:
+
+The component uses conditional rendering with the logical AND operator (&&) to decide what to display. Let's look at the part of the code responsible for conditional rendering:
+
+```jsx
+{!data && (
+  <Container>
+    ...
+  </Container>
+)}
+{data && (
+  <Container>
+    ...
+  </Container>
+)}
+```
+
+- The first part `{!data && (...)}` means that if `data` is falsy (such as null, undefined, etc.), then it will evaluate the right side of the && operator, which is the JSX inside the parentheses. This is the "Loading..." state, which will show a loading spinner and the message "Cargando Datos...".
+  
+- The second part `{data && (...)}` means that if `data` is truthy, then it will evaluate the right side of the && operator, which is the JSX inside the parentheses. This is the main content of the page that shows the user details.
+
+So essentially, it checks whether `data` has been loaded. If it hasn't, it shows a loading indicator. If it has, it shows the main content.
+
+Now, let's write a simple React component that conditionally displays "Hello" if 'showHello' is true, and "Goodbye" if it is false. 
+
+Let's use a state variable 'showHello' and render "Hello" or "Goodbye" based on its value:
+

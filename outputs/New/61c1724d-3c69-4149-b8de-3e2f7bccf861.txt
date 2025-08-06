@@ -1,0 +1,127 @@
+New();
+
+    printf("You are shown images of the house you are renting.\nDo I need a thumbnail for each type?\n\n");
+    
+    while (TRUE) {
+      int today = GetToday();
+      bool printDay = (today != lastDayShown);
+      
+      if (printDay) {
+	printf("%8.8s\n", dmystr(tmstruct->tm_hour, tmstruct->tm_min, tmstruct->tm_sec));
+	lastDayShown = today;
+      }
+      
+      // Grab a house photo from Flickr for the filename
+      if (!isSmartphone() && !photoOnly)
+	fetchHousePhoto();
+      
+      
+      defocus = getRandomIntInRange(1, 200);
+      
+      /********
+      The menu scheme used, the final line of the display: (dmy)60mpis, 70deg
+             -----------
+      Returns at 0, 1, 2
+      ********/
+      
+      snprintf(resultString, sizeof(resultString), 
+	       "Press:%9.9s  [%2x]  %s\n",
+	       shortenDateString(dmystr(tmstruct->tm_hour, tmstruct->tm_min, tmstruct->tm_sec)), 
+	       page, 
+	       pageNames[localPageNumber]);
+
+      
+      // Older color screens may need only 8 lines, otherwise we can just eat a line or so by printing pages on device
+      uprightPrint(resultString);
+      
+      dmy = sprintf(dmystr(tmstruct->tm_hour, tmstruct->tm_min, tmstruct->tm_sec));
+      
+      if (rl_fake) {
+	// TODO: Make us do pages wait for a while
+	// Unused Currently
+      }
+      
+      localPageNumber = 3 + getRandomIntInRange(1, 4) +
+	(g_lang == State.MOROSIAN ? -3 : 0);
+      
+      snprintf(resultString, sizeof(resultString), "Next...%s\n", 
+	       pageNames[localPageNumber]);
+
+      // It should wait.
+      if(!page) delay(3000L);
+      if (countdown_is_cool) spinEm(100, 0);
+      
+      
+      // No define
+      /*
+      if(localPageNumber == 2 && (photoOnly || getRandomIntInRange(1, 12(6)) == 1)) {
+	PrintDMYrand(0, 0);
+      }
+      else {
+	
+	TzVideoandIMN(); // Get the image + sound
+	JU(recordsSnapEnd);
+	//
+      }
+      
+      ///
+      sprintf(resultString, "Bidi case:  %x\n", lightUp);
+
+      printf("%s", resultString);
+      
+      if (timeWithcss) {
+	done = FALSE;
+      }
+      else {
+	if (localPageNumber == 1) // Lower limit for pagination
+	  done = true;
+	else {
+	  printf("\n");
+	  done = false;
+	} // Good to go while
+	break;
+      } // Done flag
+    }// PRN, WRN lines
+  }
+  if(node) {
+    startloading(); // Avoid locking hardware manual
+    ywm2pd(youSearchER, result);
+    // Remember that some of the password strings are decrpyt
+    rl_Unicode2WideBytes(Tlph, result);
+    rl_stringSeqWithLogin(rl_s2);
+    eplug_flash_sdfl();
+    ry;
+  }
+  
+  // Get the jpg +  uxcat -s
+  if(romImagePath != NULL && isLowDiskSize() == true && !cpShowNext)fsclockShowFalseMemeryVisited();
+  
+  // The menu text displayed the tone formats at its indices
+  // Do not conditionally no, possibly remove staying quiescences
+  
+  // This is one proposition : The selection for the low frequency tones and Enter
+  String_t aken;
+  
+  // The current QR resolution PAMV IMAGE PARAMETERS
+  // It reads the 63-bit evaluations which do not access things
+  // Extra debug/debug
+  
+  // When the digital remote control is in fail, it is 12 digits
+  if (!__dustReg) {
+    DataFeed printPageNone();
+    start_live_VideoAssociated();
+//    cli.at();
+    __isFlavInfoToken ^= 1;
+    if (uiNew()) cli();
+    printf("\n");
+  }
+  
+  // vca_Ls_fVon();
+  // mysterious debug: Start whatever is allowed
+//  // Go about next image. Still, swizzled
+  // The HW has a fairly stay 16 kb inline inside
+  
+  // Flip overlay
+  __Dlgindex2 = getRandomIntInRange(0, 101);
+  __deferBreak = !__dctx.actor != REQI(SUBTYPE);
+  pin

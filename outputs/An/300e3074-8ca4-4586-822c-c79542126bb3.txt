@@ -1,0 +1,146 @@
+An error occurred while saving the data.')
+    return redirect('home')
+
+urlpatterns = [
+    path('', home_view, name='home'),
+    path('upload_csv/', upload_csv_view, name='upload_csv'),
+    path('add_entry/', add_entry_view, name='add_entry'),
+]
+```
+
+Alternatively, per the instruction to focus on core logic and avoid boilerplate, perhaps we can write a minimal, single code file that captures the logic.
+
+Thus, here's the code.
+
+[Note: For code, we need to be careful with imports, models, handling of file upload, etc.]
+
+Here's the code.
+
+```python
+# app.py
+
+import csv
+from io import TextIOWrapper
+
+from django.contrib import messages
+from django.core.files.storage import FileSystemStorage
+from django.db import models
+from django.http import HttpResponseRedirect
+from django.shortcuts import render, redirect
+from django.urls import path
+
+# Define the data model
+class DataEntry(models.Model):
+    field1 = models.CharField(max_length=100)
+    field2 = models.IntegerField()
+    field3 = models.DateField()
+    # Add more fields as per CSV data
+
+# View to render the home page with forms
+def home(request):
+    return render(request, 'home.html')
+
+# View to handle CSV file upload
+def upload_csv(request):
+    if request.method == 'POST' and request.FILES.get('csv_file'):
+        csv_file = request.FILES['csv_file']
+
+        # Check if the file is a CSV
+        if not csv_file.name.endswith('.csv'):
+            messages.error(request, 'Please upload a CSV file.')
+            return redirect('home')
+
+        # Use TextIOWrapper to read the uploaded file
+        try:
+            data = TextIOWrapper(csv_file.read().decode('utf-8'))
+            reader = csv.DictReader(data)
+
+            # Clear existing data
+            DataEntry.objects.all().delete()
+
+            for row in reader:
+                # Assuming CSV fields match model fields
+                # Adjust field names as needed
+                entry = DataEntry(
+                    field1=row['field1'],
+                    field2=int(row['field2']),
+                    field3=row['field3']  # Assuming correct date format
+                )
+                entry.save()
+
+            messages.success(request, 'CSV data uploaded successfully.')
+            return redirect('home')
+        except Exception as e:
+            messages.error(request, f'Error processing CSV: {str(e)}')
+            return redirect('home')
+    else:
+        messages.error(request, 'No CSV file selected.')
+        return redirect('home')
+
+# View to handle adding a new entry
+def add_entry(request):
+    if request.method == 'POST':
+        field1 = request.POST.get('field1')
+        field2 = request.POST.get('field2')
+        field3 = request.POST.get('field3')
+
+        # Validation can be added here
+
+        try:
+            entry = DataEntry(
+                field1=field1,
+                field2=int(field2),
+                field3=field3
+            )
+            entry.save()
+            messages.success(request, 'Entry added successfully.')
+            return redirect('home')
+        except Exception as e:
+            messages.error(request, f'Error adding entry: {str(e)}')
+            return redirect('home')
+    else:
+        messages.error(request, 'Invalid request method.')
+        return redirect('home')
+
+urlpatterns = [
+    path('', home, name='home'),
+    path('upload_csv/', upload_csv, name='upload_csv'),
+    path('add_entry/', add_entry, name='add_entry'),
+]
+```
+
+In this code:
+
+- We define a model `DataEntry` with three fields, representing data that would come from a CSV file.
+
+- The `home` view renders the home page, which would contain the CSV upload form and the add entry form.
+
+- The `upload_csv` view processes POST requests with an uploaded CSV file.
+
+  - It checks the file type.
+
+  - It reads the CSV data using `csv.DictReader`.
+
+  - It clears existing data.
+
+  - It iterates over each row, creating and saving a `DataEntry` instance.
+
+  - It uses `messages` framework to display success or error messages.
+
+- The `add_entry` view processes POST requests to add a new entry.
+
+  - It extracts fields from POST data.
+
+  - It creates and saves a new `DataEntry`.
+
+  - It uses `messages` for feedback.
+
+- The `urlpatterns` map the URLs to views.
+
+Assuming this code is in a Django project with proper configuration, it would function as per the description.
+
+However, per instruction, "It does not have to be standalone - be light on mockups / placeholders / boilerplate, focus on the core logic."
+
+Thus, perhaps we can write only the core logic, focusing on the key parts: model definition, views for uploading CSV and adding an entry, and the logic for feedback.
+
+Therefore

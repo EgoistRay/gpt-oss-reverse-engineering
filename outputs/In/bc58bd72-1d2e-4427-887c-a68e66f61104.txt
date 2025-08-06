@@ -1,0 +1,125 @@
+In terms of the 'be light on mockups', we can assume that the data is available and perhaps use placeholders where necessary.
+
+I'll proceed and write the code accordingly.
+
+But first, think about data.
+
+Assuming we have a DataFrame with:
+
+- 'customer_id' : unique identifier
+
+- 'customer_segment' : e.g., 'Low', 'Mid', 'High'
+
+- 'purchases' : vector of total purchases per month over 12 months.
+
+Alternatively, each month could be a column 'm1', 'm2', ..., 'm12', with the purchase amount.
+
+Similarly, data per customer: a row with these values.
+
+First, the code will read in the data (assumed pre-existing DataFrame), select a 'customer_segment' of interest (say, 'High'), and extract their purchase time series.
+
+Then compute the mean purchase per month across all customers in that segment.
+
+Plot the mean purchase per month, with error bars.
+
+Compute the 'slope' of the trend, perhaps via linear regression.
+
+Compute mean square of the slope and mean purchase.
+
+Compute the 'slope significance' perhaps analogously to the 'slopethresh' in the original code.
+
+Compute 'r_squared' per customer.
+
+Plot histogram of the slope significance.
+
+Plot the mean purchase with error bars.
+
+Plot mean r_squared.
+
+Given that, I'll write code accordingly.
+
+Details such as code for linear regression for each customer, calculation of slope and r_squared per customer.
+
+Similarly, code for plotting.
+
+I'll import necessary libraries: pandas, numpy, matplotlib, seaborn, sklearn.linear_model.
+
+Proceed to write code accordingly.
+
+Remember, only output the single code file, and nothing else.
+
+Let's proceed.
+
+```python
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+from sklearn.linear_model import LinearRegression
+
+# Assuming 'customer_data' is a pre-loaded DataFrame with the following columns:
+# 'customer_id'       : Unique identifier for each customer
+# 'customer_segment'  : Categorical variable indicating customer segment (e.g., 'Low', 'Mid', 'High')
+# 'm1', 'm2', ..., 'm12' : Purchase amounts for months 1 through 12
+
+# For the purpose of this code, let's create a mock DataFrame with sample data
+# This is just placeholder data for demonstration purposes
+np.random.seed(42)  # For reproducible results
+
+num_customers = 200
+months = ['m{}'.format(i) for i in range(1, 13)]
+segments = ['Low', 'Mid', 'High']
+
+data_list = []
+for i in range(num_customers):
+    segment = np.random.choice(segments, p=[0.3, 0.4, 0.3])  # Probabilities can be adjusted
+    purchases = np.abs(np.random.normal(loc=1000 if segment=='High' else 500, scale=200, size=12))
+    customer_dict = {
+        'customer_id': i,
+        'customer_segment': segment
+    }
+    customer_dict.update(dict(zip(months, purchases)))
+    data_list.append(customer_dict)
+
+customer_data = pd.DataFrame(data_list)
+
+# Define whether to include only customers with sufficient data (e.g., all 12 months)
+include_all_months = True
+
+# 1. Selecting the Customer Segment
+segment_of_interest = 'High'
+segment_data = customer_data[customer_data['customer_segment'] == segment_of_interest]
+
+# 2. Handling Missing Data
+if include_all_months:
+    # Ensure all months are present; drop if any missing
+    segment_data = segment_data.dropna(subset=months)
+else:
+    # Include customers even if they have some missing months
+    segment_data = segment_data.copy()
+
+# 3. Computing Per-Customer Metrics
+# For each customer, compute:
+# - Slope and R-squared of purchase trend over time
+# - Mean purchase amount over the year
+customer_metrics = []
+for idx, row in segment_data.iterrows():
+    y = row[months].values.reshape(-1, 1)  # Purchase amounts
+    X = np.arange(1, 13).reshape(-1, 1)    # Months (1-12)
+    model = LinearRegression()
+    model.fit(X, y)
+    slope = model.coef_[0][0]
+    r_squared = model.score(X, y)
+    mean_purchase = np.mean(y)
+    customer_metrics.append({
+        'customer_id': row['customer_id'],
+        'slope': slope,
+        'r_squared': r_squared,
+        'mean_purchase': mean_purchase
+    })
+
+metrics_df = pd.DataFrame(customer_metrics)
+
+# 4. Calculating Statistical Measures
+# Slope Variance
+slope_variance = np.mean(metrics_df['slope'] ** 

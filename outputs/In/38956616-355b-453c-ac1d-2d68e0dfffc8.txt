@@ -1,0 +1,43 @@
+In such spatially interacting systems, there is also the question of whether the system is 'free' or 'interacting' in the thermodynamic sense.
+
+But the article focuses more on small systems, where the interactions dominate overall probabilities in a way that the become the 'state function' of the system.
+
+Another point: The article wants to show that the thermodynamic description of small systems is possible and essential. This is especially relevant for the understanding of systems such as superfluidity and superconductivity, where large non-zero condensation exists only in the thermodynamic limit.
+
+But experimental observations of mesoscopic systems supports that in practice, systems are always finite and hence predial, and yet exhibit macroscopic or 'thermodynamic' behavior.
+
+Given this, in short, the article suggests that 'thermodynamics' applied to small systems is not just an approximate measure, but at the very core of their behavior.
+
+There are also references to quantum thermodynamics, pointing out that such systems possess strong entanglement with environment, giving rise to many-phase properties, and that these systems can't be well described via classical thermodynamics.
+
+Given all of these, the article is perhaps trying to posit that all physical systems, from the tiny to the large, are governed fundamentally by thermodynamic concepts, and furthermore that, given the thermodynamically constrained dynamics, the 'macroscopic' determinants of evolution in a system are the 'thermodynamic forces' and that the mechanisms can be expressed as forces and fluxes relationship.
+
+Alternatively, perhaps the article is too strong in concluding that the Hamiltonian is non-fundamental, but perhaps it's an evocative statement that the Hamiltonian emerges as a function derived from the underlying thermodynamic potential due to the constraints of the system, especially under certain symmetries or protections.
+
+Similarly, the point that 1-body Hamiltonians are transvalent, i.e., indicated by the first law, maybe that the works of time, or the energy changes in different regimes have periodic dependence on time and thus can be expressed in terms of phase as 'determinants' of the system? But perhaps it's an incomplete phrase.
+
+Anyway, looking ahead: The article wants to explain the thermodynamic function in quantum systems.
+
+Pretend that the energy fluctuation in quantum dynamics is determined via the derivatives of the thermodynamic potential \(\Phi(U)\).
+
+Then, possibly, that can connect to the Schrödinger equation, via interpreting \(\Phi(U)\) as a function (e.g., the Hamiltonian). But the 'Hamiltonian' is not fundamental; it comes from thermodynamic potential.
+
+Hence quantum mechanical evolution can be modeled via thermodynamic progress.
+
+Given all that, I think the article tries to make the general point that, via various examples and treatments, I can see that all physical dynamics can be expressed via thermodynamic forces, but the more universal ones are energy, free energy, mass, entropy. The 'conservation laws' of mass, charge, angular momentum, etc., may be expressed via mass, charge, angular momentum as 'measurements' in the system.
+
+Focusing on the main points:
+
+- Thermodynamics is fundamental and applicable to all systems.
+
+- All natural processes derive their direction and rate from the demands of maximizing the free energy while accounting for the constraints placed upon the system, and must be thermodynamically driven.
+
+- The description may be in terms of fluxes and forces, and the system must obey deterministic constraints derived from its internal potential(s).
+
+Now that we're to take a deep breath, I'll think about every paragraph in turn.
+
+It opens: "The beam of light always travels in a straight line from a source to a wall. Hence the light rays are straight. In general all motions of bodies are determined by the same general equations (only aux. probabilities being different). For example, the motion of a planet is absolutely determined, just like that of air molecules. Similarly, the precise determining equations of quantum mechanics are analogous to the precise equations of motion of a planet and a light ray is of no exception. Also, I now note that the laws that are dimensions of 'the energy' are independent of mass. 'The question is to ..." This seems to veer in a direction of discussing the fundamental nature of the dynamics.
+
+But further, the article states: "The energy fluctuations at the quantum level are always determined by the 1-body Hamiltonians (like on the other derivative side only from the 'quantum of action' which has decisive role for the probability of each system.") Oh, so they're suggesting that the 'Hamiltonian' is derived from the quantization.
+
+It continues: "The role that was previously conceived of the 1-body dynamics is an attribute of the state, i.e., 'volume' changes of the space, or 'entropy'. The number of parts to the system depends on the inherent conservation of energy, work, or dynamical changes; for example, mass to account some conserved quantity

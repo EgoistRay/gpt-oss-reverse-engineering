@@ -1,0 +1,28 @@
+Why is that the case?"
+
+We need to interpret: It's a two-player zero-sum game where players alternate turns? No. Wait: "You can move a stone at most k-1 cells forward". So presumably you are allowed to move a stone to a later cell, but ensure not to surpass a boundary or something? "There's another puzzle I’m thinking about: Suppose you have 2 stones that look back on them."? Hmm.
+
+Maybe the problem is that two stones roll on a board? Wait: maybe it's a two-player impartial game where each player can move a stone forward by using at most k-1 cells? Actually typical game: Nim-heap game: remove stones from heaps. This is like a take-away game: you can remove 1 to k-1 stones, and the player who takes the last stone wins? Classic Nim variant: The Grundy numbers for each heap are n mod k? If each player can remove 1 to k-1 stones, then the P-positions (previous player wins?) are multiples of k. That's the typical Nim. So with two heaps the Nim-sum is crucial: it's winning if the Nim-sum is nonzero. Here, since we have 2 stones each with some size, that would correspond.
+
+But the OP wrote: "But that game has no two stones looking at each other treat like Nim? I'm sure the game is subtraction game: still appears in questions: any two tokens etc. Also what's with the cursor? The typical cricket board RA? But there's a slight shift: I've forgotten earlier solution but ..."
+
+Let's attempt to recover. Suppose the original puzzle: "Two impartial stones known as the NIM-like game: take-away game of two piles, each with variable number of beans, remove at least one stone and at most k-1 of them from exactly one pile. Whoever is forced to take last stone loses (normal play?)." Wait, we need to guess.
+
+To solve such puzzle: we can apply Sprague-Grundy theorem, compute Grundy numbers for single pile game as g(n) = n mod k. Then for two piles, Grundy number is g(n) XOR g(m). So let's propose Grundy numbers for each stone: g(m) = floor((m-1)/ (k-1) )? Wait, typical take-away game: you can remove 1 to k-1 total items from a single heap. Then Grundy number is n mod k at each heap. So for two stones, the joint Grundy number is (n mod k) XOR (m mod k). Winning positions are those where XOR != 0.
+
+But the OP might have misinterpreted. He says that "I key a few values: 1, 3, 5 or 7 etc." Wait.
+
+Hold on. Let's parse more carefully. They wrote: "I've seen this puzzle before, but can't remember if I'm missing an edge case or if I just miscommunicated the question. Have a digital puzzle I'm trying to solve? Are there any prior similar questions? My answer uses standard Nim but concept might differ. It might be 'taking a heap's number of stones once at most k-1 each turn, next player becomes disadvantage'?" I'm lost.
+
+Maybe the actual puzzle: "Given two piles of stones, each starting at size N? or not? The first player can pick any number of stones from one pile between 1 and k-1 inclusive. The second player faces same restrictions." Wait.
+
+Why I'm stuck? Let's reconstruct from "takes any number of beans from a heap, but you cannot take *all* the beans." Wait. Or "you can first move stone at most k-1 cells forward'?
+
+Maybe the puzzle: "Old board game: two knights start at opposite corners of a chessboard; you can move them one step at a time (like knight move) but not beyond—they can move at most k-1 steps per turn." Hmm.
+
+Another clue: They wrote "I suspect Nim's variant but mention two 'stones' that 'look at each other' or 'side'." Actually, "two stones that look at each other" might refer to Nim heaps side by side where some moves affect both? like "2-heap subtraction game: you can remove m stones from one heap or remove m stones from both heaps simultaneously" typical in Hackenbush or Wythoff's game. Wythoff Nim: you have two piles and can remove any number of coins from one pile or equal number from both. Here the P-positions are given by (floor(n*phi), floor(n*phi^2)). But with a maximum subtraction of k-1, that may change.
+
+Maybe the puzzle is variant of Wythoff's Nim with bounded removal? Wait.
+
+But OP says "When playing one player takes step at most k-1 cells forward." Not there.
+

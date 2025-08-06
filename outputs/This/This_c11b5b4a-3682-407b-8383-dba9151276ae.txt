@@ -1,0 +1,102 @@
+This method takes an `IEnumerable<string>` which represents the lines of the output file (presumably a CSV file). It first checks if `fileLines` and `this.outputPath` are not null. If the output path is not null, it calls `CheckIfOutputPathIsSet()`. 
+
+Then it calls `GetDataFromOutputFile(fileLines)` which parses the lines into `OutputRowData` objects. It then calls `GetAllOutputRows(dataFromFile)` to group the `OutputRowData` into `OutputRow` objects, and stores the result in `_outputRows`. Finally, it calls `SaveOutputRowsToOutputFile()`.
+
+Let's look at `GetDataFromOutputFile`:
+
+```csharp
+public IEnumerable<OutputRowData> GetDataFromOutputFile(IEnumerable<string> lines)
+{
+    return lines.Select((l, i) => new OutputRowData(i, l, this.outputPath));
+}
+```
+
+This method takes the lines and converts each line into an `OutputRowData` object, passing the line index, the line itself, and the output path to the constructor of `OutputRowData`.
+
+Now let's look at `GetAllOutputRows`:
+
+```csharp
+public IEnumerable<OutputRow> GetAllOutputRows(IEnumerable<OutputRowData> outputRowData)
+{
+    // Group by the output row key.
+    var groupedData = outputRowData
+        .GroupBy(row => row.OutputRowKey);
+
+    var results = new List<OutputRow>();
+    // Iterate over all rows.
+    foreach (var groupedRow in groupedData)
+    {
+        // Create a new output row.
+        var outputRow = new OutputRow(groupedRow.Key, groupedRow);
+
+        // Add the output row to list.
+        results.Add(outputRow);
+    }
+
+    // Return the output rows.
+    return results;
+}
+```
+
+This method groups the `OutputRowData` by `OutputRowKey`, then for each group, it creates an `OutputRow` with the key and the group of `OutputRowData`. It collects these into a list and returns it. This effectively constructs the higher-level `OutputRow` objects from the lower-level `OutputRowData` objects.
+
+Now let's look at `CheckIfOutputPathIsSet()`:
+
+```csharp
+public void CheckIfOutputPathIsSet()
+{
+    var directory = Path.GetDirectoryName(this.outputPath);
+    if (string.IsNullOrWhiteSpace(directory))
+    {
+        string dir = Path.GetFullPath(Environment.CurrentDirectory);
+
+        // Get the current directory and set the output path
+        this.outputPath = dir + "\\output.csv";
+    }
+}
+```
+
+This method checks if the directory part of the `outputPath` is not empty. If it is empty, it sets `outputPath` to a default value in the current directory called "output.csv". This seems to be ensuring that `outputPath` has a valid directory and file name.
+
+Next, let's look at `SaveOutputRowsToOutputFile()`:
+
+```csharp
+public void SaveOutputRowsToOutputFile()
+{
+    string fileContent = string.Empty;
+    // Iterate over all output rows.
+    foreach (var outputRow in _outputRows)
+    {
+        // Save the row
+        fileContent += $"{outputRow.OutputRowKey},{outputRow.OutputRowValues}{Environment.NewLine}";
+    }
+
+    // Write the file
+    System.IO.File.WriteAllText(this.outputPath, fileContent);
+}
+```
+
+This method builds a string that represents the content of the output CSV file. For each `OutputRow`, it appends a line containing the `OutputRowKey`, a comma, and `OutputRowValues`, followed by a newline. After constructing the entire content, it writes this string to the `outputPath` file.
+
+Finally, let's look at `GetFileRows()`:
+
+```csharp
+public IEnumerable<string> GetFileRows()
+{
+    // Get the file rows
+    string[] fileLines = System.IO.File.ReadAllLines(this.outputPath);
+    // Return the lines as a IEnumerable
+    return fileLines.ToList();
+}
+```
+
+This method reads all lines from the file at `outputPath` and returns them as an `IEnumerable<string>`. Note that it actually returns a `List<string>`, but the return type is `IEnumerable<string>`, which is fine.
+
+In summary, the `OutputFile` class provides functionality to:
+- Construct an output file object from the path.
+- Read lines from the output CSV file.
+- Parse these lines into `OutputRowData` objects.
+- Group these into `OutputRow` objects by a key.
+- Write back the grouped `OutputRow` objects to the CSV file.
+
+This class relies on `OutputRow` and `OutputRowData` classes, which have methods and properties like `GetDataFromOutputRow`, `OutputRowKey`, and

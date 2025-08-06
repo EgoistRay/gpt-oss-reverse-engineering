@@ -1,0 +1,67 @@
+This function checks if a given path is a directory. Let's go through it:
+
+- `struct stat st;`: Declares a stat structure.
+
+- `int error;`: Declared integer variable for storing errors.
+
+- `error = stat(path, &st);`: Calls 'stat' on the path and stores the error.
+
+- `return ((error) ? 0 : S_ISDIR(st.st_mode));`: This checks if there was an error. If 'error' is non-zero, it returns 0. If 'error' is zero (meaning 'stat' was successful), it calls the macro 'S_ISDIR(st.st_mode)', which checks if the mode of the file indicates a directory. This macro returns a boolean indicating if the file is a directory. So this function returns 1 if 'path' is a directory (and 'stat' did not return an error) and 0 otherwise.
+
+The use of the ternary operator here effectively translates to: if 'stat' returns an error, return 0. Otherwise, return whether 'st' is a directory.
+
+Moving on.
+
+```c
+/**
+ * @brief check the type of the file path
+ * @param path string containing the absolute path
+ * @param file_type integer
+ * @return 1 if the type of the file equals file_type
+ * otherwise, return 0
+ */
+int
+check_file_type(const char *path, mode_t file_type)
+{
+    struct stat st;
+
+    if (stat(path, &st) == -1)
+        return 0;
+
+    return (file_type == S_IFMT) ? (st.st_mode & ~S_IFMT) == st.st_mode
+                                 : S_IFMT & st.st_mode == file_type
+                                 ? 1
+                                 : 0;
+}
+```
+This function 'check_file_type' checks if the file at 'path' matches a given 'file_type'. Let's parse it.
+
+- `int check_file_type(const char *path, mode_t file_type)`: It takes a path and a file_type which is of type 'mode_t'.
+
+- `struct stat st;`: Declares a stat structure.
+
+- `if (stat(path, &st) == -1) return 0;`: Calls 'stat' on the path. If it returns -1, there's an error, so it returns 0.
+
+Now let's look at the return statement, which looks a bit complex. 
+
+- `return (file_type == S_IFMT) ? (st.st_mode & ~S_IFMT) == st.st_mode
+                                 : S_IFMT & st.st_mode == file_type
+                                 ? 1
+                                 : 0;`
+
+Let's break this down. This is a ternary operation. The condition part is `file_type == S_IFMT`. 
+
+- If `file_type == S_IFMT` is true, then the expression after the '?' is evaluated: `(st.st_mode & ~S_IFMT) == st.st_mode`. 
+- If `file_type == S_IFMT` is false, then the expression after the ':' is evaluated. That expression is another ternary: `S_IFMT & st.st_mode == file_type ? 1 : 0`.
+
+Let's focus on the first case. If `file_type == S_IFMT`, then it checks if `(st.st_mode & ~S_IFMT) == st.st_mode`. Let's decipher this:
+  - `S_IFMT` is a bitmask that includes all the bits used to indicate file type. 
+  - `~S_IFMT` would be the bitmask that has zeroes where the file type bits are, and ones elsewhere. 
+  - `st.st_mode & ~S_IFMT` would zero out the file type bits from st_mode, leaving only the non-file-type bits. 
+  - If this result equals `st.st_mode`, that means that `st.st_mode` had no file type bits set to anything. This is an odd check.
+
+Let's look at the second case. If `file_type` is not `S_IFMT`, then it checks if `S_IFMT & st.st_mode == file_type`. This part makes sense. It is checking if the file type bits in st.st_mode match the given file_type.
+
+Given how this function is supposed to work, the part where it checks if `(st.st_mode & ~S_IFMT) == st.st_mode` doesn't immediately make sense. Let's try to interpret it in the context of what might make sense. If `file_type` is `S_IFMT`, maybe the intention is to check if the file is a *regular* file. However, `S_IFMT` is not used to represent a regular file. The macro for a regular file is usually `S_IFREG`. 
+
+Let's recall that `S_IFMT` is a bitmask that isolates the file type bits. If

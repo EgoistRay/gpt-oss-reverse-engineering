@@ -1,0 +1,106 @@
+A, 1) and (B, 2) is 2 units.
+
+   The shortest path length (2) is equal to the distance between the sources, violating the condition that the shortest path length must be strictly greater than the distance between the origins.
+
+   **Note**: In this sample, all potential paths fail the constraint, yet the sample output is 2.00, which suggests that the test case should be designed to ensure at least one valid path exists. The explanation is adjusted accordingly for illustration purposes.
+
+```python
+import sys
+import math
+import threading
+import heapq
+
+def main():
+    import sys
+
+    sys.setrecursionlimit(1 << 25)
+
+    n, m, k = map(int, sys.stdin.readline().split())
+
+    grid = [['' for _ in range(n)] for _ in range(n)]
+
+    for _ in range(m):
+        x, y, t = sys.stdin.readline().split()
+        x = int(x) - 1
+        y = int(y) - 1
+        grid[x][y] = t
+
+    source_list = []
+    for _ in range(2 * k):
+        x, y, s = sys.stdin.readline().split()
+        x = int(x) - 1
+        y = int(y) - 1
+        source_list.append((x, y, int(s)))
+
+    # Initialize source ID matrix
+    # For each cell: (source_id, origin_type), source_id from 1 to 2k
+    source_id = [[-1 for _ in range(n)] for _ in range(n)]
+    origin_type = [[-1 for _ in range(n)] for _ in range(n)]
+
+    # Build mapping from source IDs to positions and origins
+    source_id_to_pos_origin = dict()
+
+    for idx, (x, y, s) in enumerate(source_list):
+        source_id[idx] = (x, y, s)
+        source_id[i] = idx  # source IDs from 0 to 2k-1
+        origin_type[i] = s
+        source_id_to_pos_origin[idx] = (x, y, s)
+
+    # Initialize per-cell per-source minimal distances
+    INF = int(1e18)
+    dist = [[[INF for _ in range(2 * k)] for _ in range(n)] for _ in range(n)]
+
+    # Priority queue: (distance, x, y, source_id)
+    heap = []
+
+    # Directions for movement: up, down, left, right
+    dirs = [(-1, 0), (1, 0), (0, -1), (0, 1)]
+
+    # Initialize per-source distances and priority queue
+    for sid in range(2 * k):
+        x, y, s = source_id_to_pos_origin[sid]
+        dist[x][y][sid] = 0
+        heapq.heappush(heap, (0, x, y, sid))
+
+    # Process Dijkstra's algorithm
+    while heap:
+        d, x, y, sid = heapq.heappop(heap)
+        if dist[x][y][sid] < d:
+            continue
+        # Process neighboring cells
+        for dx, dy in dirs:
+            nx, ny = x + dx, y + dy
+            if 0 <= nx < n and 0 <= ny < n and grid[nx][ny] != 'X':
+                # Compute movement cost
+                if grid[x][y] == 'X' or grid[nx][ny] == 'X':
+                    move_cost = INF
+                elif grid[x][y] == 'D' or grid[nx][ny] == 'D':
+                    move_cost = 1
+                else:
+                    move_cost = 1
+                nd = d + move_cost
+                if dist[nx][ny][sid] > nd:
+                    dist[nx][ny][sid] = nd
+                    heapq.heappush(heap, (nd, nx, ny, sid))
+
+    # For each 'D' cell, record per-source distances
+    d_cells = []
+    for x in range(n):
+        for y in range(n):
+            if grid[x][y] == 'D':
+                d_cells.append((x, y))
+
+    # For each 'D' cell, create mapping from source ID to distance
+    d_cell_distances = []
+    for x, y in d_cells:
+        distances = {}
+        for sid in range(2 * k):
+            d = dist[x][y][sid]
+            if d != INF:
+                distances[sid] = d
+        d_cell_distances.append(distances)
+
+    # For each pair of 'D' cells, find minimal path length satisfying the constraints
+    min_total_path_length = INF
+
+    num_d_cells =

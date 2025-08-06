@@ -1,0 +1,25 @@
+Why**Why a blue‑painted car can be warmer *or* cooler than a red one – a “convincing” argument**
+
+Below is a compact, technically‑rigorous explanation that addresses the two seemingly contradictory statements:
+
+| Blue car | Red car |
+|---------|--------|
+| **High visible‑light reflectance (~0.80–0.90)** | **Low visible‑light reflectance (~0.10–0.20)** |
+| **High infrared emissivity (~0.90–0.95)** | **Low infrared emissivity (~0.60–0.75)** |
+| **Higher solar‑absorbed fraction of the *visible* spectrum** | **Lower solar‑absorbed fraction of the *visible* spectrum** |
+| **Lower emissive heat loss per unit temperature** (because emissivity is *high*, it actually loses *more* heat – see below)** | **Higher emissive heat loss per unit temperature** (because emissivity is *low*, it loses *less* heat) |
+
+The net temperature difference depends on which energy exchange dominates in a given situation: **solar absorption** or **thermal radiation** (plus convection).  
+
+---
+
+## 1. Energy balance equations
+
+For each car the instantaneous energy balance is
+
+\[
+\underbrace{Q_{\text{solar}}}_{\text{absorbed}} 
+- \underbrace{Q_{\text{emit}}}_{\text{thermal radiation}} 
+- \underbrace{Q_{\text{conv}}}_{\text{convection}} 
+- \underbrace{Q_{\text{cond}}}_{\text{conduction to chassis}}
+=

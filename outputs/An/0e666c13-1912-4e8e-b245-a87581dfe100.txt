@@ -1,0 +1,97 @@
+An eavesdropper can measure the probe states to infer the key. The goal of our analysis is to determine how the presence of the quantum channel noise (phase damping) affects the mutual information between Eve and the legitimate parties.
+
+We have to proceed step-by-step:
+
+1. **State Initialization**: The initial state (Eq. (12)) involves the probe state and the superposition (or Bell) state.
+
+2. **Bob's Attack**: Eq. (16) shows the impact of Bob's attack, i.e., the action of unitary U_B, mapping the target qubit and the probe qubit.
+
+3. **Channel Phase Damping**: Apply the phase-damping channel on all two-level systems, e.g., the probe qubit, target qubit, etc.
+
+4. **Measurement Bases**: For the mutual information calculations, both the legitimate receiver (Bob) and the eavesdropper (Eve) may have different measurement bases. The probability distributions are determined accordingly.
+
+5. **Final State**: The state after the eavesdropping operations and the channel noise will provide the density matrix of the joint system (e.g., of the eavesdropper and Bob's measurement outcomes).
+
+6. **Calculating Mutual Information**: Using standard quantum information theory, we can compute the mutual information between Eve and the legitimate pair.
+
+Ok, perhaps better to proceed by defining the steps:
+
+- **Step 1**: Define the initial state.
+
+- **Step 2**: Apply Bob's unitary operator, leading to an intermediate state.
+
+- **Step 3**: Apply phase-damping channel to the relevant qubits.
+
+- **Step 4**: Trace out the degrees of freedom not needed (e.g., unobserved qubits), obtaining a reduced density matrix for the systems of interest (e.g., Bob's and Eve's qubits).
+
+- **Step 5**: Compute the mutual information between the legitimate receiver (Bob) and the eavesdropper (Eve) over the measurement outcomes.
+
+These steps correspond to what the original article seems to have done.
+
+Let me define the phase-damping channel.
+
+For instance, the phase-damping channel can be characterized by the following Kraus operators acting on a qubit (i.e., the general qubit in \(\mathcal{H}^2\)). For the phase-damping channel with parameter λ (0 ≤ λ ≤1) representing the dephasing noise strength, the Kraus operators are:
+
+- K_0 = sqrt(1 - λ) * I
+
+- K_1 = sqrt(λ) * |0⟩⟨0|
+
+- K_2 = sqrt(λ) * |1⟩⟨1|
+
+But actually, to ensure trace preservation:
+
+Let's recall.
+
+The dephasing channel can be represented as:
+
+- K_0 = sqrt(p) * I
+
+- K_1 = sqrt(1-p) * Z
+
+But this representation may vary. Another representation is:
+
+- K_1 = sqrt(1 - λ) * I
+
+- K_2 = sqrt(λ) * Z
+
+But in the article, perhaps the phase-damping channel is defined as follows.
+
+Alternatively, perhaps a standard phase-damping channel is that given by two Kraus operators:
+
+- K_0 = √(1 - λ) * I
+
+- K_1 = sqrt(λ) * diag(1, 0)
+
+- K_2 = sqrt(λ) * diag(0,1)
+
+But for the purposes, as in "Gisin and Thew" perhaps.
+
+In the article, the phase-damping channel is denoted by Λ_{γ_p}.
+
+Then, we can apply the phase-damping channel accordingly.
+
+In their model, perhaps the phase-damping channel acts only on Bob's qubit after eavesdropping.
+
+Ok, let's formalize the calculation.
+
+Assume the eavesdropper measures or otherwise manipulates the probe qubit.
+
+Proceed step by step.
+
+**First, define the initial probe state and the entangled state:**
+
+Let the initial probe state be:
+
+\[
+|\Psi'⟩ = (\alpha' |0⟩ + \beta' |1⟩) \otimes (\cos\theta |00⟩ + \sin\theta |11⟩)
+\]
+
+Similarly, the article says that:
+
+\[
+\tilde{S}_R = \sum_{b=0,1} \tilde{s}_b = - \frac{1}{2} (|0⟩⟨1| + |1⟩⟨0|)
+\]
+
+Assuming the initial state is as given, the action of Bob's measurement includes the measurement of the probe qubit.
+
+Alternatively, perhaps the "Bob" attack is

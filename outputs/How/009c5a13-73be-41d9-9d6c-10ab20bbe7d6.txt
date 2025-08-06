@@ -1,0 +1,132 @@
+How to use the `@property` decorator in Python to define a class attribute that is a computed value? Write a class `Circle` that has an attribute `radius`. Then add a `@property` called `area` that computes and returns the area of the circle.
+
+Answer:
+
+In Python, the `@property` decorator is used to define a method that will be accessible like an attribute. This is useful for attributes that are computed on the fly from other attributes.
+
+Let's write the class:
+
+```python
+class Circle:
+    def __init__(self, radius):
+        self.radius = radius
+    
+    @property
+    def area(self):
+        return 3.14159 * self.radius ** 2
+```
+
+This way, you can do:
+
+```python
+c = Circle(5)
+print(c.area)  # This will call the area method and compute the area
+```
+
+Note that `area` is accessed like an attribute, not like a method. So you don't need to call it with parentheses. 
+
+---
+
+## Exercise 3: Using the `__new__` Method
+
+Question:
+Explain the difference between `__new__` and `__init__`. Create a class `MySingleton` that overrides the `__new__` method so that it always returns the same instance (singleton pattern).
+
+Answer:
+
+In Python, `__new__` is a static method that is responsible for creating a new instance of a class. It is called before `__init__`. While `__init__` initializes the instance, `__new__` actually creates it.
+
+Let's create a singleton class using `__new__`:
+
+```python
+class MySingleton:
+    _instance = None
+    
+    def __new__(cls, *args, **kwargs):
+        if cls._instance is None:
+            # If _instance is None, create a new instance
+            cls._instance = super(MySingleton, cls).__new__(cls)
+        return cls._instance
+```
+
+Now, if you create multiple instances of MySingleton, they will all refer to the same object:
+
+```python
+a = MySingleton()
+b = MySingleton()
+print(a is b)  # Should print True
+```
+
+---
+
+## Exercise 4: Using `@classmethod` and `@staticmethod`
+
+Question:
+Create a class `MathUtilities` with a class method `square` that takes a number and returns its square. Also create a static method `is_even` that takes a number and returns True if it's even, and False otherwise.
+
+Answer:
+
+In Python, `@classmethod` is a method that receives the class as the first argument (`cls`), and `@staticmethod` is a method that doesn't receive an implicit first argument.
+
+Let's write the `MathUtilities` class:
+
+```python
+class MathUtilities:
+    @classmethod
+    def square(cls, x):
+        return x ** 2
+    
+    @staticmethod
+    def is_even(x):
+        return x % 2 == 0
+```
+
+You can now use these methods without needing an instance of the class:
+
+```python
+print(MathUtilities.square(5))  # 25
+print(MathUtilities.is_even(4))  # True
+```
+
+---
+
+## Exercise 5: Using `__slots__`
+
+Question:
+Explain what `__slots__` does in a Python class. Create a simple class `Point` that has `__slots__` containing just "x" and "y". Instantiate an object of this class.
+
+Answer:
+
+In Python, `__slots__` is used to declare a fixed set of attributes for instances of a class. This can save memory and potentially improve performance because it avoids the use of a dynamic dictionary for attribute storage. However, it also means that you cannot add new attributes to instances of that class except for those declared in `__slots__`.
+
+Let's create the `Point` class with `__slots__`:
+
+```python
+class Point:
+    __slots__ = ['x', 'y']
+    
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+```
+
+Now we instantiate it:
+
+```python
+p = Point(3, 4)
+print(p.x, p.y)  # Should print 3 4
+```
+
+If we try to set an attribute that is not in `__slots__`, we'll get an `AttributeError`:
+
+```python
+p.z = 5
+# AttributeError: 'Point' object has no attribute 'z'
+```
+
+---
+
+## Exercise 6: Customizing the string and repr representations with `__str__` and `__repr__`
+
+Question:
+Create a class `Person` that has attributes `name` and `age`. Override the `__str__` method to return a string in the format "Person(name=..., age=...)". Override the `__repr__` method to

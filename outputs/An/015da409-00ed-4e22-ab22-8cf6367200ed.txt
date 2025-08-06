@@ -1,0 +1,76 @@
+An interesting point is that, in general, we want the set of edges to remain connected (i.e., for any pair of vertices, there's a path). I think the edges we're removing are the ones that are no longer needed to connect the graph.
+
+In standard Kruskal's algorithm, we keep the lightest edges that connect components. For all edges that are not in MST, these edges are already connecting subcomponents within the same component of the forest. So they are not needed.
+
+Thus we can output those edges.
+
+Edge case: The graph may have multiple MSTs, but our result is valid.
+
+Implementation plan:
+
+- Read input.
+
+- Build a list of edges with endpoints and weight.
+
+- Sort edges by weight ascending.
+
+- DSU init.
+
+- For each edge 0..m-1:
+
+    if find(u) != find(v): union, keep it.
+
+    else: Mark this edge to be removed.
+
+- After processing all edges, the set of removed edges is output.
+
+Check that we are to output the edges in order of increasing weight, which is already how we processed.
+
+Edge weight is stored in an array, so we can print edge weights directly.
+
+Edge count removed is the number of edges we marked. Should be at most n.
+
+We might need to output 'case' numbering starting 1.
+
+Input size: up to 1000 test cases, each with up to 1000 edges, so total edges up to 1e6.
+
+But each testcase is small; performance is fine.
+
+Wait: Is this the only scenario? Let's check the possibility of MST having exactly n-1 edges, but the graph with cycles may have more than n edges? Not relevant.
+
+Thus the solution is simple. But hold on: The input gives a graph with n vertices, m edges. For this problem, the graph must be "a connected graph of weighted graph with n vertices and m edges", but no guarantee of connectivity. Maybe we need to assume the given graph is connected (since it's part of a 'bridge' network). The sample includes a 3-edge graph with 2 edges... but they said 3 3 for the first test: nodes=3, edges=3. So it's connected.
+
+Alternatively, testcases would only include connected ones. So we proceed.
+
+But let's consider all examples we might need to handle: consider graph like 4 nodes, edges 1-2(1),2-3(2),3-4(3); no cycle. m=3,n=3, output 0, as there's no redundancy. That's correct: no need to remove any edge.
+
+Consider graph: 4 nodes, edges:1-2(1),2-3(2),3-4(3),4-1(2). There's a cycle 1-2-3-4-1. m=4,n=3, extra edges 1. Our algorithm would consider edges sorted: [1-2(1),2-3(2),4-1(2),3-4(3)]. DSU:
+
+- 1-2 (union)
+- 2-3 (union)
+- 4-1: 4 and 1? 1 is in comp {1,2,3}, 4 separate: union
+- 3-4: now 3 and 4 are now same comp: duplicate -> remove 3-4(3). Output: 3.
+
+This is fine.
+
+Alright.
+
+But we need to consider if m < n-1? The graph cannot be connected. But maybe they have to print 0, as there's no edges to remove? Problem might not have such test.
+
+But consider m < n: Then the graph might be disconnected? But problem says 'connected graph', meaning m >= n-1 and it is connected.
+
+Anyway, our algorithm works even for disconnected: For each component we end up with a forest.
+
+But then the problem condition says remove a path between two vertices should not be in a particular subset. But we assume a subset that includes the forest edges across components, but those forest edges don't connect all vertices, so it's incomplete. In short, for disconnected, the condition is unsatisfiable. But we probably shouldn't encounter this.
+
+Thus we can proceed.
+
+Wait, another possibility: The term "Bridge" implies maybe it's a tree? But no, they talk about removing edges to get a forest that is a subset of the graph. Perhaps they want to ensure that after removal, the graph is a tree plus isolated vertices, i.e., at most n-1 edges. The condition is to pick a forest with no cycles.
+
+Thus indeed we just need to find a spanning forest with all edges minimal. That is exactly the Minimum Spanning Forest.
+
+So the solution is Kruskal.
+
+Edge weights are unique, so no tie-breaking.
+
+Now, let's check subtlety: The output format

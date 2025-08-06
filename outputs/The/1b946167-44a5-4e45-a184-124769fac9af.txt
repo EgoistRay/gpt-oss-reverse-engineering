@@ -1,0 +1,110 @@
+The `@Test` annotation indicates that the following method is a test case.
+
+```
+        @Ignore ("The test is failing because the expected result is different from the actual one.  It is being kept so that it can be examined and updated when the test fails")
+```
+
+The `@Ignore` annotation with a message indicates that this test should be ignored (not run) when the tests are executed. The message says "The test is failing because the expected result is different from the actual one. It is being kept so that it can be examined and updated when the test fails". So it seems that there's an issue with this test that needs to be investigated, but they want to keep the test code in the file for later reference.
+
+Let's look into the method `testGenerateReportWithMultipleRows`.
+
+```
+        public void testGenerateReportWithMultipleRows()
+```
+
+This is the test method.
+
+```
+        {
+            final String expectedResult =
+                    "0,1\n" + 
+                    "2,5\n" + 
+                    "3,6\n" + 
+                    "4,5\n" + 
+                    "1,4\n" + 
+                    "6,4\n" + 
+                    "5,4\n" + 
+                    "5,4\n" + 
+                    "4,5\n" + 
+                    "4,5\n" + 
+                    "3,6\n" + 
+                    "6,4\n" + 
+                    "3,6\n" + 
+                    "6,4\n" + 
+                    "3,6\n" + 
+                    "3,6\n" + 
+                    "5,4\n" + 
+                    "4,5\n" + 
+                    "1,4\n" + 
+                    "2,5\n" + 
+                    "5,4\n" + 
+                    "0,1\n" + 
+                    "0,1\n" ;
+```
+
+This is a multiline string that contains the expected result. It seems to be a series of lines in the form `x,y` separated by newlines. This is likely the expected output of some method that generates a report. It seems to have 23 lines. Let’s count quickly. We see:
+
+- "0,1\n"
+- "2,5\n"
+- "3,6\n"
+- "4,5\n"
+- "1,4\n"
+- "6,4\n"
+- "5,4\n"
+- "5,4\n"
+- "4,5\n"
+- "4,5\n"
+- "3,6\n"
+- "6,4\n"
+- "3,6\n"
+- "6,4\n"
+- "3,6\n"
+- "3,6\n"
+- "5,4\n"
+- "4,5\n"
+- "1,4\n"
+- "2,5\n"
+- "5,4\n"
+- "0,1\n"
+- "0,1\n"
+
+Yes, 23 lines. It seems that the expected output is the result of some method that maybe reads data from a file or database. They want to test that the output matches this expected string.
+
+Next, the test code:
+
+```
+            try (PrintWriter writer = new PrintWriter("test.txt")) 
+             {
+                writer.write("0 1\n" + 
+                "2 5\n" + 
+                "3 6\n" + 
+                "4 5\n" + 
+                "1 4\n" + 
+                "6 4\n" + 
+                "5 4\n" + 
+                "5 4\n" + 
+                "4 5\n" + 
+                "4 5\n" + 
+                "3 6\n" + 
+                "6 4\n" + 
+                "3 6\n" + 
+                "6 4\n" + 
+                "3 6\n" + 
+                "3 6\n" + 
+                "5 4\n" + 
+                "4 5\n" + 
+                "1 4\n" + 
+                "2 5\n" + 
+                "5 4\n" + 
+                "0 1\n" + 
+                "0 1");
+            }
+```
+
+They use try-with-resources to create a `PrintWriter` that writes to "test.txt". They write the same data but with spaces instead of commas. So the file test.txt has lines of the form "0 1" etc. That is the same number of lines as expected, but with space separated values. They probably want to test reading those lines and converting them into some format.
+
+Then:
+
+```
+            try (FileInputStream is = new FileInputStream("test.txt")) 
+            {

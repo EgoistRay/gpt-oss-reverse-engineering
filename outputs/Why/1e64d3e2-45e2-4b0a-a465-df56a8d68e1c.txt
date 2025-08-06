@@ -1,0 +1,82 @@
+Why are we not able to see any error? For `int` there is an error? Wait earlier they said compile fails. But maybe they used `int` and got error; but for `string` compile succeeded. But the error they saw may be something else: "The name 'string' does not exist in the current context" or something. Let's check.
+
+Hold on: In VB.NET, `Imports` statements that attempt to import a namespace or type that doesn't exist will cause a compile-time error. But the message may refer to "Namespace 'string' does not exist". Let's replicate quickly mentally:
+
+```
+Imports string
+```
+
+The compiler will parse `Imports string`. Since there is no namespace named string, error 1: "Namespace 'string' cannot be found or referenced". But they said they get error for 'int' but not for 'string'. Could be because of a difference between reserved keywords and type names: `string` is a keyword but also an alias for .NET type `System.String`. The compiler may treat `Imports string` as an attempt to import the namespace `string` but fails? But why not compile for string? Hmm.
+
+Another possibility: In VB.NET, the `Imports` statement allows you to bring into scope an alias for a namespace or type. It can be used like:
+
+```
+Imports System
+Imports System.Collections
+Imports System.Collections.Generic
+
+```
+
+But also you can alias:
+
+```
+Imports MyAlias = System.IO
+
+```
+
+But you cannot alias to a type like `Imports str = System.String`? But you can alias to a type:
+
+```
+Imports String = System.String
+
+```
+
+But not to `Imports string`. Without alias, you just import a namespace. So `Imports string` is interpreted as attempting to import namespace 'string', not alias 'string' as type. But there is no namespace 'string', so it would produce error. But you could alias with:
+
+```
+Imports String = System.String
+
+```
+
+But you cannot just `Imports string` (without alias). So for aliasing type you must use `=`. For aliasing namespace you don't. So that might explain why for `int` compile fails but for `string` maybe it doesn't fail? Hmm.
+
+But still, there is no namespace `Int32` either. So `Imports int` would fail. But they said it fails. Good.
+
+But why would `Imports string` succeed? Wait maybe the compiler treats `string` as an alias for `System.String` implicitly? But I don't think so. Actually, I recall that `Imports System` imports the `System` namespace; but you can also write `Imports System.Console`? That would import nested namespace? No, you can import type `System.Console` by default? Actually, you can import `System.Console` to bring static members? Wait `Imports System.Console` is a type; you can then use `WriteLine`. Example:
+
+```
+Imports System
+Imports System.Console
+
+Module Module1
+    Sub Main()
+        WriteLine("Hello")
+    End Sub
+End Module
+
+```
+
+Yes! In VB.NET you can import a type as well. For example:
+
+```
+Imports System.Console
+
+```
+
+Then you can use `WriteLine`. So you can import a type directly. So `Imports System.String` should be allowed. But `Imports string` (without prefix) refers to a type named 'string' in the current namespace? The global alias `global::string`? Wait.
+
+If you use `Imports System.String`, you can then refer to the type without namespace or you may use its static members. But `Imports string` might be equivalent to `Imports System.String` because `string` is a keyword alias for System.String. But you would still need to fully qualify or alias? But I believe `Imports string` may be treated as `Imports global::System.String` implicitly because `string` is a keyword alias for global::System.String. But I'm not sure if the language allows this.
+
+Let's test logically: Suppose we have:
+
+```
+Imports string
+Module Module1
+    Sub Main()
+        Dim s As string = "hello"
+    End Sub
+End Module
+
+```
+
+Will VB compile? Let's think. If you write `Imports string` it may treat 'string' as a namespace, but there is no such namespace; but if the compiler treats 'string' as an alias for System.String, it will allow. But the question indicates they didn't get an error; maybe the compiler accepted. So maybe VB.NET allows aliasing to types that are keyword alias. But not for int because there's no keyword alias? Wait there is `Int32` alias `Integer`, but not `int`. So `Imports int` fails, but `Imports string` works because 'string' is a keyword for .NET type. But why not 'Int16' or 'Integer

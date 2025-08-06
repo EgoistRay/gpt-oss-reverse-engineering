@@ -1,0 +1,129 @@
+The `useEffect` hook is used for setting up side effects in a functional component.
+
+Here's how you might use `useEffect` for the described behavior:
+
+```jsx
+import { useEffect } from 'react';
+
+function MyComponent({ shouldRun }) {
+  useEffect(() => {
+    if (shouldRun) {
+      // ... do something
+    }
+  }, [shouldRun]); // This effect depends on `shouldRun`
+  
+  return null;
+}
+```
+
+In this code snippet, `useEffect` runs the provided function whenever the `shouldRun` prop changes. If `shouldRun` is true, it runs the specified actions. This will run once after the component mounts, and then any time `shouldRun` changes. The dependency array `[shouldRun]` tells `useEffect` to only re-run the effect when `shouldRun` changes.
+
+Now, let's consider that the component might be rendering a list of items. Suppose the component's props include an array or list of items that the component uses to render. In this case, we can use `useEffect` to watch for changes to the items prop and react accordingly.
+
+Also, if the requirement is to run something only once when the component first renders (i.e., the first mount), and only if a certain prop or value is true, we can do something like this:
+
+```jsx
+useEffect(() => {
+  // This will only run once after the first render
+  setState(value => {
+    if (shouldRun) {
+      // do something and set the value
+      return newValue;
+    }
+    return value; // no change
+  });
+}, []); // empty dependency array: runs once
+```
+
+But if the effect depends on `shouldRun`, it's better to set `shouldRun` as a dependency in the dependency array.
+
+In short, the answer is:
+
+- Use `useEffect` to trigger the logic when the value changes.
+- The dependency array controls when the effect is run.
+- If you want to run the effect only once on mount, use an empty array; otherwise, pass dependencies.
+
+So, in a functional component, you would do:
+
+```jsx
+import { useEffect } from 'react';
+
+function Component(props) {
+  useEffect(() => {
+    if (props.shouldDoThis) {
+      // Perform logic that should happen on the first render
+      // or when props.shouldDoThis changes
+    }
+  }, [props.shouldDoThis]); // This ensures that effect fires when shouldDoThis changes
+  // ... rest of component
+}
+```
+
+Alternatively, you could also use an `useRef` to keep track of whether it's the first render or not:
+
+```jsx
+const hasMounted = useRef(false);
+useEffect(() => {
+  if (!hasMounted.current) {
+    if (props.shouldDoThis) {
+      // Do something
+    }
+    hasMounted.current = true;
+  }
+});
+```
+
+But usually, just using dependency array and checking `props.shouldDoThis` inside the effect is good enough.
+
+Now, if the condition is "only if a specific prop has a certain value", you can put that condition inside the effect function.
+
+Also, if you only want to run something on the first render, you may combine a check with a `useRef`. For example:
+
+```jsx
+const firstRender = useRef(true);
+useEffect(() => {
+  if (firstRender.current && props.shouldDoThis) {
+    // Do something
+    firstRender.current = false;
+  }
+});
+```
+
+But this only runs once if the prop is true on mount. If the prop later changes to true again, this effect won't run again.
+
+If you want to run when the prop changes (e.g., from false to true), and only if it's true, you don't need a `useRef`, just do:
+
+```jsx
+useEffect(() => {
+  if (props.shouldDoThis) {
+    // do something
+  }
+}, [props.shouldDoThis]); // runs whenever props.shouldDoThis changes
+```
+
+If it's important to only run when the condition changes from false to true, you might do something like:
+
+```jsx
+const prevShouldDoThis = useRef(false);
+useEffect(() => {
+  if (props.shouldDoThis && !prevShouldDoThis.current) {
+    // The value changed from false to true
+    // Do something
+  }
+  prevShouldDoThis.current = props.shouldDoThis;
+}, [props.shouldDoThis]);
+```
+
+But the original question is simpler.
+
+Therefore, the answer is: use a useEffect with the correct dependencies and a conditional inside it.
+
+In terms of the code, you might write something like:
+
+```jsx
+import { useEffect } from 'react';
+
+function MyComponent({ value, items }) {
+  useEffect(() => {
+    if (value === 'foo') {
+      // run

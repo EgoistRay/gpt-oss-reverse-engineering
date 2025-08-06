@@ -1,0 +1,83 @@
+What does this line of code do? Explain the use of `__DIR__`, `dirname(__DIR__)`, and why this might be used to load an autoload file in a PHPUnit test case.
+
+##
+
+Let's dissect this line of code:
+
+- `__DIR__` is a magic constant in PHP that returns the directory of the current file. In this case, it would be the directory where this test file `ClientTest.php` is located, which according to the namespace seems likely to be something like `/path/to/project/Tests/Client`.
+
+- `dirname(__DIR__)` calls the `dirname()` function on the directory of the current file. This effectively goes one level up from the directory of the current file. So if `__DIR__` is `/path/to/project/Tests/Client`, then `dirname(__DIR__)` would be `/path/to/project/Tests`.
+
+- `dirname(dirname(__DIR__))` would then go another level up, which would likely be `/path/to/project`.
+
+- `dirname(dirname(__DIR__)), 'vendor/autoload.php'` means we're constructing a path that is the vendor directory inside the root project directory. In a typical PHP project using Composer, the autoload file is located at `vendor/autoload.php` relative to the project root.
+
+- `require_once ...` then includes this autoload file.
+
+So this line of code is including the Composer autoloader. This is commonly done in PHPUnit test cases to enable autoloading of classes. It's a way to bootstrap the environment so that you can use the classes you want to test without having to manually include them.
+
+In the comment, it says "// If you use Composer's autoloading feature". This suggests that this line is necessary if the project is using Composer for dependency management and autoloading. If the project was using a different autoloader, or if it manually included the necessary files, this line might not be necessary.
+
+In summary, this line of code is including the autoload file from Composer, which sets up autoloading of the classes used in the test.
+
+## Exercise 2: Using the Faker Library
+
+The code creates a Faker instance for the 'en_GB' locale:
+
+```php
+$this->faker = Factory::create('en_GB');
+```
+
+Explain what this does, and write a small code snippet that uses `$this->faker` to generate a random person's first name, last name, and email address.
+
+##
+
+The Faker library is a PHP library that generates fake data, which is useful for testing. The `Factory::create('en_GB')` call creates an instance of Faker that is configured to generate data in the 'en_GB' (English - United Kingdom) locale. This means that the names, addresses, and other data will be typical of the UK.
+
+In the code snippet, `$this->faker` is set to this Faker instance, which can then be used in the test methods to generate random data.
+
+Let's write a code snippet that uses `$this->faker` to generate a random person's first name, last name, and email address.
+
+```php
+$firstName = $this->faker->firstName;
+$lastName = $this->faker->lastName;
+$email = $this->faker->email;
+```
+
+In Faker, you can also call methods on the `$this->faker` object. In fact, I recall that Faker uses a `__get()` magic method to allow accessing fields like `firstName`, `lastName`, etc. However, there are also methods that are called. Let's double-check. Usually, you might see something like `$this->faker->firstName()`, but I think both ways might work.
+
+Actually, let’s recall the Faker API. In Faker, you have:
+
+- `$faker->firstName`
+- `$faker->lastName`
+- `$faker->email`
+- etc.
+
+Yes, I think that's correct. Alternatively, you can use the method syntax, e.g. `$faker->firstName()`.
+
+For completeness, here's a more complete snippet:
+
+```php
+$firstName = $this->faker->firstName;
+$lastName = $this->faker->lastName;
+$email = $this->faker->email;
+echo "Random person: $firstName $lastName, $email\n";
+```
+
+Alternatively, we can use the "profile" provider:
+
+```php
+$profile = $this->faker->userName;
+$email = $this->faker->safeEmail;
+```
+
+But the question specifically asks for first name, last name, and email.
+
+So the answer:
+
+- Explanation: `$this->faker = Factory::create('en_GB');` creates an instance of Faker configured for UK locale, used to generate random data.
+- Code snippet:
+
+```php
+$firstName = $this->faker->firstName;
+$lastName = $this->faker->lastName;

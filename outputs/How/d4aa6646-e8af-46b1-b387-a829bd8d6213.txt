@@ -1,0 +1,35 @@
+How to compute that in the best possible time?'
+
+So we can propose algorithm.
+
+Given the 100-digit sum, you can compute 100! by factoring 100! into primes then using multiply.
+
+But there is also the concept: compute 100! using big integers library.
+
+I'll craft a step-by-step solution:
+
+Method: Use a double-digit algorithm? Actually, we can compute 100! using prime factorization and iterative multiplication. For each i from 2 to 100 multiply the product.
+
+But for 100! we can produce the exact number: 933262154439441526816992388562667004907159682643816214685929... Wait we need the full number: 93,326,215,443,944,152,681,699,238,856,266,700,490,715,968,264,381,621,468,592,963,895,217,599,993,229,915,608,941,463,976,748,157,782,852,149,695? Actually 100! = 93,326,215,443,944,152,681,699,238,856,266,700,490,715,968,264,381,621,468,598,... Wait I can check known value: 100! = 933262154439441526816992388562667004907159682643816214685929... etc. I know the final digits: 933262154439441526816992388562667004907159682643816214685929... It's a 158-digit number.
+
+But we can present the answer conceptually: compute 100! by repeated multiplication and using double-digit representation; you can also use the prime method.
+
+But maybe they just want the result: The 100! is:
+
+933262154439441526816992388562667004907159682643816214685929638.... Wait I recall the final digits: ... 600 000? I'm wrong.
+
+Let's get the perfect number: 100! = 93,326,215,443,944,152,681,699,238,856,266,700,490,715,968,264,381,621,468,598,? I recall that 100! ends with 00 as typical factorial for multiples of 10 more than 5. But the last non-zero digits of 100! is ... However there are trailing zeros.
+
+But the sum we computed earlier 158 digits plus 4 is 162 digits. So 162-digit 100! value ends with 4. So we might produce 100! as 93,326,215,443,944,152,681,699,238,856,266,700,490,715,968,264,381,621,468,592,963,895,217,599,993,229,915,608,941,463,976,748,157,782,852,149,695.
+
+Wait there might be digits mis- typed after 4.
+
+Let's produce the known 100! using known value: 100! = 93,326,215,443,944,152,681,699,238,856,266,700,490,715,968,264,381,621,468,598,  ? I'm not 100% sure.
+
+Let's compute using prime factorization: We'll compute 100! quickly.
+
+But we can cross-check from known table: 100! = 933262154439441526816992388562667004907159682643816214685929638911... Wait I'm still uncertain.
+
+I'll quickly compute using Python in my head? That may be long. But we can rely on known values. Let's open memory: I recall 50! = 30414093201713378043612608166064768844377641568960512000000000000 (but earlier we had 30414093... with 25 zeros?). Wait 50! has 65 digits? Actually 50! ~ 3.04140932017e64. That's 65 digits. But we had earlier 70? Wait we had 50! value above.
+
+But the actual 50! is: 30414093201713378043612608166064768844377641568960512000000000000 (makes sense). So 50! indeed ends with 15 zeros? Let's check. Wait 50! has floor(50/5)+floor(50/25)=10+2=12 zeros. In our string we have 15 zeros. Let's count last zeros: ...60512000000000000. That has 11 zeros? Wait '60512000000000000' ends with 14 zeros? Actually '60512' then 12 zeros? Let's check: 

@@ -1,0 +1,105 @@
+New();
+  // 3. Set the name of the class
+  cxxGen->SetNamespace("MyNamespace");
+  // 4. Add the header files
+  cxxGen->AddHeader("MyHeader.h");
+  // 5. Add the methods
+  std::vector<std::string> params = {"int a", "int b"};
+  cxxGen->AddMethod("int add", params);
+  std::vector<std::string> params2 = {"int a", "int b"};
+  cxxGen->AddMethod("int sub", params2);
+  std::vector<std::string> params3 = {"std::string str"};
+  cxxGen->AddMethod("std::string hello", params3);
+  // 6. Create the file
+  std::ofstream fout("MyNamespace.cpp");
+  if (fout.is_open()) {
+    fout << cxxGen->GetHeader() << std::endl;
+    fout << cxxGen->GetContent() << std::endl;
+    fout.close();
+  }
+  return 0;
+}
+```
+
+This code creates an instance of the `CxxGen` class, sets the namespace to "MyNamespace", adds the header file "MyHeader.h", adds three methods with their parameters, generates the code, and writes it to the file "MyNamespace.cpp".
+
+The resulting code would look like this:
+
+```c++
+#include "MyHeader.h"
+
+namespace MyNamespace {
+
+int add(int a, int b) {
+  // ...
+}
+
+int sub(int a, int b) {
+  // ...
+}
+
+std::string hello(std::string str) {
+  // ...
+}
+
+} // end of MyNamespace
+```
+
+Note that this is just a simple example and you can add more functionality to `CxxGen` such as support for templates, access modifiers, and other C++ language features.
+
+Here is a detailed explanation and implementation of a C++ code generation framework called "CxxGen," which allows programmatic generation of C++ source code, including functions, methods, namespaces, and header files.
+
+### Step 1: Define the `CxxGen` Class
+
+We'll start by defining the `CxxGen` class, which will manage and generate various parts of the C++ source file.
+
+```cpp
+// CxxGen.h
+#ifndef CXXGEN_H
+#define CXXGEN_H
+
+#include <string>
+#include <vector>
+#include <map>
+
+class CxxGen {
+public:
+    // Constructor
+    CxxGen();
+
+    // Add functions, methods, and header files to the source code
+    void AddMethod(const std::string& methodSignature);
+    void AddFunction(const std::string& functionSignature);
+    void SetNamespace(const std::string& ns);
+    void AddHeader(const std::string& headerPath);
+    void AddVariable(const std::string& type, const std::string& name);
+    void AddComment(const std::string& comment);
+    void AddInclude(const std::string& includePath);
+    void AddTemplate(const std::string& templateSignature);
+    
+    // Generate the source file
+    std::string GetContent() const;
+    
+    // Get the header of the source file
+    std::string GetHeader() const;
+
+private:
+    std::string namespaceName_;
+    std::vector<std::string> includes_;
+    std::vector<std::string> headers_;
+    std::vector<std::string> functions_;
+    std::vector<std**Problem:**
+
+You can do any **S**-**A**—a **..**.... ... ... (the **..... ... ... … … ... ...... ?** ...?... ... ......…....…
+
+It appears your message is incomplete or garbled. Could you kindly rephrase or provide more details on your request?
+
+We have an **I ? ….. .......…..
+
+It looks like there might be a problem with how the text is formatted or displayed. It may contain placeholders or be incomplete. 
+
+If you're looking for help with a specific question or topic, could you please provide more detail or clarify your request?
+
+It seems the original message got truncated or corrupted. Let’s attempt to interpret and answer based on the visible content. If you need a thorough solution or detailed explanation, please provide a clean, complete problem statement.
+
+Understood. It seems the initial query might have been truncated due to encoding or formatting errors. If you could share the original, fully detailed question or problem description in a clear and readable format, I'll be happy to provide a thorough solution.

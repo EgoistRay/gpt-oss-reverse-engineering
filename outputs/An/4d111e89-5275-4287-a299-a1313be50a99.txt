@@ -1,0 +1,65 @@
+An example: The function $f(x) = -x^2 \cdot \mathbb{1}_{[-2,2]}(x)$ is in $L^\infty(-2,2)$.
+
+But this is not the function in question.
+
+Alternatively, let's try to find a bounded function that is discontinuous on a set of measure zero but unbounded on a set of measure zero, but this is inconsistent.
+
+Alternatively, perhaps the function in question is bounded, but the essential boundedness is violated because of the pointwise unboundedness.
+
+But perhaps the issue is that the function is bounded but the essential supremum is infinite due to the pointwise unboundedness.
+
+Wait, perhaps there is a misunderstanding.
+
+In general, for a measurable function $f$ defined on a Lebesgue measurable subset $X$ of $\mathbb{R}^n$, we can define the essential supremum of $f$ as
+
+$\text{ess sup}_{x \in X} f(x) = \inf \{ M \in \mathbb{R} : \mu(\{ x \in X : f(x) > M \}) = 0 \} $.
+
+Similarly, the essential infimum is defined analogously.
+
+Now, the function is in $L^\infty$ if and only if its essential supremum is finite.
+
+Now, suppose the function is essentially bounded, i.e., its essential supremum is finite, but it takes infinite values on a set of measure zero. Then the $L^\infty$ norm is finite.
+
+Now, in our function $f(x) = \frac{1}{x - 2}$ on $(-2,2]$, the function is finite everywhere except at $x=2$, where it's unbounded.
+
+So, the function is unbounded at a single point, i.e., $x=2$, which is a set of measure zero.
+
+Therefore, the function is essentially bounded, as the measure of the set where it is unbounded is zero. Indeed, $f(x)$ is bounded outside an arbitrarily small interval near $x=2$.
+
+But perhaps the problem lies in that the function is unbounded at a point that is the limit point of the domain.
+
+Specifically, perhaps we cannot assign a finite value of the function in a neighborhood of $x=2$, as it tends towards infinity.
+
+Now, for the function $f(x)$ to be in $L^\infty$, the function must be essentially bounded; that is, there must be a finite number $M$ such that the function is bounded by $M$ outside a set of measure zero.
+
+But in our function, for any $M > 0$, the set $\{ x \in (-2,2] : f(x) > M \}$ is the interval $(2 - \frac{1}{M}, 2]$, which has positive measure $1/M$.
+
+Hence, the set where $f$ exceeds any fixed $M$ has positive measure for any $M$.
+
+Thus, the essential supremum is infinite.
+
+Wait, this suggests that the function is not essentially bounded.
+
+Indeed, the set $A_M = \{ x \in (-2,2] : \frac{1}{x - 2} > M \} = \{ x \in (-2,2] : x - 2 < \frac{1}{M} \}$.
+
+But as $x - 2$ is negative, $x - 2 < 0$, so $x - 2 < \frac{1}{M}$ is always true.
+
+But perhaps we need to be more precise.
+
+We see that as $x$ approaches $2$ from below, $x - 2$ approaches zero from below, so $\frac{1}{x - 2}$ tends to $-\infty$.
+
+Wait, perhaps we made a mistake earlier.
+
+Let me be more precise.
+
+Let me define $f: (-2,2] \to \mathbb{R}$ by $f(x) = \frac{1}{x - 2}$ for $x \in (-2,2)$, and $f(2) = 0$.
+
+Now, for $x \in (-2,2)$, $x - 2$ is negative, i.e., $x - 2 \in (-4,0)$, so $x - 2 < 0$.
+
+Then, $\frac{1}{x - 2} < 0$, as the denominator is negative.
+
+Thus, $f$ is negative on $(-2,2)$.
+
+Moreover, as $x$ approaches $2$ from below, $x - 2 \to 0^-$, so $\frac{1}{x - 2} \to -\infty$.
+
+Similarly, as

@@ -1,0 +1,55 @@
+A' },
+      { productName: 'P002', unitPrice: 5.0, quantitySold: 60, saleTimestamp: '2023-10-01T09:30:00Z', cashierUsername: 'userC' }
+    ];
+    const insertedDocs = await salesCollection.insertMany(sales);
+    
+    // Define test date range
+    const startDate = '2023-10-01T00:00:00Z';
+    const endDate = '2023-10-01T23:59:59Z';
+    
+    // Call the function
+    const topProducts = await getTopProducts(salesCollection, startDate, endDate);
+    
+    // Assertion
+    expect(topProducts).to.have.lengthOf(3);
+    expect(topProducts[0].productId).to.equal(prod1Id);
+    expect(topProducts[0].totalQuantitySold).to.be.closeTo(150, 0.001);
+    expect(topProducts[1].productId).to.equal(prod2Id);
+    expect(topProducts[1].totalQuantitySold).to.be.closeTo(65, 0.001);
+    expect(topProducts[2].productId).to.equal(prod3Id);
+    expect(topProducts[2].totalQuantitySold).to.be.closeTo(30, 0.001);
+  });
+
+  // Test case for Scenario 2
+  it('Test Scenario 2: Sales data with multiple entries for the same product', async function() {
+    // Insert products
+    const prod1 = { productId: 'P005', productName: 'Product 5', unitPrice: 50.0 };
+    const prod2 = { productId: 'P006', productName: 'Product 6', unitPrice: 25.0 };
+    const prod3 = { productId: 'P007', productName: 'Product 7', unitPrice: 15.0 };
+    
+    await productsCollection.insertMany([prod1, prod2, prod3]);
+
+    // Insert sales
+    const prod1Id = prod1._id;
+    const prod2Id = prod2._id;
+    const prod3Id = prod3._id;
+    
+    const sales = [
+      // Product 5 has 5 entries
+      { productName: 'P005', unitPrice: 50.0, quantitySold: 10, saleTimestamp: '2023-10-02T10:00:00Z', cashierUsername: 'userA' },
+      { productName: 'P005', unitPrice: 50.0, quantitySold: 5, saleTimestamp: '2023-10-02T11:00:00Z', cashierUsername: 'userB' },
+      { productName: 'P005', unitPrice: 50.0, quantitySold: 12, saleTimestamp: '2023-10-02T12:00:00Z', cashierUsername: 'userC' },
+      { productName: 'P005', unitPrice: 50.0, quantitySold: 8, saleTimestamp: '2023-10-02T13:00:00Z', cashierUsername: 'userD' },
+      { productName: 'P005', unitPrice: 50.0, quantitySold: 9, saleTimestamp: '2023-10-02T14:00:00Z', cashierUsername: 'userE' },
+      // Product 6 has 2 entries
+      { productName: 'P006', unitPrice: 25.0, quantitySold: 20, saleTimestamp: '2023-10-02T10:30:00Z', cashierUsername: 'userF' },
+      { productName: 'P006', unitPrice: 25.0, quantitySold: 30, saleTimestamp: '2023-10-02T15:00:00Z', cashierUsername: 'userG' },
+      // Product 7 has 3 entries
+      { productName: 'P007', unitPrice: 15.0, quantitySold: 15, saleTimestamp: '2023-10-02T16:00:00Z', cashierUsername: 'userH' },
+      { productName: 'P007', unitPrice: 15.0, quantitySold: 25, saleTimestamp: '2023-10-02T17:00:00Z', cashierUsername: 'userI' },
+      { productName: 'P007', unitPrice: 15.0, quantitySold: 10, saleTimestamp: '2023-10-02T18:00:00Z', cashierUsername: 'userJ' }
+    ];
+    await salesCollection.insertMany(sales);
+    
+    // Define date range
+    const

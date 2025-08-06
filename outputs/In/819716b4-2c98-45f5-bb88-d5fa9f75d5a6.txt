@@ -1,0 +1,67 @@
+In summary, this code defines two functions that perform an in-place 3x3 Gaussian filter on a grayscale image: one using floating-point arithmetic and the other using integer arithmetic (likely fixed-point). It also includes a test case that reads an image, applies the filter, and visualizes the result.
+
+Now let's write a tutorial on how to write this code. We'll break it down into segments and discuss what each part aims to achieve.
+
+# Tutorial: Implementing In-Place Gaussian Filtering on a Grayscale Image
+
+In this tutorial, we’ll walk through the process of writing a C++ program that applies Gaussian filtering to a grayscale image. We’ll implement this in two ways: using floating-point arithmetic and using integer arithmetic. We'll also set up a test case to apply this filter to an image and visualize the results.
+
+## Step 1: Include the Required Libraries
+
+We'll start by including the necessary headers. 
+
+```cpp
+#include "../utils/image.hpp"
+#include "../utils/visualize.hpp"
+#include "catch.hpp"
+```
+
+Explanation: 
+- "image.hpp" and "visualize.hpp" are utility headers that we assume define the `Image` class (with `width`, `height`, `data`) and functions for loading, saving, and visualizing images. These are not standard headers, so they must be part of the project or a specific library we’re using.
+- "catch.hpp" is a header from the Catch2 unit testing framework, used to write test cases.
+
+## Step 2: Define the Gaussian Filtering Function (Floating-Point)
+
+We’ll define a function called `GaussFilter` that takes a pointer to image data and an integer specifying the number of passes. This function will apply an in-place 3x3 Gaussian filter.
+
+```cpp
+void GaussFilter(unsigned char* imgData, int imgHeight, int imgWidth, int num_passes) {
+  for (int p = 0; p < num_passes; ++p) {
+    const int img_width = imgWidth;
+    const int img_height = imgHeight;
+    const int img_width_plus_1 = imgWidth + 1;
+    const int img_height_plus_1 = imgHeight + 1;
+    const int img_width_plus_2 = imgWidth + 2;
+    const int img_height_plus_2 = imgHeight + 2;
+    const int img_width_plus_3 = imgWidth + 3;
+    const int img_height_plus_3 = imgHeight + 3;
+    const int img_width_plus_4 = imgWidth + 4;
+    const int img_height_plus_4 = imgHeight + 4;
+    const bool is_valid_img_height = 1 < img_height;
+    const bool is_valid_img_width = 1 < img_width;
+    const unsigned char* img_src_data = imgData;
+    float* img_dst_data = reinterpret_cast<float*>(imgData);
+    if (img_height > 2 && img_width > 2) {
+      if (is_valid_img_height && is_valid_img_width) {
+        for (int h = 2; h < img_height_plus_2; h += 2) {
+          for (int w = 2; w < img_width_plus_2; w += 2) {
+            if (h == 2) {
+              img_dst_data[1] = img_dst_data[1] + 0.25f * img_src_data[img_width_plus_1];
+              img_dst_data[2] = img_dst_data[2] + 0.25f * img_src_data[img_width_plus_2];
+            }
+            if (w == 2) {
+              img_dst_data[0] = img_dst_data[0] + 0.25f * img_src_data[img_width_plus_1];
+              img_dst_data[img_width_plus_1] =
+                  img_dst_data[img_width_plus_1] + 0.25f * img_src_data[img_width_plus_2];
+            }
+            if (h != img_height_plus_2) {
+              img_dst_data[img_width + 1] =
+                  img_dst_data[img_width + 1] + 0.5f * img_src_data[img_width_plus_2];
+              img_dst_data[img_width + 2] =
+                  img_dst_data[img_width + 2] + 0.5f * img_src_data[img_width_plus_3];
+            }
+            if (w != img_width_plus_2) {
+              img_dst_data[h * img_width] =
+                  img_dst_data[h * img_width] + 0.5f * img_src_data[h * img_width_plus_1];
+              img_dst_data[h * img_width + 1] =
+                  img_dst_data[h * img_width + 1] + 0.5f *

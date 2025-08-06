@@ -1,0 +1,102 @@
+The function `addEventListenerForScrollToBottom` adds a 'scroll' event listener to the document body. When scrolled, it checks if the bottom is near the bottom of the page, and if so, it calls `loadNewComments` to load the next page of comments.
+
+In the component, on mount, it calls `loadComments(1)`. Then, it calls `addEventListenerForScrollToBottom` to set up the infinite scroll.
+
+Note that the scroll event listener needs to be removed when the component is unmounted.
+
+Thus, in the return function of useEffect, we remove the scroll event listener.
+
+However, there's a problem: the `loadNewComments` function uses `currentPage` in its closure. But `currentPage` is being updated, and unless we have the closure with the latest value, the function may have a stale value.
+
+To avoid that, perhaps it's better to use a Ref to store `currentPage` and access the latest value from there.
+
+Alternatively, we could set up the `loadNewComments` function inside useEffect to capture the correct `currentPage`.
+
+But perhaps the simplest way is to use `useRef` to store the 'currentPage', and read from that when needed.
+
+Similarly, the 'loading' state can be stored in `loadingRef`, as a boolean Ref, to avoid triggering re-renders when setting.
+
+Alternatively, perhaps it's acceptable to have 'loading' as state variable; we can also set up a 'loadMore' flag.
+
+Alternatively, we can write the code to handle the possible race conditions.
+
+In this code, in the initial effect (useEffect), we can use an empty dependency array, so it runs on mount.
+
+In the `addEventListenerForScrollToBottom` function, the 'loadNewComments' function will capture the current 'currentPage' from 'currentPage' variable, which may be stale.
+
+But, since 'currentPage' is in state and being updated via setCurrentPage after each load, it may not reflect the latest.
+
+Therefore, to avoid closure over stale states, we can use 'useEffect' to set 'currentPage' and 'loading' in a way that the 'loadNewComments' can access the current page.
+
+Alternatively, to avoid this issue, we can write the load function to accept the page number as a parameter.
+
+Similarly, we can define 'loadNewComments' function inside the scroll event listener, so that it captures the latest 'currentPage' via closure.
+
+Alternatively, the best practice is to use a function that uses 'currentPage' via useRef.
+
+Given that, we can modify the 'currentPage' to be a Ref.
+
+Thus, in code:
+
+```javascript
+import React, { useState, useEffect, useRef } from 'react';
+import { useParams } from 'react-router-dom';
+const commentsPerPage = 20;
+
+const CommentViewer = () => {
+  const { articleId } = useParams();
+  const [comments, setComments] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [hasMore, setHasMore] = useState(true);
+  const pageRef = useRef(1); // Ref to store current page
+  const isFetchingRef = useRef(false); // Ref to avoid multiple fetches
+
+  const loadComments = async (page) => {
+    if (isFetchingRef.current) return;
+    isFetchingRef.current = true;
+    setLoading(true);
+    try {
+      const res = await fetch(`https://api.example.com/articles/${articleId}/comments?page=${page}`);
+      if (res.ok) {
+        const data = await res.json();
+        // Assuming data is an array of comments
+        if (data.length < commentsPerPage) {
+          setHasMore(false);
+        }
+        if (page === 1) {
+          setComments(data);
+        } else {
+          setComments(prevComments => [...prevComments, ...data]);
+        }
+        pageRef.current = page + 1;
+      } else {
+        console.error(`Failed to fetch comments for page ${page}`);
+      }
+    } catch (error) {
+      console.error(`Error fetching comments for page ${page}:`, error);
+    } finally {
+      setLoading(false);
+      isFetchingRef.current = false;
+    }
+  }
+
+  const loadNextPage = () => {
+    if (!loading && hasMore) {
+      loadComments(pageRef.current);
+    }
+  }
+
+  useEffect(() => {
+    loadComments(1);
+  }, [articleId]);
+
+  const handleScroll = () => {
+    if (window.innerHeight + document.documentElement.scrollTop >= document.documentElement.offsetHeight - 200) {
+      loadNextPage();
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener('scroll', handleScroll);
+    
+    return () => window

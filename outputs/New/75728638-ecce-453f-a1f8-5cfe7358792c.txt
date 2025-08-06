@@ -1,0 +1,137 @@
+New.email == "bob@example.com" {
+                print("Test passed: User updated successfully.")
+            } else {
+                print("Test failed: User not updated correctly.")
+            }
+        case .failure(let error):
+            // The error should be a deleted data error
+            if case .forcedNilDataSource = error {
+                print("Test passed: Correctly handled forcedDelete with nil data source.")
+            } else {
+                print("Test failed: Unexpected error: \(error)")
+            }
+        }
+        expectation.fulfill()
+    }
+
+    // Helper to create a new delete operation for a specific user ID
+    var forcedDeleteOperation: DeleteOperation? {
+        return DeleteOperation<User>(userID: 2)
+    }
+
+    waitForExpectations(timeout: 1, handler: nil)
+}
+
+// MARK: Execution
+
+// Running the test functions
+createUserWithRealDataSourceTest()
+updateUserWithDelayedDataSourceTest()
+deleteUserWithForcedNilDataSourceTest()
+```
+
+```swift
+import Foundation
+import Dispatch
+
+// MARK: - DataSource Protocol
+
+/// Protocol defining the basic CRUD operations for a data source.
+protocol DataSource {
+    associatedtype Entity: Codable
+    var entityType: Entity.Type { get }
+
+    /// Initialize with optional data
+    init(with data: [Entity]?)
+
+    /// Create operation: inserts a new entity into the data store.
+    func create(_ entity: Entity) throws -> Entity
+
+    /// Read operation: retrieves entities based on a filter closure.
+    /// - Parameters:
+    ///   - filter: A closure that takes an entity and returns a Bool indicating whether it matches.
+    /// - Returns: An array of entities that match the filter. Throws if data store is nil.
+    func read(filter: (Entity) throws -> Bool) throws -> [Entity]
+
+    /// Update operation: updates an entity in the data store.
+    /// - Parameters:
+    ///   - id: The identifier of the entity to update. Assumes entities have an `id` field.
+    ///   - updates: A closure that applies updates to the entity.
+    /// - Returns: The updated entity. Throws if entity not found.
+    func update(id: Int, updates: (inout Entity) throws -> Void) throws -> Entity
+
+    /// Delete operation: removes an entity from the data store.
+    /// - Parameter id: The identifier of the entity to delete.
+    /// - Returns: The deleted entity. Throws if entity not found.
+    func delete(id: Int) throws -> Entity
+}
+
+// Extension to provide default implementation of `read` operation when data store is nil
+extension DataSource {
+    func read(filter: (Entity) throws -> Bool) throws -> [Entity] {
+        guard let dataStore = getDataStore() else {
+            throw DataSourceError.forcedNilDataSource
+        }
+        return dataStore.filter { try filter($0) }
+    }
+
+    /// Accessor for the data store. Returns an optional array of Entity.
+    /// Conforming types should override to provide actual data store access.
+    func getDataStore() -> [Entity]? {
+        // Default implementation returns nil, indicating forced nil.
+        return nil
+    }
+}
+
+// MARK: - DataSource Errors
+
+/// Enum representing errors that can occur in data source operations.
+enum DataSourceError: Error {
+    case entityNotFound
+    case forcedNilDataSource
+}
+
+// MARK: - Example Entity
+
+/// Example entity: User, conforming to Codable, Identifiable with an Int id.
+struct User: Codable, Equatable {
+    var id: Int
+    var name: String
+    var email: String
+}
+
+// MARK: - RealDataSource
+
+/// Implementation of DataSource using an in-memory array to store entities.
+class RealDataSource<Entity: Codable & Equatable & Identifiable & HasID> : DataSource {
+    typealias Entity = Entity
+
+    private var dataStore: [Entity] = []
+
+    // Identifier accessor: Needed to access id of an entity
+    // Assumes Entity has variable `id`
+    init(with data: [Entity]? = nil) {
+        if let initialData = data {
+            dataStore = initialData
+        }
+    }
+
+    func create(_ entity: Entity) throws -> Entity {
+        dataStore.append(entity)
+        return entity
+    }
+
+    func getDataStore() -> [Entity]? {
+        // For RealDataSource, always return data store
+        return dataStore
+    }
+
+    func read(filter: (Entity) throws -> Bool) throws -> [Entity] {
+        // Use the default implementation in DataSource extension
+        guard let dataStore = getDataStore() else {
+            throw DataSourceError.forcedNilDataSource
+        }
+        return dataStore.filter { try filter($0) }
+    }
+
+    func update(id: Int, updates: (inout Entity) throws -> Void) throws -> Entity {

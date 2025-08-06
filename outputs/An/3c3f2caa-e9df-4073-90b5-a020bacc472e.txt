@@ -1,0 +1,141 @@
+An error occurred while creating the user.");
+    }
+  };
+
+  // Render the component
+  return (
+    <div>
+      {errorMessage && (
+        <div style={{ color: "red" }}>
+          <b>{errorMessage}</b>
+        </div>
+      )}
+      <form onSubmit={handleSubmit} id="createUserForm">
+        <h2>{t("Create User Account")}</h2>
+
+        {/* First Name */}
+        <div className="form-group">
+          <label htmlFor={t("First-Name")}>{t("First-Name")}</label>
+          <input
+            type="text"
+            placeholder={t("First-Name")}
+            className="form-control"
+            maxLength={50}
+            value={firstName}
+            onChange={handleFirstNameChange}
+          />
+        </div>
+
+        {/* Last Name */}
+        <div className="form-group">
+          <label htmlFor={t("Last-Name")}>{t("Last-Name")}</label>
+          <input
+            type="text"
+            placeholder={t("Last-Name")}
+            className="form-control"
+            maxLength={50}
+            value={lastName}
+            onChange={handleLastNameChange}
+          />
+        </div>
+
+        {/* Email Address */}
+        <div className="form-group">
+          <label htmlFor={t("Email-Address")}>{t("Email-Address")}</label>
+          <input
+            type="email"
+            placeholder={t("Email-Address")}
+            className="form-control"
+            maxLength={50}
+            value={email}
+            onChange={handleEmailChange}
+          />
+        </div>
+
+        {/* Contact Number */}
+        <div className="form-group">
+          <label htmlFor={t("Contact-Number")}>{t("Contact-Number")}</label>
+          <input
+            type="text"
+            placeholder={t("Contact-Number")}
+            className="form-control"
+            // maxLength={10} // Remove if you want to handle validation separately
+            value={contactNumber}
+            onChange={handleContactNumberChange}
+          />
+        </div>
+
+        {/* Password */}
+        <div className="form-group">
+          <label htmlFor={t("Password")}>{t("Password")}</label>
+          <input
+            type="password"
+            placeholder={t("Password")}
+            className="form-control"
+            maxLength={50}
+            value={password}
+            onChange={handlePasswordChange}
+          />
+        </div>
+
+        {/* Confirm Password */}
+        <div className="form-group">
+          <label htmlFor={t("Confirm-Password")}>{t("Confirm-Password")}</label>
+          <input
+            type="password"
+            placeholder={t("Confirm-Password")}
+            className="form-control"
+            maxLength={50}
+            value={confirmPassword}
+            onChange={handleConfirmPasswordChange}
+          />
+        </div>
+
+        {/* Submit Button */}
+        <div className="form-group">
+          <button type="submit" className="btn btn-success" id="createAccountBtn">
+            {t("Create-Account")}
+          </button>
+        </div>
+      </form>
+    </div>
+  );
+}
+```
+
+In this updated code:
+- The `createUser` function is defined with the `async` keyword to handle asynchronous operations.
+- Inside the `createUser` function, the `await` keyword is used to wait for the `fetch` request to complete before proceeding. This ensures that we correctly handle the response before moving forward.
+
+Thank you! 
+
+Sure! Here's an
+
+Sure! Here's an updated version of your function to include error handling using the HTTP status code in the error message if the status code is not 200. This will make the error message more informative.
+
+```jsx
+import React, { useState, useEffect } from "react";
+import "./styles.css";
+import {
+  useTranslation
+} from "react-i18next";
+
+export default function CreateUser() {
+  // State variables for user information
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [contactNumber, setContactNumber] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [errorMessage, setErrorMessage] = useState(""); // State variable for error messages
+
+  // Internationalization hook
+  const { t } = useTranslation();
+
+  // Update state when input changes
+  const handleFirstNameChange = (e) => {
+    setFirstName(e.target.value);
+  };
+
+  const handleLastNameChange = (

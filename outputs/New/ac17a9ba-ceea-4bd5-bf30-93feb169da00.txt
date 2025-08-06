@@ -1,0 +1,96 @@
+NewPassword);
+    } catch (err) {
+        console.error('Test case 2 failed:', err.message);
+    }
+
+    // Test case 3: Invalid reset token
+    try {
+        const result = await updatePassword('invalidtoken', 'AnotherPassword123');
+        console.log('Test case 3: Success', result);
+    } catch (err) {
+        console.error('Test case 3 failed as expected:', err.message);
+    }
+
+    // Test case 4: New password fails complexity
+    try {
+        const result = await updatePassword(resetToken1, 'weakpassword');
+        console.log('Test case 4: Success', result);
+    } catch (err) {
+        console.error('Test case 4 failed as expected:', err.message);
+    }
+
+    // Test case 5: New password matches current password
+    try {
+        // First, reset password to 'NewSecurePassword!'
+        await updatePassword(resetToken1, 'NewSecurePassword!');
+        // Attempt to set the same password again
+        await updatePassword(resetToken1, 'NewSecurePassword!');
+        console.log('Test case 5: Success');
+    } catch (err) {
+        console.error('Test case 5 failed as expected:', err.message);
+    }
+
+    // Test case 6: Reset token is expired
+    try {
+        // For the test, we will create a reset token that is expired
+        // Create a token that expires in -1 hour from now (i.e., already expired)
+        const expiredToken = crypto.randomBytes(20).toString('hex');
+        const expiredExpiresAt = new Date(Date.now() - 60 * 60 * 1000); // 1 hour ago
+        // Insert into reset_tokens
+        await query('INSERT INTO reset_tokens (user_id, token, expires_at) VALUES (?, ?, ?)', [userId2, expiredToken, expiredExpiresAt.toISOString()]);
+
+        // Generate email token
+        const emailToHash = `email${hashedPassword}:${expiredToken}`;
+        const hashOfEmailToHash = crypto.createHash('sha1').update(emailToHash).digest('hex');
+
+        const emailToken = crypto.randomBytes(20).toString('hex') + hashOfEmailToHash;
+
+        // Attempt to reset password
+        await updatePassword(emailToken, 'AnotherSecurePassword123');
+        console.log('Test case 6: Success');
+    } catch (err) {
+        console.error('Test case 6 failed as expected:', err.message);
+    }
+
+    console.log('--- Tests Completed ---');
+}
+
+// Run tests
+runTests();
+```
+
+**Explanation of the Test Cases:**
+
+- **Test Case 1**: Uses a valid reset token to successfully reset the password.
+  
+- **Test Case 2**: Validates the email token mechanism by resetting the password using a valid email token.
+  
+- **Test Case 3**: Attempts to reset with an invalid token, expecting an error.
+
+- **Test Case 4**: Tries setting a password that doesn't meet complexity requirements, anticipating a failure.
+
+- **Test Case 5**: Checks against setting the same password as the current one, expecting an error.
+
+- **Test Case 6**: Handles an expired token scenario, ensuring the function appropriately rejects the action.
+
+The code includes comprehensive in-memory database setup, schema definitions, utility functions for password hashing and complexity validation, secure token generation and verification mechanisms, and rigorous test cases to validate functionality across different scenarios. This ensures the `updatePassword` function operates correctly and securely across varied conditions.**Problem: Advanced React Native Navigation and State Management**
+
+You are tasked with developing a React Native application that serves as a simplified e-commerce platform. The application should provide a smooth and intuitive user experience, incorporating advanced navigation patterns, state management, and performance optimization techniques. The key requirements and constraints for this application are outlined below.
+
+**Requirements:**
+
+1. **Navigation Structure:**
+   - Implement both stack and tab navigations using React Navigation (version 5 or higher).
+   - The app should have the following screens:
+     - **Home Screen**: Displays a list of product categories.
+     - **Category Screen**: Shows a list of products within a selected category.
+     - **Product Detail Screen**: Provides detailed information about a selected product, including an option to add the product to the cart.
+     - **Cart Screen**: Shows the list of products added to the cart, total price, and an option to proceed to checkout.
+     - **Checkout Screen**: Collects user information for order processing.
+   - The bottom tab navigator should include the following tabs:
+     - Home
+     - Cart
+     - Profile (this can be a placeholder for future development and does not require functional implementation)
+
+2. **State Management:**
+   - Use Redux (or any other state management library of your choice

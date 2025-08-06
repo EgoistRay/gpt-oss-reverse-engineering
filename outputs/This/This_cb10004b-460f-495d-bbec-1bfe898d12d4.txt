@@ -1,0 +1,114 @@
+This method will create a new `MyUserDetails` object using the data from the `User` object and return it.
+
+Now let's write the `createUser` method. This method will take a `RegisterUser` object, create a new `User` record, encode the password, and save it.
+
+```
+private User createUser(RegisterUser registerUser) {
+    User user = new User();
+    user.setUsername(registerUser.getUserName());
+    user.setPassword(encoder.encode(registerUser.getPassWord()));
+    user.setRoles(ROLE_USER);
+    return userRepository.save(user);
+}
+```
+
+This method creates a new `User` entity, sets its username, encodes the password, assigns the role of `ROLE_USER`, and then saves it using the `userRepository`.
+
+Now let's do the `loadUserByUsername` method. This method will retrieve a user by username and convert it to `UserDetails` if it exists.
+
+```
+@Override
+public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    Optional<User> userOptional = userRepository.findByUsername(username);
+    if (userOptional.isPresent()) {
+        return convert(userOptional.get());
+    }
+    throw new UsernameNotFoundException(username);
+}
+```
+
+This method attempts to find a user by username. If it finds one, it converts it to `UserDetails`. If it doesn't find one, it throws `UsernameNotFoundException`.
+
+Now let's write the `addRoleUserToUser` method.
+
+```
+public void addRoleUserToUser(User user, UserRole role) {
+    user.getRoles().add(role);
+    userRepository.save(user);
+}
+```
+
+However, I want to note again that this method might not work if the `User` entity's roles collection is not a `Collection<GrantedAuthority>` or similar. It might need to add a `UserRole` to a collection of `UserUserRole` join entities or something similar. This depends on the mapping of the `User` entity.
+
+Now let's write the `findAll` method.
+
+```
+@Cacheable("User")
+public Page<User> findAll(Pageable pageable) {
+    return userRepository.findAll(pageable);
+}
+```
+
+And the `get` method that retrieves a user by ID.
+
+```
+public User get(Long id) {
+    return userRepository.findById(id).orElseThrow(() -> new IllegalArgumentException());
+}
+```
+
+And finally, the `getAllRoles` method.
+
+```
+public List<UserRole> getAllRoles() {
+    return userRoleRepository.findAll();
+}
+```
+
+Putting it all together, we get the same code as originally provided.
+
+I should also note that I might want to check the `User`, `UserRole`, `RegisterUser`, and other related classes to fully understand how they work. For instance, how does `user.getRoles()` interact with `UserRole`? That would be important to understand if that method `addRoleUserToUser` is implemented correctly.
+
+Also, the `UserDetails` returned by `convert` might need to include the proper authorities that the user has. In a typical Spring Security setup, you would extract the roles from the `User` object and convert them to a list of `GrantedAuthority` objects. This might involve something like:
+
+```
+List<GrantedAuthority> authorities = user.getRoles().stream()
+    .map(role -> new SimpleGrantedAuthority(role.getName()))
+    .collect(Collectors.toList());
+return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), authorities);
+```
+
+But this depends on the structure of the `User` and `UserRole` classes.
+
+Overall, this `UserService` class is a Spring service that handles user registration, authentication, role assignment, and basic CRUD operations for user entities, and integrates with Spring Security by providing the `UserDetailsService` implementation.
+
+@Service
+public class UserService implements UserDetailsService {
+  // Service for managing users, implementing Spring Security's UserDetailsService.
+
+  private final UserRepository userRepository;
+  private final UserRoleRepository userRoleRepository;
+  private final BCryptPasswordEncoder encoder;
+  // Dependencies injected via constructor.
+
+  public UserService(UserRepository userRepository, UserRoleRepository userRoleRepository, BCryptPasswordEncoder encoder) {
+    this.userRepository = userRepository;
+    this.userRoleRepository = userRoleRepository;
+    this.encoder = encoder;
+  }
+
+  public UserDetails registerUser(RegisterUser registerUser) {
+    // Registers a new user.
+    if (!userRepository.existsByUsername(registerUser.getUserName())) {
+        return convert(createUser(registerUser));
+    }
+    throw new UserAlreadyExistsException();
+  }
+
+  private UserDetails convert(User user) {
+    // Converts User entity to UserDetails object.
+    return new MyUserDetails(
+        user.getId(),
+        user.getUsername(),
+        user.getPassword(),
+        user.getRole().toString

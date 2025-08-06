@@ -1,0 +1,75 @@
+What do the authors say in the discussion?
+
+"The study confirms that in the general adult population of France, both non-smoking status and having a doctor diagnosis of COPD are associated with an increased level of awareness of and risk perception of occupational respiratory diseases. These associations are stronger in certain socio-demographic subgroups. In particular, the association between having a doctor diagnosis of COPD and an increased level of awareness and risk perception of occupational respiratory diseases is much stronger in people with a high level of knowledge that diseases can be caused by occupational exposures, as well as with personal work experience (i.e., having performed a specific job for at least 12 months). These results suggest that people who have a doctor diagnosis of COPD and have had at least one year of work are more likely to attribute any respiratory disease to occupational factors, to be aware of and to adopt protective measures against occupational respiratory disease. This conclusion also underlines the high proportion of “undiagnosed” COPD cases among the general adult population, even in a highly developed country, and the need for targeted prevention, in the workplace and in the general population."
+
+Thus, the key hypotheses or research questions the authors set out to address are:
+
+1. Whether non-smoking status and having a doctor diagnosis of COPD are associated with increased awareness and risk perception of occupational respiratory diseases in the general adult population of France, and whether these associations differ for specific subgroups.
+
+2. Whether these associations are stronger among individuals with higher levels of knowledge that diseases can be caused by occupational exposures, and among those with personal work experience of at least 12 months.
+
+3. To characterize the population of adults in France with a diagnosis of COPD and their level of knowledge, awareness, and behavioral adoption of protective measures against occupational respiratory disease.
+
+2.
+
+For each hypothesis, outline the experimental or analytical approach used to test it, including sample size, measurement instruments, and statistical analyses.
+
+First, we need to identify the specific hypotheses.
+
+There are at least three main hypotheses:
+
+- Hypothesis 1: Non-smoking status and having a doctor diagnosis of COPD are associated with increased levels of awareness and risk perception of occupational respiratory disease.
+
+- Hypothesis 2: These associations are stronger in certain socio-demographic subgroups. Specifically, people with higher knowledge that diseases can be caused by occupational exposures and those with at least 12 months of work experience.
+
+- Hypothesis 3: There exists a high proportion of "undiagnosed" COPD cases among the general adult population, and that there is a need for targeted prevention measures.
+
+Now, for each, let's outline the experimental/analytical approach.
+
+Hypothesis 1: Non-smoking status and having a doctor diagnosis of COPD are associated with increased levels of awareness and risk perception of occupational respiratory diseases.
+
+Approach:
+
+- Study design: cross-sectional survey.
+
+- Data source: 'Health Barometer of France,' a 2015 national representative survey.
+
+- Sample size: 12,000 adults, 18 years or older, representative of the French population living in private households.
+
+- Measurements:
+
+   * COPD diagnosis: self-reported 'doctor-diagnosed COPD, emphysema, or chronic bronchitis' (Yes/No).
+
+   * Smoking status: participants reported being current or past smokers.
+
+   * Awareness: 'Do you think that some professions could cause respiratory diseases?' yes/yes with doubt/no. (So, yes/no).
+
+   * Risk perception: a 5-point Likert scale with options: no, a little, some, a lot, a very high risk, that a person's job could cause respiratory disease. For analysis, they recoded into: High risk perception (some, a lot, a very high risk), and not high risk perception.
+
+   * Knowledge of risk factors: 'Do you think that having prolonged contact with chemical products, especially in a work setting, could cause respiratory disease?'
+
+- Statistical Analyses:
+
+   * For each outcome variable (awareness, risk perception, knowledge), they performed weighted logistic regression analyses.
+
+   * Two models: first, adjusted for age, gender, occupation and level of education.
+
+   * Second, additionally adjusting for occupational exposures: having ever exposed to certain occupational risk factors.
+
+   * Reporting crude odds ratio (cOR) and adjusted odds ratio (aOR). Using STATA 15 and R 3.5.
+
+Hypothesis 2: The associations are stronger in certain socio-demographic subgroups.
+
+Approach:
+
+- The same above data set.
+
+- Subgroup analysis: focusing on participants with an occupational exposure history (ever exposed to risk factors such as pesticides, solvents, irritants and fumes, dust, chemicals associated with asthma).
+
+- Adjusted models: considering high knowledge (having answered 'yes' to the knowledge question).
+
+- So, the adjusted odds ratios are compared between participants with high knowledge and those with low knowledge.
+
+- Additionally, analysis of those with at least 12 months of work experience.
+
+- The authors report that adjusted odds

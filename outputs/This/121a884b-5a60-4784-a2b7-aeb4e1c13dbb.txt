@@ -1,0 +1,94 @@
+This function `addToFavorites` takes a `movie` of type `Movie`. It gets an `app` instance from `useApp`. 
+
+It then checks if the movie's `id` is already in the favorites, or if it's already in the watchlist, or if it's in either `app.watched.movies` or `app.watched.series`. If the movie is already in one of those lists, it shows a toast notification "Movie already in watchlist" and returns.
+
+If the movie ID is not in the favorites, it pushes the movie ID onto the `favorites` array.
+
+Next:
+
+```javascript
+export function removeFromFavorites(id: number) {
+  const app = useApp()
+  // TODO remove from localStorage
+  app.favorites = app.favorites.filter((movieId) => movieId !== id)
+}
+```
+
+This function `removeFromFavorites` takes an `id` and gets the `app`. It then filters out the movie ID from the `favorites` array. There is a TODO comment saying "remove from localStorage", which again suggests that `favorites` might currently be stored in memory rather than persisted in local storage.
+
+Continuing:
+
+```javascript
+export function addToWatched(
+  id: number,
+  type: "movie" | "series",
+  rating = 0,
+  watchTime = null
+) {
+  if (!watchTime) {
+    const app = useApp()
+    watchTime = app.user?.watchTime ?? 0
+  }
+
+  const app = useApp()
+
+  const watchTimeKey = type === "movie" ? "movieWatchTime" : "showWatchTime"
+
+  if (!app.watched[movieKey].movies) {
+    const movieKey: "movie" | "show" = type === "movie" ? "movie" : "show"
+    const defaultMovie: WatchedMovie = {
+      rating: 1,
+      ratingCount: 1,
+      ratingAvg: 1,
+      watchtime: watchTime || 0,
+      watchDate: watchTime,
+      watchTime,
+    }
+    app.watched[movieKey].movies = { [id]: defaultMovie }
+
+    return
+  }
+
+  // if movie is already in watched, add rating
+  if (app.watched[movieKey].movies[id]) {
+    const watchTimeKey = type === "movie" ? "movieWatchTime" : "showWatchTime"
+
+    // if rating is 0 or -1, set rating to undefined
+    if (rating === 0 || rating === -1) {
+      app.watched[movieKey].movies[id].rating = undefined
+    }
+
+    app.watched[movieKey].movies[id][watchTimeKey] += watchTime
+
+    app.watched[movieKey].movies[id].watchTime += watchTime
+    return
+  }
+
+  const defaultMovie: WatchedMovie = {
+    rating: rating,
+    ratingCount: 1,
+    ratingAvg: rating,
+  }
+
+  app.watched[movieKey].movies[id] = {
+    ...defaultMovie,
+    [watchTimeKey]: watchTime,
+    watchDate: watchTime,
+    watchTime: watchTime,
+  }
+}
+```
+
+The function `addToWatched` takes an `id`, a `type` which can be "movie" or "series", a `rating` defaulting to 0, and a `watchTime` which can be a number or null. Inside the function, it first checks if `watchTime` is not set. If it's not set, it gets the `app` instance, and tries to get `app.user?.watchTime`. If that exists, it uses that; otherwise it defaults to 0. 
+
+Then it again gets the `app`. This might be redundant. Let's keep it in mind. Then it defines a `watchTimeKey` which is "movieWatchTime" if the type is "movie", otherwise "showWatchTime".
+
+Then it checks if `app.watched[movieKey].movies` exists. Wait a second, where does `movieKey` come from? I don't see it defined before this. Let's read ahead. I see a line:
+
+```javascript
+const movieKey: "movie" | "show" = type === "movie" ? "movie" : "show"
+```
+
+This line defines `movieKey` based on the type. But this line is after the check that uses `movieKey`. This would cause an error, because `movieKey` is not defined before it's used. This looks like a bug in the code. Let's keep that in mind.
+
+Assuming `movieKey` was defined correctly, this block checks if there's no entry for movies under the `movieKey`. In that case, it creates a new movie entry with the given `id`, sets default rating values, and

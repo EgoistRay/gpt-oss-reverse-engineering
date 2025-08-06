@@ -1,0 +1,169 @@
+How to Use:*
+
+- Open the application.
+- Select a CSV file.
+- View the summary report.
+- Optionally, export the summary report to a CSV file.
+
+---
+
+**Source Code:**
+
+Below is an overview of the main components and classes used in the application:
+
+```csharp
+// Employee.cs
+public class Employee
+{
+    public string EmployeeID { get; set; }
+    public string EmployeeName { get; set; }
+    public string Department { get; set; }
+    public decimal Salary { get; set; }
+    public DateTime JoinDate { get; set; }
+}
+
+// DataProcessor.cs
+public class DataProcessor
+{
+    public Dictionary<string, List<Employee>> LoadAndValidateData(string filePath)
+    {
+        // Implementation
+    }
+
+    public List<DepartmentReport> ComputeSummaryReport(Dictionary<string, List<Employee>> departmentEmployees)
+    {
+        // Implementation
+    }
+}
+
+// Exporter.cs
+public class Exporter
+{
+    public void ExportToCsv(string filePath, List<DepartmentReport> reports)
+    {
+        // Implementation
+    }
+}
+
+// MainForm.cs (WinForms)
+public partial class MainForm : Form
+{
+    // UI components and event handlers
+}
+```
+
+---
+
+**Testing and Usage:**
+
+Test cases should include:
+
+- Valid CSV file with all correct records.
+- CSV file with some invalid records (e.g., incorrect date format, negative salary).
+- CSV file with duplicate EmployeeID entries.
+- CSV file with a large number of records to assess performance.
+
+To run the application:
+
+1. Build the solution using Visual Studio.
+2. Run the application; the main form will appear.
+3. Use the "Open CSV" button to select a CSV file.
+4. After processing, review the summary report in the UI.
+5. Optionally, use the "Export Summary" button to save the report to a CSV file.
+
+---
+
+**Conclusion:**
+
+This solution provides a robust, user-friendly application that reads, validates, processes, and reports employee data from CSV files. It emphasizes performance, maintainability, and scalability, meeting the outlined functional and non-functional requirements.
+
+```csharp
+// Employee.cs
+using System;
+
+namespace EmployeeCSVProcessor
+{
+    public class Employee
+    {
+        public string EmployeeID { get; set; }
+        public string EmployeeName { get; set; }
+        public string Department { get; set; }
+        public decimal Salary { get; set; }
+        public DateTime JoinDate { get; set; }
+
+        // Constructor
+        public Employee(string employeeID, string employeeName, string department, decimal salary, DateTime joinDate)
+        {
+            EmployeeID = employeeID;
+            EmployeeName = employeeName;
+            Department = department;
+            Salary = salary;
+            JoinDate = joinDate;
+        }
+    }
+}
+```
+```csharp
+// DepartmentReport.cs
+using System;
+
+namespace EmployeeCSVProcessor
+{
+    public class DepartmentReport
+    {
+        public string DepartmentName { get; set; }
+        public int EmployeeCount { get; set; }
+        public decimal AverageSalary { get; set; }
+
+        // Constructor
+        public DepartmentReport(string departmentName, int employeeCount, decimal averageSalary)
+        {
+            DepartmentName = departmentName;
+            EmployeeCount = employeeCount;
+            AverageSalary = averageSalary;
+        }
+    }
+}
+```
+```csharp
+// DataProcessor.cs
+using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
+
+namespace EmployeeCSVProcessor
+{
+    public class DataProcessor
+    {
+        public async Task<Dictionary<string, List<Employee>>> LoadAndValidateDataAsync(string filePath)
+        {
+            var departmentEmployees = new Dictionary<string, List<Employee>>(StringComparer.OrdinalIgnoreCase);
+            var seenEmployeeIDs = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            int lineNumber = 0;
+
+            // Read lines asynchronously
+            using (var reader = new StreamReader(filePath))
+            {
+                string headerLine = await reader.ReadLineAsync();
+                lineNumber++; // Header line
+
+                // Validate header
+                var headerColumns = headerLine.Split(',');
+                if (headerColumns.Length != 5 ||
+                    !headerColumns[0].Equals("EmployeeID", StringComparison.OrdinalIgnoreCase) ||
+                    !headerColumns[1].Equals("EmployeeName", StringComparison.OrdinalIgnoreCase) ||
+                    !headerColumns[2].Equals("Department", StringComparison.OrdinalIgnoreCase) ||
+                    !headerColumns[3].Equals("Salary", StringComparison.OrdinalIgnoreCase) ||
+                    !headerColumns[4].Equals("JoinDate", StringComparison.OrdinalIgnoreCase))
+                {
+                    throw new Exception("Invalid CSV header format.");
+                }
+
+                string line;
+                while ((line = await reader.ReadLineAsync()) != null)
+                {
+                    lineNumber++;
+                    if (string.IsNullOrWhite

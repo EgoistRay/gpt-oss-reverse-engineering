@@ -268,14 +268,14 @@ The project has been extended to analyze multiple models, revealing distinct cha
 
 ### Model Comparison Overview
 
-| Model | Size | Primary Content Focus | Training Data Type | Content Quality | Format Style |
-|-------|------|---------------------|-------------------|----------------|--------------|
-| **GPT-OSS-120B** | 120B | Gaming mechanics, astrophysics, technical systems | Synthetic (Textbook-style) | High | Structured technical docs |
-| **GPT-OSS-20B** | 20B | Programming tutorials, code explanations | Synthetic (Textbook-style) | High | Educational tutorials |
-| **DeepSeek-Chat-v3-0324** | Unknown | Literary fiction, creative writing | Mixed (Natural + Synthetic) | High | Narrative prose |
-| **Qwen3-Coder** | Unknown | Mathematical logic, formal proofs | Natural (Academic) | High | Formal academic |
-| **Kimi-K2** | Unknown | Technical support, programming help | Mixed (Natural + Synthetic) | Medium | Technical troubleshooting |
-| **GLM-4.5** | Unknown | Web content, forum posts, mixed topics | Natural (Web content) | Medium | Informal web content |
+| Model | Primary Content Focus | Training Data Type | Content Quality | Format Style |
+|-------|---------------------|-------------------|----------------|--------------|
+| **GPT-OSS-120B** | Gaming mechanics, astrophysics, technical systems | Synthetic (Textbook-style) | High | Structured technical docs |
+| **GPT-OSS-20B** | Programming tutorials, code explanations | Synthetic (Textbook-style) | High | Educational tutorials |
+| **DeepSeek-Chat-v3-0324** | Literary fiction, creative writing | Mixed (Natural + Synthetic) | High | Narrative prose |
+| **Qwen3-Coder** | Mathematical logic, formal proofs | Natural (Academic) | High | Formal academic |
+| **Kimi-K2** | Technical support, programming help | Mixed (Natural + Synthetic) | Medium | Technical troubleshooting |
+| **GLM-4.5** | Web content, forum posts, mixed topics | Natural (Web content) | Medium | Informal web content |
 
 ### Detailed Model Analysis
 
@@ -380,7 +380,6 @@ The project has been extended to analyze multiple models, revealing distinct cha
 
 - **Official announcement:** [*Introducing gpt-oss*](https://openai.com/index/introducing-gpt-oss/) &nbsp;*(OpenAI, Aug 2025)*
 - **Model card:** [*openai/gpt-oss-20b*](https://huggingface.co/openai/gpt-oss-20b) &nbsp;*(Hugging Face)*
-- **Industry adoption:** [Microsoft integrates gpt-oss-20b into Windows AI Foundry](https://www.theverge.com/news/719640/microsoft-openai-gpt-oss-open-model-windows-ai-foundry-release) &nbsp;*(The Verge, 6 Aug 2025)*
 
 ### Reverse-engineering & data-attribution studies
 

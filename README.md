@@ -6,36 +6,37 @@ This repository is dedicated to reverse engineering the training data distributi
 
 ## Project Overview
 
-The project uses GPT-OSS-20B model to generate random samples starting with common English words, then analyzes the patterns in the generated content to understand the model's training data distribution.
+This project reverse engineers the training data distribution of language models by analyzing their random generation patterns when prompted with common English words. **GPT-OSS-20B served as the main testbed** for detailed analysis, with additional models analyzed for comparative insights.
 
 ## Methodology
 
-- **Prompt Strategy**: Uses the 10 most common English words as starting prompts
-- **Model**: GPT-OSS-20B via OpenRouter API
-- **Generation**: 16 samples per word with temperature=1.0 for maximum randomness
-- **Analysis**: Examines content patterns to understand training data composition
+- **Prompt Strategy**: Uses the 9 most common English words as starting prompts
+- **Main Model**: **GPT-OSS-20B** (primary analysis target)
+- **Additional Models**: 5 other models via OpenRouter API (GPT-OSS-120B, DeepSeek-Chat-v3-0324, Qwen3-Coder, Kimi-K2, GLM-4.5) for comparative analysis
+- **Generation**: Multiple samples per word with temperature=1.0 for maximum randomness
+- **Analysis**: Examines content patterns to understand training data composition and model specialization
 
 ## Data Collection
 
-The project collected 160 samples total (16 samples × 10 words) across these categories:
+The project collected samples from 6 different models across 9 common English words. Each model generated multiple samples per word, providing insights into their training data distribution:
 
-| Word | Samples | Content Focus |
-|------|---------|---------------|
-| **The** | 16 | Technical documentation, code explanations, educational content |
-| **This** | 16 | Code walkthroughs, implementation details, debugging explanations |
-| **How** | 16 | Mathematical proofs, algorithmic explanations, problem-solving |
-| **Why** | 16 | Software architecture, best practices, design decisions |
-| **What** | 16 | Technical troubleshooting, API documentation, error analysis |
-| **A** | 16 | Web development tutorials, UI/UX explanations, code examples |
-| **An** | 16 | Algorithm analysis, data structures, computational complexity |
-| **In** | 16 | Software development scenarios, cross-platform implementations |
-| **New** | 16 | Programming tutorials, code serialization, technical implementations |
+| Word | Content Focus | Models Analyzed |
+|------|---------------|-----------------|
+| **The** | Technical documentation, code explanations, educational content | All 6 models |
+| **This** | Code walkthroughs, implementation details, debugging explanations | All 6 models |
+| **How** | Mathematical proofs, algorithmic explanations, problem-solving | All 6 models |
+| **Why** | Software architecture, best practices, design decisions | All 6 models |
+| **What** | Technical troubleshooting, API documentation, error analysis | All 6 models |
+| **A** | Web development tutorials, UI/UX explanations, code examples | All 6 models |
+| **An** | Algorithm analysis, data structures, computational complexity | All 6 models |
+| **In** | Software development scenarios, cross-platform implementations | All 6 models |
+| **New** | Programming tutorials, code serialization, technical implementations | All 6 models |
 
-## Key Findings
+## Key Findings (GPT-OSS-20B Analysis)
 
 ### 1. **Massive Programming/Technical Content Dominance**
 
-The analysis reveals that GPT-OSS models have been trained on an extremely large corpus of programming and technical content:
+The analysis of GPT-OSS-20B reveals that this model has been trained on an extremely large corpus of programming and technical content:
 
 - **~85-90% of generated content** is programming-related
 - Heavy focus on code explanations, tutorials, and technical documentation
@@ -133,14 +134,14 @@ The analysis reveals that GPT-OSS models have been trained on an extremely large
 
 ### 4. **Implications**
 
-The analysis suggests that GPT-OSS models have been trained on:
+The analysis suggests that GPT-OSS-20B has been trained on:
 
 1. **Massive Programming Corpora**: Likely including GitHub repositories, Stack Overflow, technical blogs, and documentation sites
 2. **Educational Content**: Programming tutorials, courses, and learning materials
 3. **Professional Development**: Enterprise patterns, best practices, and industry standards
 4. **Mathematical/Algorithmic Content**: Computer science theory and problem-solving approaches
 
-This indicates that GPT-OSS models are particularly well-suited for:
+This indicates that GPT-OSS-20B is particularly well-suited for:
 - Code generation and explanation
 - Technical documentation
 - Programming education
@@ -151,20 +152,22 @@ This indicates that GPT-OSS models are particularly well-suited for:
 
 ```
 gpt-oss-reverse-engineering/
-├── main.py                          # Main entry point
 ├── notebooks/
 │   └── random_generation.ipynb     # Data collection notebook
-├── outputs/                         # Generated samples by word
-│   ├── The/                        # 16 samples starting with "The"
-│   ├── This/                       # 16 samples starting with "This"
-│   ├── How/                        # 16 samples starting with "How"
-│   ├── Why/                        # 16 samples starting with "Why"
-│   ├── What/                       # 16 samples starting with "What"
-│   ├── A/                          # 16 samples starting with "A"
-│   ├── An/                         # 16 samples starting with "An"
-│   ├── In/                         # 16 samples starting with "In"
-│   └── New/                        # 16 samples starting with "New"
+├── outputs-oss-120b/               # GPT-OSS-120B samples
+│   ├── The/, This/, How/, Why/, What/, A/, An/, In/, New/
+├── outputs-oss-20b/                # GPT-OSS-20B samples  
+│   ├── The/, This/, How/, Why/, What/, A/, An/, In/, New/
+├── outputs-dpsk-v3-0324/           # DeepSeek-Chat-v3-0324 samples
+│   ├── The/, This/, How/, Why/, What/, A/, An/, In/, New/
+├── outputs-qwen3-coder/            # Qwen3-Coder samples
+│   ├── The/, This/, How/, Why/, What/, A/, An/, In/, New/
+├── outputs-kimi-k2/                # Kimi-K2 samples
+│   ├── The/, This/, How/, Why/, What/, A/, An/, In/, New/
+├── outputs-glm-4.5/                # GLM-4.5 samples
+│   ├── The/, This/, How/, Why/, What/, A/, An/, In/, New/
 ├── pyproject.toml                  # Project dependencies
+├── uv.lock                         # Dependency lock file
 └── README.md                       # This file
 ```
 
@@ -194,77 +197,99 @@ uv sync
 
 The main functionality is in the Jupyter notebook:
 
-1. **Data Collection**: Run `notebooks/random_generation.ipynb` to collect samples
-2. **Analysis**: Examine the generated content in the `outputs/` directory
-3. **Pattern Recognition**: Identify training data distribution patterns
+1. **Data Collection**: Run `notebooks/random_generation.ipynb` to collect samples from multiple models
+2. **Analysis**: Examine the generated content in the model-specific output directories
+3. **Pattern Recognition**: Identify training data distribution patterns across different models
+4. **Model Comparison**: Compare content characteristics and training data types
 
 ## Example Outputs
 
-Here are three typical examples showcasing the diverse content patterns generated by GPT-OSS:
+Here are examples showcasing the diverse content patterns generated by different models:
 
-### 1. Code Documentation ("The" prompt)
+### 1. GPT-OSS-120B: Technical Systems ("The" prompt)
 ```
-The main difference is that the `if` statement evaluates the condition in the parentheses and executes the block of code if the condition is true, while the `case` statement compares a value against multiple expressions and executes a block of code based on the matching expression.
+The script embodies a gold mining mechanic where the player's **gain rate** and **cumulative gold** augment based on various dynamic modifiers, reflecting strategic depth and player agency.
 
-Here is a concise summary of the key differences between the if statement and the switch statement in C#:
-
-1. Syntax: The if statement uses a boolean expression in parentheses and executes a block of code if the expression is true, while the switch statement uses a single expression, which can be of various types, and evaluates it against multiple expressions. The block of code is executed when there is a match.
-
-2. Purpose: The if statement is used for evaluating a single condition or multiple conditions in a hierarchical manner, while the switch statement is used for evaluating a single value against multiple cases.
+- **Base Increment:** Initially, the gold amount added per tick is a fixed value, serving as the foundational accrual rate.
+  
+- **Sprout and Popularity Scaling:** The script introduces scaling mechanisms where each **"sprout"**—possibly representing a unit or resource—defaulting to an increment of **0.2** to the gain rate per tick.
 ```
 
-### 2. Mathematical Problem-Solving ("How" prompt)
+### 2. GPT-OSS-20B: Programming Education ("The" prompt)
 ```
-How many edges are there in this graph?" They might want answer in terms of m and n. So we answer that there's 4m + 5(-2m + 3n - 2) = 5(3n - 2) - 4m edges.
+The `@Test` annotation indicates that the following method is a test case.
 
-Alternatively, combine if one desires: 35n - 18? Wait, 12m + 15n = 3(4m+5n). So answer: 3(4m+5n). Given that. So answer. Alternatively 12m + 15n.
-
-We might also mention that there is greater weight not used for soap foam graph. But that's not asked.
-
-Thus answer: 12m + 15n.
-
-But maybe they want explanation: The graph is a planar graph with vertices and edges. So graph edges can be counted using Euler's formula?
+```
+        @Ignore ("The test is failing because the expected result is different from the actual one.  It is being kept so that it can be examined and updated when the test fails")
 ```
 
-### 3. Programming Tutorial ("New" prompt)
-```
-New York",
-  "age": 28,
-  "children": {
-    "child1": "Alice",
-    "child2": "Bob"
-  }
-}
+The `@Ignore` annotation with a message indicates that this test should be ignored (not run) when the tests are executed.
 ```
 
-In Java, this would be represented using Maps and Lists.
+### 3. DeepSeek-Chat-v3-0324: Literary Fiction ("The" prompt)
+```
+The Crust On Its Uppers
+Derek Raymond
+1
+'SUCH are the blessings of peace that we might almost be on the eve of war.'
+This remark, muttered to himself by the demonstrative old gentleman indulging in a leg-show on the bench opposite, woke me up.
+```
 
-The code would read from a JSON file, parse it into a Java Map or custom data class, then serialize it into a binary format, write it back to a file, read it again, and deserialize to a Map or custom object, then reconstruct to JSON for comparison.
+### 4. Qwen3-Coder: Mathematical Logic ("The" prompt)
+```
+The following Premises: A ⇒ (B ⇒ C), (A ∧ B) ⇒ (D ∧ C), A, B  what is the conclusion? Use direct proof.
 
-```java
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.core.type.TypeReference;
+### Given Premises:
+1. **A ⇒ (B ⇒ C)**  
+2. **(A ∧ B) ⇒ (D ∧ C)**  
+3. **A**  
+4. **B**
 
-import java.io.*;
-import java.util.*;
+### Goal:
+Derive a conclusion from these premises using direct proof.
+```
 
-public class JsonSerializationTest {
-    public static void main(String[] args) throws IOException, ClassNotFoundException {
-        // Original JSON string
-        String originalJson = "{\"name\":\"John Doe\",\"address\":\"123 Main St, New York\",\"age\":28,\"children\":{\"child1\":\"Alice\",\"child2\":\"Bob\"}}";
+### 5. Kimi-K2: Technical Support ("The" prompt)
+```
+The | you added in the middle of the rename string {new_name} to separate between cases: `${tm1_title | lower}` is the problem. Remove tit.
+Change
+```
+ ${${1:a}.${2:b}.${tm1_title | lower}}
+├── ${1:a}.${2:b}.${tm1_title | lower}.${4:FIELD}
+├──  ${1:a}.${2:b}.${tm1_title | lower}.${5:PIPE}
+```
+to
+```
+ ${${1:a}.${2:b}.tm1_title | lower}
+├── ${1:a}.${2:b}.tm1_title | lower.${4:FIELD}
+├──  ${1:a}.${2:b}.tm1_title | lower.${5:PIPE}
+```
+```
 
-        // Parse JSON into a Java Map
-        ObjectMapper mapper = new ObjectMapper();
-        Map<String, Object> originalMap = mapper.readValue(originalJson, new TypeReference<Map<String, Object>>(){});
+### 6. GLM-4.5: Web Content ("The" prompt)
+```
+The::_BeAST
+06-12-2020, 18:35
+hello guys , so i tried to make a plugin that makes a player idk...... ok i tell you:
+so i wanted to make a plugin that makes the player stuck in a room that has text written for example "welcome to the server" and the player gotta crouch or do something like push a button to start playing!. but i had a lot of errors .... so i asked some friends and they helped me with fixing i couple of errors..... but when i added the plugin to the server it didn't work and i don't know why !. please if you have any idea how to fix the plugin to make it work please tell me........
 ```
 
 ## Key Insights
 
-This reverse engineering approach reveals that GPT-OSS models are heavily trained on programming and technical content, making them particularly effective for software development tasks, code explanation, and technical documentation generation. The overwhelming dominance of programming-related content suggests these models are optimized for developer assistance and technical communication. 
+This reverse engineering approach reveals distinct training data patterns across different models:
+
+- **GPT-OSS-20B** (main testbed): Heavily trained on synthetic programming and technical content, making it particularly effective for software development tasks
+- **GPT-OSS-120B**: Similar synthetic training but with broader technical scope including gaming and astrophysics
+- **DeepSeek-Chat-v3-0324**: Shows strong creative writing and multilingual capabilities
+- **Qwen3-Coder**: Excels at mathematical logic and formal reasoning
+- **Kimi-K2**: Provides practical technical support and programming assistance
+- **GLM-4.5**: Handles diverse web content and informal communication
+
+The analysis demonstrates how different training data sources and approaches result in specialized model capabilities, with synthetic training data showing higher consistency and quality compared to natural web content. 
 
 ## Multi-Model Analysis
 
-The project has been extended to analyze multiple models, revealing distinct characteristics and training data patterns across different architectures and sizes.
+Building on the initial GPT-OSS-20B analysis, the project was extended to analyze multiple models, revealing distinct characteristics and training data patterns across different architectures and sizes.
 
 ### Model Comparison Overview
 

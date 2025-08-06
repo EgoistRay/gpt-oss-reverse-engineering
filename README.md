@@ -274,6 +274,8 @@ The project has been extended to analyze multiple models, revealing distinct cha
 | **GPT-OSS-20B** | 20B | Programming tutorials, code explanations | Synthetic (Textbook-style) | High | Educational tutorials |
 | **DeepSeek-Chat-v3-0324** | Unknown | Literary fiction, creative writing | Mixed (Natural + Synthetic) | High | Narrative prose |
 | **Qwen3-Coder** | Unknown | Mathematical logic, formal proofs | Natural (Academic) | High | Formal academic |
+| **Kimi-K2** | Unknown | Technical support, programming help | Mixed (Natural + Synthetic) | Medium | Technical troubleshooting |
+| **GLM-4.5** | Unknown | Web content, forum posts, mixed topics | Natural (Web content) | Medium | Informal web content |
 
 ### Detailed Model Analysis
 
@@ -301,6 +303,18 @@ The project has been extended to analyze multiple models, revealing distinct cha
 **Format**: Formal academic writing with mathematical notation  
 **Quality**: High mathematical precision and logical rigor
 
+#### **Kimi-K2**
+**Focus**: Technical support, programming help  
+**Training**: Mixed natural and synthetic content  
+**Format**: Technical troubleshooting with code examples  
+**Quality**: Medium quality with practical programming assistance
+
+#### **GLM-4.5**
+**Focus**: Web content, forum posts, mixed topics  
+**Training**: Natural web content  
+**Format**: Informal web content with emojis and casual language  
+**Quality**: Medium quality with diverse but inconsistent content
+
 ### Comparative Analysis
 
 #### **Content Distribution Patterns**
@@ -309,23 +323,31 @@ The project has been extended to analyze multiple models, revealing distinct cha
    - **GPT-OSS models**: 85-90% technical/programming content
    - **DeepSeek**: 60% creative/literary, 40% technical
    - **Qwen3-Coder**: 95% mathematical/logical content
+   - **Kimi-K2**: 80% technical support, 20% general content
+   - **GLM-4.5**: 40% technical, 60% general web content
 
 2. **Training Data Types:**
    - **GPT-OSS models**: Synthetic textbook-style instructional content
    - **DeepSeek**: Mixed natural and synthetic content
    - **Qwen3-Coder**: Natural academic and mathematical content
+   - **Kimi-K2**: Mixed natural and synthetic content
+   - **GLM-4.5**: Natural web content and forum posts
 
 3. **Model Specialization:**
    - **GPT-OSS-120B**: Technical systems and gaming mechanics
    - **GPT-OSS-20B**: Programming education and software development
    - **DeepSeek-Chat-v3-0324**: Creative writing and multilingual content
    - **Qwen3-Coder**: Mathematical logic and formal reasoning
+   - **Kimi-K2**: Technical support and programming help
+   - **GLM-4.5**: General web content and forum discussions
 
 ### Implications for Model Selection
 
 - **Software Development**: GPT-OSS models (especially 20B) are optimal
 - **Creative Writing**: DeepSeek-Chat-v3-0324 excels
 - **Mathematical Reasoning**: Qwen3-Coder provides highest precision
+- **Technical Support**: Kimi-K2 offers practical programming assistance
+- **General Web Content**: GLM-4.5 handles diverse informal content
 - **General Technical Tasks**: GPT-OSS-120B offers best balance of capability and accessibility
 
 ### Data Characteristics Analysis
@@ -344,6 +366,8 @@ The project has been extended to analyze multiple models, revealing distinct cha
 | **GPT-OSS-20B** | Educational tutorials | Variable (20-100 lines) | High practical relevance |
 | **DeepSeek** | Narrative prose | Short-medium (10-50 lines) | High creativity |
 | **Qwen3-Coder** | Formal academic | Short-medium (10-40 lines) | High mathematical precision |
+| **Kimi-K2** | Technical troubleshooting | Short-medium (10-30 lines) | Medium practical assistance |
+| **GLM-4.5** | Informal web content | Short-medium (10-60 lines) | Medium diverse content |
 
 #### **Key Findings**
 - **GPT-OSS models**: Synthetic training data following "Textbook is All You Need" approach

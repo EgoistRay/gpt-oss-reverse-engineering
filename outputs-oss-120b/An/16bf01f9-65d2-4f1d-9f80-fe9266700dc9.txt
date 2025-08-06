@@ -1,0 +1,78 @@
+An example of using `assertRaises` is:
+
+```python
+def test_function_raises_exception(self):
+    with self.assertRaises(ValueError):
+        function_that_raises_value_error()
+```
+
+The code in the question also uses a different form of `assertRaises` which uses `self.assertRaises(message, exception_type, callable, *args, **kwargs)`. This form expects a message, the exception type, the function, and arguments to pass to the function.
+
+---
+
+These exercises cover several key concepts from the code. Let's also check one more exercise that combines string parsing with error handling, as it's a central feature of the tests:
+
+### Exercise 6 Summary:
+
+Suppose we have a function `def parse_int(string):` that attempts to parse an integer from a string. Write a unit test that checks that `parse_int("123")` returns `123`, and that `parse_int("abc")` raises a `ValueError`.
+
+### Exercise 6 Answer:
+
+```python
+class ParseIntTest(unittest.TestCase):
+    def test_parse_int_valid(self):
+        self.assertEqual(parse_int("123"), 123)
+
+    def test_parse_int_invalid(self):
+        self.assertRaises(ValueError, parse_int, "abc")
+```
+
+---
+
+These exercises should give a good review of the concepts demonstrated in the code.
+
+def test_invalid_input():
+    with self.assertRaises(ValueError): parse("invalid input")  # Example of testing for exception.Let's go through this code line by line and see what it's doing. I'll also provide context around what I think this code is trying to achieve based on its structure, variable names, and any other clues I can find.
+
+Firstly, let's note that this code is a header file for a C++ library that appears to be dealing with "cubes". The term "cube" here is not immediately obvious, but it might be related to a specific data structure or representation used in combinatorics or group theory. The presence of `std::map<string, string> cube_map` suggests that there's a mapping from characters to strings, which might be used to encode some kind of "group element" or "symbolic expression". 
+
+The namespace `cr` suggests that this might be part of a larger library or project. I see references to "cube_element" and "cube", which suggests we're dealing with some kind of algebraic structure, potentially with its own set of elements and operations. The code seems to involve things like random distributions, generating all combinations, and a "genus" operation, which makes me think this might be related to something in algebraic topology, combinatorial group theory, or something similar.
+
+The code also includes a header file "cube.h" which I don't have access to. This means there will be some functions and types referenced that are defined elsewhere. For now, I will have to guess what these functions do based on usage.
+
+Now let's go through it step by step:
+
+```
+// Header guard to prevent double inclusion
+#ifndef MCRR_RIEMANN_H
+#define MCRR_RIEMANN_H
+
+// includes a header "cube.h" which we don't have.
+#include "cube.h"
+
+namespace cr{
+    // Define a map from string to string called 'cube_map'.
+    std::map<string, string> cube_map;
+    
+    // Define an unordered_set of strings called 'set2'.
+    unordered_set<string> set2;
+    
+    // Define a function 'cube_to_gen' that takes a const std::string reference 's' and returns an int.
+    int cube_to_gen(const std::string &s){
+        // It returns the absolute value of (s[1] - '0')
+        return abs(s[1] - '0');
+    }
+```
+
+The function `cube_to_gen` looks a bit suspicious. It assumes that the string `s` has at least two characters. It takes the second character (index 1), subtracts the ASCII value of '0' to convert it to a digit, and then takes the absolute value. This would interpret a string like "x3" as having gen=3. However, there's something potentially concerning: if the string does not have a second character, this will cause undefined behavior.
+
+Also, `std::abs` might not be needed here if it's always a digit; maybe it's handling something like a negative sign? We'll have to see how it's used later.
+
+Now, there's a big comment block:
+```
+// --------------- test for subproblem --------------------------------
+// generate all possible cubes of degree d over a finite set S = {0, ..., d} and check whether the group generated is all permutations from n-element group?
+// TODO: check the group property or find a counterexample?
+// --------------- END-------------------------------------------------
+```
+From this comment, it sounds like the author is dealing with "cubes" that have a "degree", and there's a group that's somehow generated from this

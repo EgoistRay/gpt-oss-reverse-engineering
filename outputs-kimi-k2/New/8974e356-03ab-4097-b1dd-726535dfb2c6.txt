@@ -1,0 +1,70 @@
+New &OldKey in *temp_cursor (rename_fields)
+RenameKeyData=NewKeyData
+RenameKeyValue=NewKeyValue
+Get *temp_cursor
+EndDo
+
+If &OldKey <> &NewKey
+  &OldKey = &NewKey
+EndIf
+
+Get *Previous cursor
+
+```
+
+When I run the procedure I get `Error: Change of value is not valid`.
+
+I have tried many different variations but I always get the same error.
+
+Is what I am trying to do even possible?
+
+Ultimately I want to rename, or delete then re-create a GDC so that the name of that GDC matches changes I make to a GDT from inside of a procedure.
+
+For example: GDT field `FooId` exists along with a GDC named `FooId`. I change `FooId` to `BarId`. I then want to change `FooId` GDC to `BarId` (or delete FooId and create BarId) all from inside of my procedure.
+
+Absolutely any help on this is appreciated. Thanks in advance.
+Answer:
+According to the KB on gamasoft:
+
+> A Transaction -and the work-with pattern- must be shipped with an SDT and GDC. It is generated with almost the same structure as the transaction, and can’t be changed. The structure it has is determined by the transaction structure, and applies to each level. In the case of the GDC (Grid Data Collection), it applies only to the highest level. Therefore, the structure of the GDC will have the same names as the transaction, and for each transaction level there will be an SDT.
+
+So it's impossible to directly rename or modify GDCs as the system re-creates them automatically based off your transaction.
+
+Based on a comment left by arango86:
+
+> In that case the only solution would be to set the Grid Data Collection property of the grid to none, instead of the GDC, and use your own defined collection (or list) explicitly. Then, you won't have ambiguity anymore if your change the name of the transaction attribute.
+
+So while we you can't use the automatically generated GDC, you can use your own collection and Vlatkov was able to get this to work.
+Answer:
+This error means that GeneXus encountered a difference in the names in the Ordered='n' clause (in the .xml of the .xpz in GeneXus 15) at import time.
+
+The problem comes from the fact that you are trying to replicate what GeneXus internally generates as a GDC pattern, and you can't use 
+ &NewKey=trim(&OldKey) 
+because the name &NewKey is the same as a Transaction attribute, and GeneXus' engine is safeguarding against such errors. 
+This is actually pretty consistent with SDT collection usage, as you need a new variable name for the Item (in your case RenameKeyData) 
+
+In any case, depending on what you want to achieve there may be a simple solution or not.
+
+**Is it absolutely necessary that the collection's item has "BarId" as name?.** 
+
+If the answer is no, you could just resort to aliasing attributes in grid columns as for display purposes, only the SDT collection structure matters.
+
+If the answer is yes, you could: 
+
+* Create an SDT (or not, let me explain) for your WW pattern with item name BarId, rename the collection to something else too, and use it instead of the GDC.
+Note that GDC definitions may change when you change the Transaction definition, so creating your own SDT with the BarId attribute/variable will prevent any ambiguity or runtime error.
+
+-Rename it in the WWPattern too, as that will rename the GDC according to the new attribute name.However if the structure changes frequently you may break runtime.
+
+2nd option:
+
+Use an SDT without using an Item name of BarId at all, so as to avoid compile/run-time errors; you would then make changes to the grid columns only (column name, Title, etc.)
+
+I think the 2nd option is perhaps more reasonable because it doesn't involve touching the WW object at all; bigger flexibility in short.
+
+Finally, returning to your original problem: It is technically *possible* but requires you to specifically save the WW object with a specific value in the Ordered attribute, and iterate through multiple objects too. 
+Due to the maintenance overhead, I would refrain from doing so.
+
+Instead, I would use an additional SDT (or List of variables, if only one Transaction level) that I fill up in the procedure and assign to the Grid Control.
+
+Hope it helps. Perhaps if you could provide more specifics we could get to the right answer faster. Regards!

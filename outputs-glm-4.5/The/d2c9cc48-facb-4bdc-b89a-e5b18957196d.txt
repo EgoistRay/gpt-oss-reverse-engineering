@@ -1,0 +1,57 @@
+The::_BeAST
+06-12-2020, 18:35
+hello guys , so i tried to make a plugin that makes a player idk...... ok i tell you:
+so i wanted to make a plugin that makes the player stuck in a room that has text written for example "welcome to the server" and the player gotta crouch or do something like push a button to start playing!. but i had a lot of errors .... so i asked some friends and they helped me with fixing i couple of errors..... but when i added the plugin to the server it didn't work and i don't know why !. please if you have any idea how to fix the plugin to make it work please tell me........
+Code:
+#include <amxmodx>
+#include <fun>
+#include <cstrike>
+#include <fakemeta>
+#define PLUGIN "New Plugin"
+#define VERSION "1.0"
+#define AUTHOR "Author"
+new bool:g_bDoAction[ 33 ];
+public plugin_init()
+{
+register_plugin(PLUGIN, VERSION, AUTHOR)
+register_forward(FM_PlayerPostThink, "Fwd_PlayerPostThink", 1);
+}
+public client_putinserver( id )
+{
+if( !is_user_bot( id ) && !is_user_hltv( id ) )
+{
+set_task(1.0, "GoTo", id);
+}
+}
+public Fwd_PlayerPostThink(id)
+{
+if(is_user_alive(id) && g_bDoAction[id])
+fm_set_user_maxspeed(id, 0.1)
+return FMRES_IGNORED
+}
+public GoTo(id)
+{
+set_user_rendering( id, kRenderFxFadeSlow, 0, 0, 0, kRenderTransAlpha, 0);
+g_bDoAction[id] = true
+strip_user_weapons( id )
+if(cs_get_user_team( id ) == CS_TEAM_T )
+{
+engfunc( EngFunc_SetOrigin, id, Float:{ 0.0, 0.0, 0.0 } );
+}
+else if(cs_get_user_team( id ) == CS_TEAM_CT )
+{
+engfunc( EngFunc_SetOrigin, id, Float:{ 0.0, 0.0, 0.0 } );
+}
+}
+stock fm_set_user_maxspeed(index, Float:speed = -1.0) {
+engfunc(EngFunc_SetClientMaxspeed, index, speed);
+set_pev(index, pev_maxspeed, speed);
+return 1;
+}
+:P thank you :D :wink::bacon!::bacon!::bacon!::bacon!::bacon !:savage::savage::savage::savage::savage::savage ::savage::avast::avast::avast::avast::avast::avast ::avast::up::up::up::up::up::up:
+@OciXCrom i need your help :D also for you guys too :P <3 <3 <3 <3 <3 !.
+Btw I changed the code a little bit but still I don't know what's wrong I tried so many times but no use......
+please help :D :fox: a little fox needs help :P :crab: :crab::crab::hammer: :hammer:
+Edit 3: i tried to change the render and the origin but still doesn't work :(
+Edit 4 (Final Edit !): oh and btw i'm new at pawn... so forgive me if there is a dumb mistake and please don't get angry...... :D Thank you guys <3 <3 <3 <3 <3 <3 <3 <3 <3 <3 <3 <3 <3 <3 <3 <3 !.:wolf::wolf::wolf::wolf::wolf::wolf::wolf::w olf::wolf::wolf::wolf::wolf::wolf::cry::cry::cry::cry::cry::cry::cry::cr y::wink::wink::wink::wink::wink:千万不要了.... 。
+Edit 5 (Fake Edit): I just did the last edit to get your attention :cry:...... because I really need the help! :D Thank you <3 <3 <3 <3 <3 <3 <3 !. <3 <3 <3 <3 <3 <3 <3 <3 <3 <3 <3:avast::avast::avast::avast::avast::avast::avast:! .:nono::nono::nono::nono::nono::nono::nono:：哭：哭：哭：哭：哭：哭：大哭：大笑：大笑：大笑：笑：笑：笑：笑话：大笑：大笑：大笑：大笑：大笑：大笑：大笑：大笑：大笑：大笑：大笑

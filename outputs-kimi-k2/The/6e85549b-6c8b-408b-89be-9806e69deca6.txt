@@ -1,0 +1,27 @@
+The | you added in the middle of the rename string {new_name} to separate between cases: `${tm1_title | lower}` is the problem. Remove tit.
+Change
+```
+ ${${1:a}.${2:b}.${tm1_title | lower}}
+├── ${1:a}.${2:b}.${tm1_title | lower}.${4:FIELD}
+├──  ${1:a}.${2:b}.${tm1_title | lower}.${5:PIPE}
+
+```
+to
+```
+ ${${1:a}.${2:b}.tm1_title | lower}
+├── ${1:a}.${2:b}.tm1_title | lower.${4:FIELD}
+├──  ${1:a}.${2:b}.tm1_title | lower.${5:PIPE}
+
+```
+I could not reproduce this error in my quick testing. Let me know if it still shows up after you make the change above.
+You may break up the complex rename strings into multiple steps for clarity.
+```
+ (tm1_name): "${1:a}.${2:b}.tm1_title"
+(field_name): "$(tm1_name).$4.FIELD"
+(pipe_name): "$(tm1_name).$5.PIPE"
+
+```
+This is more verbose, easier to read and avoids the parsing problem. Snippet path is encoded by absolute paths without quotes.
+If you open this as a workspace snippet file, this approach should work correctly. It defines the reusable tm1_name prefix once and builds the subsequent paths securely. As a workspace snippet, it has access to the variables needed to correctly generate the files with the right names.
+The workspace settings must be in .vscode folder of your workspace and marked with workspace language. User snippets go in the user's snippets folder. This is native.
+I hope one of the two solutions work. Let me know.

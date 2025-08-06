@@ -1,0 +1,41 @@
+New: How to install WPS54G Rev. 1 & 2 without the CD - Page 2 - Linksysinfo.org
+New: How to install WPS54G Rev. 1 & 2 without the CD
+Dec 3 2007, 12:58 AM
+Based upon the following method, using the latest firmware and the latest WMP54G hardware:
+http://www.linksysinfo.org/modules...wtopic&t=25779
+I no longer see any blue light (I have Universal Plug and Play turned off), and I can select a network on the desktop.
+Although one never sees how to "exit" the application, the WPS button succeeds. Wireless communication works normally.
+However, and this is the major problem, I cannot get the broadcom to work in the laptop at all. The WMP54G works in a desktop as I just described, but the laptop uses an AIRONET classic card whose driver is like 8 years old. The WMP54Gon the other hand is that last card with broadcom drivers and a 2.4 dBi antenna.
+When I install the broadcom into the laptop, try to install it using the procedure above there IS no WPS button. The broadcom tries to verify itself with the WRT54G and fails: the access point tells me on its interface that no IP address was assigned. When I try to assign an IP with statics, I get no communication.
+Do you have any ideas about how to get any of this working??
+QUESTION: does the upcoming version 3 of the WRT54G hardware work with all this?
+Dec 3 2007, 06:41 PM
+QUESTION: does the upcoming version 3 WRT54G hardware work with all this?
+Answer: Yes but no...
+The good news is it will work even better than the current versions.
+The bad is news is not everything will be available at first. At launch only 1 Windows driver will be available to download for free. It will be found withing the normal support area like the others. More OS's versions will be added soon.
+Dec 3 2007, 08:35 PM
+QUOTE(Steve_Smith @ Dec 3 2007, 01:41 PM)
+The good news is it will work even better than the current versions. [...] More OS's versions will be added soon.
+1) Is there a plan to support configuration via the GUI Administration interface, like older models, instead of / in addition to the Windows configuration utility?
+2) Will Linux be explicitly "one of the OS versions [that] will be added soon"? If not, are you declining to discuss it for now because it is a) not planned or b) still under development?
+3) Dec 4 2007, 09:36 PM
+Further clue: the laptop WMP54G RT works fine with an old WRT54G V.1.
+However, the WMP54G is an RTM, and the new WRT54G is apparently not backwards compatible with RTs. This is the firmware error message:
+The firmware inside the WMP54G is too old for the new WRT54GS. To upgrade your firmware please... insert cdrom into drive.
+Is there any way for me to upgrade the card's firmware directly or to disable the automatic firmware upgrade query?
+Dec 5 2007, 04:30 AM
+QUOTE(Steve_Smith @ Dec 3 2007, 09:07 PM)
+The good news is it will work even better than the current versions... More OS's versions will be added soon.
+Is there a plan to support configuration via the
+GUI Administration interface, like older models,
+instead of / in addition to the Windows configuration
+Will Linux be explicitly "one of the OS versions [that]
+will be added soon"? If not, are you declining to discuss
+it for now because it is a) not planned or b) still under
+1. No plans for GUI interface at this time but is noted as a request.
+2. WRT54G v3.0 will be fully supported in Linux.
+Also all encryption methods not previous available on all cards will be available across all OSs
+Dec 5 2007, 06:39 PM
+QUOTE(Frankster @ Dec 4 2007, 12:36 AM)
+The following article explains how to install the latest RTM firmware (dated 10/25/2007) into any WMP54G RTM card to make it compatible with the

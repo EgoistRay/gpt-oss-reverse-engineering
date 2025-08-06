@@ -1,0 +1,118 @@
+NewImage',
+        key='key',
+        encryption=encryption,
+        target=target_table,
+        unordered=True,
+    )
+    return op
+
+
+def verify_image(
+    image: Image,
+    source_image: Image,
+    source_product: APIToolkitProduct,
+    target_product: APIToolkitProduct,
+) -> Dict[VersionID, VersionDTO]:
+    """
+    Create versions for new product parent and then
+    target image_versions.
+
+    Verify only stays at target product, not source.
+
+    The version_status is important to be added because b/c
+    actions only have the child and target_setup is None for a field.
+
+    This version will live only for one platform
+    as exhibited in the test case IR_154.
+    """
+
+    if target_product.configuration != source_product.configuration:
+        raise InvalidStatementException(
+            "The source and target product are inconsistent for product versions"
+        )
+
+    # ... other code ...
+    
+# this is the main function that is currently being used.
+def main():
+    try:
+        # create an instance for the user with journey permission. (SeaQUS)
+        ...
+        computed_product = oarf-etc...
+
+        # set up a workflow for an image
+        workflow = ImageWorkflow(source_product, target_product, options[status: move_to_each_but_version])
+
+        # Allocate the IMU device
+        compute_rename_from_quickload_groups_with_correct_data(original, sea)
+        # Validate fields and save
+        store.Redirect()
+        …
+    except Exception as e
+
+Your existing code can be refactored for a cleaner structure, better handling, and improved readability. Below is a revised version that addresses several issues including handling potentially empty dictionaries, raising more specific errors, checking for missing image cropping data, and improving the overall layout and flow:
+
+```python
+def create_image_op(image: Image, target: ProjectImage, product: APIToolkitProduct) -> ImageOperations:
+    # Create mappings for the image assets based on expected transformations and cropping.
+    try:
+        # The main reference bucket containing the source image.
+        output_locator = image.imageAssetData["imageAsset"]["references"]["output"]["s3"]
+        # Crop settings for the main 4x1 aspect ratio batched container.
+        image.crop["main4x1"] = {
+            "s3BucketName": outputLocator,
+            "archivalId": image.imageAssetData["imageAsset"]["current"]["archivalId"]
+        }
+        # Managing the 'all' containers which might have different configurations.
+        for section in image.crop["all"]:
+            image.crop["all"][section].update({
+                "archivalId": image.imageAssetData["imageAsset"]["archivalId"]
+            })
+    except KeyError as ke:
+        raise InvalidStatementException(
+            f"Missing expected fields for image cropping configuration: {ke}"
+        )
+
+    # Creating an operation instantiated in the SDK suitable for registering an image.
+    operation_details = {
+        "uid_full":"binary_sourceImage",
+        "source":"binary:SourceImage",
+        "source_resource": SourceImage(uid=image.uid, type=AssetSourceImageTypes.IMAGE),
+        "target_resource":
+            ImageImage(uid=image.uid, type=AssetImageTypes.IMAGE_IMAGEV1),
+        "options": {},
+        "ids": {"source": image.uid},
+    }
+    target_step = OperationTargetStep(**operation_details)
+    return ImageOperations(
+        properties={"op": "ImageBulkUpdate", "source_image_id_edges": [image.uid], 
+                    "target": target_step},
+        uid=V2ImageBulkUpdateUID("ir_update_images_v2", target.core_data[UID]),
+        operation=target_step,
+    )
+
+def update_baseimage(input: Image,
+                     source_product: APIToolkitProduct,
+                     target_product: APIToolkitProduct) -> ImageOperations:
+    # Create a suitable operation for an 's3' type target object.
+    operation = ImageOperations(
+        properties={},
+        uid=V2ImageBulkUpdateUID("ir_update_images_v2", input.uid),
+        datasetpaths=input.datasetPaths,
+        operation=ImageBulkUpdateMapper.s3v2_mapper(
+            Image.update_image_without_asset(target_image)
+        )
+    )
+    # This operation should correctly handle deletion logic unless it's dependent
+    # upon initialization requirements, in which case it should also be commented.
+    operation.operation["status"]["archiving"]["metadata"]["key"] = "delete"
+    return operation
+
+def verify_image(image: Image,
+                 source_image: Image,
+                 source_product: APIToolkitProduct,
+                 target_product: APIToolkitProduct) -> Dict[VersionID, VersionDTO]:
+    # Checks for consistency across integrated product versions and ensures
+    # proper status relay even when degradation occurs. Carefully verifies
+    # that images are loaded with complete metadata.
+    if target_product.configuration != source_product

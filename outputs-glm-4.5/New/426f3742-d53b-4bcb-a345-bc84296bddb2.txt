@@ -1,0 +1,127 @@
+New httprbac implementation, with sqlite import
+By default, the database files are created under <projectdir>/db/.
+To override the default directory, setup the environment variable :
+SQLITE_PATH.
+##Repo Structure: └── .
+    ├── awstats
+    │   └── ...
+    ├── crypt
+    │   └── ...
+    ├── css
+    │   └── ...
+    ├── framework
+    │   └── ...
+    ├── js
+    │   └── ...
+    ├── lang
+    │   └── ...
+    ├── vendor
+    │   └── ...
+    ├── README.md
+    ├── api.bat
+    ├── api.php
+    ├── composer.json
+    ├── create sqlite db.bat
+    ├── engima.bat
+    ├── enigma.php
+    ├── index.html
+    ├── info.php
+    ├── jsconfig.json
+    ├── launch.bat
+    ├── launch帮助你启用TLS并生成自签名证书.txt
+    ├── license.md
+    ├── menu.php
+    ├── oauth.bat
+    ├── oauth.php
+    ├── pdo.php
+    ├── proxy.php
+    ├── Dobuild.md
+    ├── enigma.md
+    ├── getting-started.md
+    ├── index.php
+    ├── install.md
+    ├── menu.json
+    ├── protocol.md
+    └── update.md
+##Affected Files: enigma.php, api.php, menu.php
+##File: enigma.php
+```
+<?php
+require_once 'vendor/autoload.php';
+require_once 'framework/rbac/Httprbac.php';
+require_once 'lang/en.php'; // Load the language file
+
+/*
+ * This file is part of the enigma project.
+ *
+ * (c) enigma project <http://github.com/enigma/>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+session_start();
+date_default_timezone_set('Asia/Singapore');
+$config = require('framework/config.php');
+
+// Initialize RBAC
+$httprbac = new \enigma\Httprbac();
+$httprbac->init();
+
+// Detect if HTTPS is being used and update $config['base_url'] accordingly
+$base_url = $config['base_url'];
+if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on') {
+    // Already HTTPS, no change needed
+} else {
+    // Check for HTTP_X_FORWARDED_PROTO (common in reverse proxy setups)
+    if (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https') {
+        // Update $config['base_url'] to use HTTPS if it's currently HTTP
+        if (strpos($base_url, 'http://') === 0) {
+            $config['base_url'] = 'https://' . substr($base_url, 7);
+        }
+    }
+}
+
+// Authenticate the user (handle both OAuth2 and Basic Auth)
+$user = null;
+if (isset($_SESSION['user'])) {
+    $user = $_SESSION['user'];
+} elseif (isset($_SERVER['PHP_AUTH_USER']) && isset($_SERVER['PHP_AUTH_PW'])) {
+    // Basic Authentication: hardcoded username "admin" and password "secret"
+    if ($_SERVER['PHP_AUTH_USER'] === 'admin' && $_SERVER['PHP_AUTH_PW'] === 'secret') {
+        $user = 'admin';
+        $_SESSION['user'] = $user;
+    } else {
+        header('WWW-Authenticate: Basic realm="Enigma Dashboard"');
+        header('HTTP/1.0 401 Unauthorized');
+        echo 'Unauthorized';
+        exit;
+    }
+} else {
+    // Redirect to OAuth if no user session or Basic Auth
+    header('Location: ' . $base_url . '/oauth.php');
+    exit;
+}
+
+// Assign a role to the user
+if ($user === 'admin' || $user === 'testadmin') {
+    $_SESSION['role'] = 'admin';
+} else {
+    $_SESSION['role'] = 'user';
+}
+$role = $_SESSION['role'];
+
+// Parse the request path
+$request_uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+$path = trim(str_replace($config['base_url'], '', $request_uri), '/');
+$segments = explode('/', $path);
+
+// Define RBAC permissions
+$httprbac->addPermission('dashboard', 'access');
+$httprbac->addPermission('stats', 'access');
+$httprbac->addPermission('settings', 'access', 'admin'); // 'settings' requires 'admin' role
+$httprbac->addPermission('logout', 'access');
+$httprbac->addPermission('unauthorized', 'access');
+
+// Route the request
+if (empty($segments[0]) || $segments[0] === 'dashboard' || $segments

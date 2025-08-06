@@ -1,0 +1,27 @@
+How can one determine whether an ultra-compact X-ray binary has a main sequence star as a donor? Both systems have the same density and fractional radius, ... Should i guess this based on the observations? ..."
+
+---
+
+It is brief, but after summarization is done above – we see the user asks:
+
+"How can one determine whether an ultra-compact X-ray binary has a main sequence star as a donor? Both systems have the same density and fractional radius, ... Should i guess this based on the observations? ..."
+
+We need to answer: In an ultra-compact X-ray binary (UCXB) with a neutron star (NS) or black hole accretor, you can have either a white dwarf donor or an evolved companion like a main-sequence star (presumably not, but maybe subgiant / helium star), but the user wants to know how determine if the donor is a main-sequence star. The problem: density is same (0.5 g/cm³ maybe?). Actually for a given orbital period, the donor's mean density is fixed (Roche-lobe filling). So for a period of ~80 min, the donor has ~10^−1 - 1 g/cm³, which is like main sequence star. But for ultra-compact X-ray binaries, periods under 80 minutes, the donor must be compact: white dwarf (degenerate) or helium star, not a normal main sequence, because main sequence star would be too large to fit.
+
+But the user wonders: they have same density and fractional radius, maybe in some sense? Actually for Roche-lobe overflow, the mass and radius relation of donor determines period.
+
+The question: How to differentiate between main sequence donor vs white dwarf donor based on observations? Use spectral features: detection of hydrogen lines vs absence of hydrogen (Helium/Carbon/Oxygen etc). Also X-ray burst characteristics: type I bursts rely on hydrogen burning vs helium or C. Composition of accreted material (evident from X-ray burst behavior, spectral lines, burst recurrence L, energetics). Also optical/IR spectral lines from the accretion disk can reveal presence of hydrogen? Emission lines of H-alpha etc. Where there is an H-rich donor, we see hydrogen emission lines from disk. In UCXBs with He or C/O white dwarf donors, emission lacking H lines, dominated by He lines.
+
+And the nature of donor can be inferred from orbital period distribution: ultra-compact (<80 min) generally require degenerate or helium star donors else they would overflow Roche lobe. But there could be main-sequence donors that are very low mass, near the hydrogen burning limit (brown dwarf). But the density of a main sequence star at the low-mass end is comparable to that of a helium white dwarf? Actually M dwarfs have mean density >1 g/cm^3; need to compute. But perhaps the key is that an ultra-compact binary has a short orbital period, requiring a small orbital separation, limiting the donor radius. For a 15-min period, the donor radius is about 0.05 R⊙ (10,000 km). This is comparable to a white dwarf radius, not a main sequence star.
+
+Thus morphological properties: The orbital period calibration (P_orb vs M_d, R_d). Observations: detection of hydrogen or lack thereof; detection of helium lines; detection of N or C/O lines to infer donor composition; the presence of Type I X-ray bursts with show of helium burning.
+
+Also, the observed X-ray luminosity and its spectral features? The article may cite Juett et al. 2001, Nelemans & van der Klis. However need to answer succinctly.
+
+Thus the answer: Using spectroscopy (optical/IR). For NS UCXBs, the bright X-ray emission can outshine the donor. However narrow emission lines can be seen from the reprocessing region (accretion disk). The presence of H-alpha and other hydrogen lines would indicate H-rich donor. The absence suggests a H-poor donor (white dwarf, helium or CO). Additionally, helium lines like He I, He II are strong in He-rich donors. C/N/O lines point to C/O white dwarf donors. Also measure abundances via X-ray burst properties: bursts in systems with H absence have shorter, more energetic bursts of helium or carbon.
+
+Also, detection of orbital modulation in optical light curve due to X-ray heating of donor; the amplitude depends on donor size and temperature.
+
+Also, discussion about using the M-R relation: if you have system mass ratio q from radial velocities, you can infer donor mass and radius, and compare to main sequence mass-radius relation (Kippenhahn & Weigert). A low-mass donor may be consistent with either.
+
+But typical UCXBs: they cannot have main sequence donors, because main sequence stars of any mass cannot fit within the Roche lobe

@@ -1,0 +1,62 @@
+Why • You may chose to skip this evaluation
+✓  How would you like to define styles for your components? › CSS
+✓  What generation do you plan to target? › Babel bundles for evergreen browsers (ES2015+)
+✓  Pick a library to handle client-side routing › React Router v6
+✓  Choose an SSR web server › Express (w/ compression and HTTP/2)
+
+```
+
+When the scaffolding completes I run `npm build && npm start`. The Node/express server starts-up as expected and I'm able to browse to the site on `http://localhost:3000`.
+
+From here **I'd like the site/application to be served at the path `/foo/bar/`**, not the site I started with. Specifically, if I navigate to `http://localhost:3000/foo/bar/` I should see the exact same thing as I see from `http://localhost:3000` but looking at this setup with the `/foo/bar/` context path.
+
+I'm naively I guess assuming that I should be able to do this with some configuration to Razzle—the existing webpack setup, etc... I did read in the Razzle docs that one can configure a client's basepath with the `"basename": "/foo/bar"` in the package.json file, like so:
+
+```
+  "razzle": {
+    "basename": "/foo/bar",
+    "options": {
+      "verbose": false,
+      "debug": {
+        "heapUsage": true
+      }
+    }
+
+```
+
+I published that, restarted the server (`npm build && npm start`) and tried to navigate to `http://localhost:3000/foo/bar/` but the request appears to be handled by React Router as it shows the "NotFound" component:
+
+```
+
+export default function NotFound() {
+  return <h1>404 - Not Found</h1>;
+}
+
+```
+
+I did think—make the assumption—that configuring the basepath in the Razzle config would handle/respect that config for the Express side, but that doesn't appear to be the case. I tried messing around with Express/routes trying to set-up something but again I'm making the assumption that Razzle already handles this.
+
+I started looking around for an example but can't seem to find one that specifically solves this scenario—probably because it's obvious and I'm missing something easy?
+Answer:
+I data-dumped this question on the RazzleJS Discord and got the following answer:
+
+> I'm unaware on razzle doing this for you automatically, but you should
+> be able to make the needed changes for both webpack-dev-server and the
+> express middleware
+> 
+> 
+> for webpack-dev-server: <https://webpack.js.org/configuration/dev-server/#devserverproxy>
+> 
+> 
+> for express, just mount the middleware `server.use('admin', razzleHandler)`
+
+So essentially **Razzle doesn't automatically handle the path-based item** it appears.
+
+After looking at it a bit more I too started to come to that same conclusion (Razzle doesn't handle it automatically), and for my needs decided to scrap the idea and move it to another host two levels deep in the domain instead:
+
+```
+host.com › foo.bar.com (which hosts an instance of my application)
+
+```
+
+This is much easier to set-up/manage for me. If you too hit this issue you might want to consider this as an alternative? The promise to "make things easier" with Razzle appears to be more on the bundling/boilerplate side, not hosting specifics like this and/or I got tripped-up by semantics/poor assumptions as `basename` seems to generally distribute to the client-side applications only.

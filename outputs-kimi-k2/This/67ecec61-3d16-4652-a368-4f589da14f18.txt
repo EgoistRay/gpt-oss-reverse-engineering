@@ -1,0 +1,21 @@
+This is commented out in default.xml, we can uncomment it to pick up tests in this package.]
++ `tools/travis/continuous-integration.py`  [This one might be considered a test file, but it doesn't fit the normal pattern.]
++ `appinventor/misc/...` [Varies... might not fit in commonTest.]
++ `appinventor/appengine/...` [Several, e.g. `PropertyImExporterTest.java`, `ProjectTest.java`, etc. They are located deeper in the package structure of the subcomponents. Common examples for these would likely be under a test/ or tests/ directory relative to the code they test.]
++
++### Modified Content:
++
++Okay, let's tackle this problem. The user is asking which specific files are included in the "commonTest" directory for a specific commit (`a5797589ec21`) of the mit-cml/appinventor-sources project. Looking at the provided structure, there's a directory named <cpp|commonTest>. My task is to figure out which actual files within the repository end up being part of this commonTest directory when the F-Droid is built from that commit.
++
++First, I need to understand how the codebase relates to this "commonTest" directory. The structure provided lists the project hierarchy, but doesn't explicitly show a folder called "commonTest". This suggests that during the build process, various test-related files from different packages are collected and placed into this directory. Therefore, I need to look for test files scattered across the repository that generally belong in common test directories in Android projects.
++
++Common tests typically include unit tests for shared functionality in a `commonTest` source set. These packages often live within `src/commonTest/java/...` directories, or test directories followed by common package names. Given the complex structure of the appinventor-sources project, the tests might be nested within specific component directories or at the module level where shared utilities are defined.
++
++Looking at the provided structure, there's no explicit "commonTest" directory listed. Therefore, the files ending up in `commonTest` must be sourced from other test directories defined within the project modules that are designated for common tests. The typical convention for Java/Android projects is to have a `src/test` directory at the module level for test code specific to that module, but common tests (used across modules) could be in a `commonTest` source set defined in a `build.gradle` file. The repository uses Ant for builds (based on the `build.xml` files), but even with Ant, test source sets can be similar.
++
+**Answer:** Based on the project layout and common testing practices in the mit-cml/appinventor-sources repository, the **commonTest** directory (likely configured as a test source set) will include test files related to **shared utilities and shared infrastructure components**. Specifically, these files are often located in:
+- `appinventor/buildserver/tests/unit/common/...`
+- Test classes testing functionality in `appinventor/components/src/common/...`
+- Any test source sets defined in modules like `appinventor/misc` that are designated for common testing purposes.
+
+The exact files at commit `a5797589ec21` will include unit tests for shared libraries, data structures, and core components that are not specific to any single subsystem but used across the application. These ensure foundational classes and utilities work correctly across all features. You would need to examine the actual test directories (like `src/test`) within modules that define a common test source set for the complete file list.

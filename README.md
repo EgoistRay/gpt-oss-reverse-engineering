@@ -261,3 +261,19 @@ public class JsonSerializationTest {
 ## Key Insights
 
 This reverse engineering approach reveals that GPT-OSS models are heavily trained on programming and technical content, making them particularly effective for software development tasks, code explanation, and technical documentation generation. The overwhelming dominance of programming-related content suggests these models are optimized for developer assistance and technical communication. 
+
+## References & Further Reading
+
+### GPT-OSS resources
+
+- **Official announcement:** [*Introducing gpt-oss*](https://openai.com/index/introducing-gpt-oss/) &nbsp;*(OpenAI, Aug 2025)*
+- **Model card:** [*openai/gpt-oss-20b*](https://huggingface.co/openai/gpt-oss-20b) &nbsp;*(Hugging Face)*
+- **Industry adoption:** [Microsoft integrates gpt-oss-20b into Windows AI Foundry](https://www.theverge.com/news/719640/microsoft-openai-gpt-oss-open-model-windows-ai-foundry-release) &nbsp;*(The Verge, 6 Aug 2025)*
+
+### Reverse-engineering & data-attribution studies
+
+- Nasr et al., **“Scalable Extraction of Training Data from (Production) Language Models,”** [USENIX Security 2023](https://arxiv.org/html/2311.17035v1)
+- Chang et al., **“XPrompt: Explaining Large Language Model’s Generation via Joint Prompt Attribution,”** [ACL 2024](https://arxiv.org/abs/2405.20404)
+- Wu et al., **“Membership Inference Attacks on Large-Scale Models,”** [Findings of ACL 2025](https://arxiv.org/pdf/2503.19338)
+- Wu & Xu, **“Enhancing Training Data Attribution for Large Language Models,”** [EMNLP 2024](https://aclanthology.org/2024.emnlp-main.782/)
+- Puerto et al., **“When and How Attacks Succeed on Large Language Models,”** [arXiv 2024](https://arxiv.org/abs/2411.00154)
